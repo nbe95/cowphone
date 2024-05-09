@@ -4,7 +4,9 @@
   "main": "app.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "node ./dist/app.js"
+    "start": "node ./dist/app.js",
+    "lint": "npx prettier . --check",
+    "format": "npx prettier . --write"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,8 @@
     "@types/node": "^20.12.11",
     "ftp-srv": "^4.6.3",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
   }
 }
