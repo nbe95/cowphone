@@ -1,0 +1,24 @@
+{
+  "name": "cowphone",
+  "version": "1.0.0",
+  "description": "A little bit of cows for your desktop phone.",
+  "main": "app.ts",
+  "scripts": {
+    "start": "node ./src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbe95/cowphone.git"
+  },
+  "author": "Niklas Bettgen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nbe95/cowphone/issues"
+  },
+  "homepage": "https://github.com/nbe95/cowphone#readme",
+  "dependencies": {
+    "@types/node": "^20.12.11",
+    "ftp-srv": "^4.6.3",
+    "typescript": "^5.4.5"
+  }
+}
