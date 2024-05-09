@@ -1,4 +1,4 @@
-import { GeneralError, FtpSrv } from "ftp-srv"
+import { GeneralError, FtpSrv } from "ftp-srv";
 import { FTP_OWN_IP, FTP_OWN_PORT, FTP_PASSWORD, FTP_USER } from "./constants";
 
 const ftpServer = new FtpSrv({
@@ -7,7 +7,7 @@ const ftpServer = new FtpSrv({
   pasv_min: 4000,
   pasv_max: 4009,
   anonymous: false,
-  greeting: "This FTP server has super cow powers."
+  greeting: "This FTP server has super cow powers.",
 });
 
 ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
@@ -18,5 +18,5 @@ ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
 });
 
 ftpServer.listen().then(() => {
-  console.log("FTP server is starting...")
+  console.log("FTP server is starting...");
 });
