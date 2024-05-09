@@ -1,16 +1,18 @@
-import {GeneralError, FtpSrv} from "ftp-srv"
+import { GeneralError, FtpSrv } from "ftp-srv"
+import { FTP_OWN_IP, FTP_OWN_PORT, FTP_PASSWORD, FTP_USER } from "./constants";
 
-const ftpUser: string = "coward"
-const ftpPassword: string = "os40"
-const ftpPort: number = 50021;
 const ftpServer = new FtpSrv({
-  url: `ftp://0.0.0.0:${ftpPort}`,
-  anonymous: false
+  url: `ftp://0.0.0.0:${FTP_OWN_PORT}`,
+  pasv_url: FTP_OWN_IP,
+  pasv_min: 4000,
+  pasv_max: 4009,
+  anonymous: false,
+  greeting: "This FTP server has super cow powers."
 });
 
 ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
-  if (username == ftpUser && password == ftpPassword) {
-    return resolve({ root: "/" });
+  if (username == FTP_USER && password == FTP_PASSWORD) {
+    return resolve({ root: "/cowphone/media" });
   }
   return reject(new GeneralError("Invalid username or password", 401));
 });

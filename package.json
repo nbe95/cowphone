@@ -1,10 +1,10 @@
 {
   "name": "cowphone",
-  "version": "1.0.0",
   "description": "A little bit of cows for your desktop phone.",
   "main": "app.ts",
   "scripts": {
-    "start": "node ./src/app.ts"
+    "build": "npx tsc",
+    "start": "node ./dist/app.js"
   },
   "repository": {
     "type": "git",
