@@ -18,6 +18,6 @@ RUN npm ci --production
 COPY --from=builder /cowphone/dist ./dist
 COPY ./media ./media
 
-EXPOSE 50021 4000-4009
+EXPOSE 21 3000-3009
 USER node
 CMD [ "node", "dist/app.js" ]
