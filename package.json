@@ -21,9 +21,11 @@
   "dependencies": {
     "@types/node": "^20.12.11",
     "ftp-srv": "^4.6.3",
+    "gm": "^1.25.0",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@types/gm": "^1.25.4",
     "prettier": "^3.2.5"
   }
 }

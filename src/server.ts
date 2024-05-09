@@ -15,7 +15,7 @@ export const runServer = async () => {
     "login",
     ({ connection, username, password }, resolve, reject) => {
       if (username == FTP_USER && password == FTP_PASSWORD) {
-        return resolve({ root: "/cowphone/media" });
+        return resolve({ root: "/home/coward/" });
       }
       return reject(new GeneralError("Invalid username or password", 401));
     },
