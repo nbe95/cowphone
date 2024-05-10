@@ -20,6 +20,8 @@
   "homepage": "https://github.com/nbe95/cowphone#readme",
   "dependencies": {
     "@types/node": "^20.12.11",
+    "canvas": "^2.11.2",
+    "fs": "^0.0.1-security",
     "ftp-srv": "^4.6.3",
     "gm": "^1.25.0",
     "typescript": "^5.4.5"
