@@ -19,15 +19,19 @@
   },
   "homepage": "https://github.com/nbe95/cowphone#readme",
   "dependencies": {
-    "@types/node": "^20.12.11",
+    "axios": "^1.6.8",
     "canvas": "^2.11.2",
+    "cookie": "^0.6.0",
     "fs": "^0.0.1-security",
     "ftp-srv": "^4.6.3",
     "gm": "^1.25.0",
+    "path": "^0.12.7",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@types/cookie": "^0.6.0",
     "@types/gm": "^1.25.4",
+    "@types/node": "^20.12.11",
     "prettier": "^3.2.5"
   },
   "prettier": {

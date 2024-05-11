@@ -24,22 +24,22 @@ export type SpeechBubbleProps = {
 type Cows = "cow";
 
 export class Cow {
-  private static templateDir: string = "/cowphone/templates";
+  private static _templateDir: string = "/cowphone/templates";
   public static font: FontProps = {
     family: "TinyUnicode",
-    file: `${Cow.templateDir}/TinyUnicode.ttf`,
+    file: `${Cow._templateDir}/TinyUnicode.ttf`,
     size: 15,
     lineHeight: 7,
   };
-  private getCowFile = (): string => `${Cow.templateDir}/${this.cow}.bmp`;
+  private _getCowFile = (): string => `${Cow._templateDir}/${this._cow}.bmp`;
 
-  private bubbleProps: SpeechBubbleProps;
-  private cow: Cows;
-  private lines: LineProps[] = [];
+  private _bubbleProps: SpeechBubbleProps;
+  private _cow: Cows;
+  private _lines: LineProps[] = [];
 
   constructor(speechBubbleProps: SpeechBubbleProps, cow: Cows = "cow") {
-    this.bubbleProps = speechBubbleProps;
-    this.cow = cow;
+    this._bubbleProps = speechBubbleProps;
+    this._cow = cow;
   }
 
   private static wrapLines = (text: string, maxWidth: number): LineProps[] => {
@@ -74,15 +74,15 @@ export class Cow {
   public setText(text: string): boolean {
     // Rearrange any spaces and wrap text to lines
     const oneLiner: string = text.trim().replace(/\s+/g, " ");
-    const lines: LineProps[] = Cow.wrapLines(oneLiner, this.bubbleProps.maxWidth);
+    const lines: LineProps[] = Cow.wrapLines(oneLiner, this._bubbleProps.maxWidth);
 
     // Check if the text will fit in the cow's speech bubble
     if (
-      lines.length <= this.bubbleProps.maxLines &&
-      Math.max(...lines.map((l) => l.width)) <= this.bubbleProps.maxWidth
+      lines.length <= this._bubbleProps.maxLines &&
+      Math.max(...lines.map((l) => l.width)) <= this._bubbleProps.maxWidth
     ) {
       console.log(`I will moo "${oneLiner}" using ${lines.length} lines.`);
-      this.lines = lines;
+      this._lines = lines;
       return true;
     }
     console.error(
@@ -93,14 +93,16 @@ export class Cow {
 
   public saveBitmap(outFile: string): void {
     // Using gm as workaround since node-canvas cannot directly save bitmaps
-    const bitmap: State = gm(this.getCowFile()).antialias(false).font(Cow.font.file, Cow.font.size);
+    const bitmap: State = gm(this._getCowFile())
+      .antialias(false)
+      .font(Cow.font.file, Cow.font.size);
 
     // Draw line by line, centered both horizontally and vertically
     const lineOffset: number = Math.floor(
-      ((this.bubbleProps.maxLines - this.lines.length) * Cow.font.lineHeight) / 2,
+      ((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2,
     );
-    this.lines.forEach((line, index) => {
-      const xPos: number = Math.floor((this.bubbleProps.maxWidth - line.width) / 2);
+    this._lines.forEach((line, index) => {
+      const xPos: number = Math.floor((this._bubbleProps.maxWidth - line.width) / 2);
       const yPos: number = (index + 1) * Cow.font.lineHeight + lineOffset;
       bitmap.drawText(xPos, yPos, line.line);
     });

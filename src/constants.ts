@@ -1,10 +1,16 @@
 import { SpeechBubbleProps } from "./cow";
+import { FtpServerProps } from "./server";
 
-export const FTP_OWN_IP: string = "127.0.0.1";
-export const FTP_OWN_PORT: number = 50021;
-export const FTP_USER: string = "coward";
-export const FTP_PASSWORD: string = "os40";
-export const FTP_ROOT: string = "/home/coward";
+export const PHONE_HOST: string = "192.168.1.10";
+export const ADMIN_PASSWORD: string = "123456";
+
+export const FTP_SERVER: FtpServerProps = {
+  host: "127.0.0.1",
+  port: 50021,
+  user: "coward",
+  password: "os40",
+  root: "/home/coward",
+};
 
 export const SPEECH_BUBBLE: SpeechBubbleProps = {
   xOffset: 4,
