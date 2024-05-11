@@ -21,6 +21,7 @@ ENV NODE_ENV production
 
 RUN adduser -D coward
 RUN apk update && apk add \
+    fortune \
     graphicsmagick \
     build-base \
     g++ \
