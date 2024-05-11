@@ -1,4 +1,4 @@
-import { FTP_ROOT, SPEECH_BUBBLE } from "./constants";
+import { ADMIN_PASSWORD, PHONE_HOST, SPEECH_BUBBLE, FTP_SERVER } from "./constants";
 // import { Cow } from "./cow";
 import { fortune } from "./fortune";
 import { runServer } from "./server";
@@ -34,8 +34,9 @@ import { Os40WebInterface } from "./webif";
 // };
 
 async function foo() {
-  const phone = new Os40WebInterface("192.168.1.10", "123456");
+  const phone = new Os40WebInterface(PHONE_HOST, ADMIN_PASSWORD);
   await phone.authenticate();
+  await phone.updateLogo({ ...FTP_SERVER, host: "192.168.1.40" }, "2024-05-11.bmp");
 }
 
 foo();

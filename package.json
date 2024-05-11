@@ -25,6 +25,7 @@
     "fs": "^0.0.1-security",
     "ftp-srv": "^4.6.3",
     "gm": "^1.25.0",
+    "path": "^0.12.7",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
