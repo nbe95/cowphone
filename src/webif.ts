@@ -48,4 +48,43 @@ export class Os40WebInterface {
     console.error(`Could not obtain auth code from OpenStage40 with IP ${this._ipAddr}.`);
     return false;
   }
+
+  public async updateLogo(ftpServer: FtpServerProps, filePath: string): Promise<boolean> {
+    const fileDir: string = path.dirname(filePath);
+    const fileName: string = path.basename(filePath);
+    const response = await axios.post(
+      this.getRequestUrl(),
+      {
+        page_submit: "WEBM_Admin_Logo",
+        "dl-lgo-method": "0",
+        "dl-lgo-addr": ftpServer.host,
+        "dl-lgo-port": ftpServer.port.toString(),
+        "dl-lgo-account": "",
+        "dl-lgo-username": ftpServer.user,
+        "dl-lgo-password": ftpServer.password,
+        "dl-lgo-path": fileDir,
+        "dl-lgo-base-url": "",
+        "dl-lgo-file": fileName,
+        "WEBM-Admin-StartDownload": "1",
+        WEBMv_Admin_Download_FileType: "4",
+        WEBMv_Admin_Download_FileName: "dl-lgo-file",
+      },
+      {
+        httpsAgent: this._agent,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Cookie: `webm=${this._auth}`,
+        },
+      },
+    );
+    const payload: string = response.data;
+    if (payload.includes("Transfer completed successfully")) {
+      console.log(
+        `Successfully updated logo for OpenStage40 at IP ${this._ipAddr} to ${fileName}.`,
+      );
+      return true;
+    }
+    console.error(`Could not update logo for OpenStage40 at IP ${this._ipAddr} to ${fileName}.`);
+    return false;
+  }
 }
