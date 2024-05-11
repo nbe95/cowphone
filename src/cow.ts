@@ -77,10 +77,14 @@ export class Cow {
     const lines: LineProps[] = Cow.wrapLines(oneLiner, this.bubbleProps.maxWidth);
 
     // Check if the text will fit in the cow's speech bubble
-    if (this.lines.length <= this.bubbleProps.maxLines) {
+    if (lines.length <= this.bubbleProps.maxLines) {
       this.lines = lines;
+      console.log(`I will moo "${oneLiner}" using ${lines.length} lines.`);
       return true;
     }
+    console.error(
+      `Holy cow! "${oneLiner}" (${lines.length} lines) won't fit in my speech bubble...`,
+    );
     return false;
   }
 
@@ -108,7 +112,7 @@ export class Cow {
         if (buffer[0x1e] == 3) buffer[0x1e] = 0;
 
         writeFile(outFile, buffer, () => {
-          console.log(`Successfully written ${outFile}`);
+          console.log(`Successfully brought the cow in the shed (${outFile}).`);
         });
       }
     });
