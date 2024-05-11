@@ -6,41 +6,53 @@ import {
 } from "canvas";
 import { CANVAS_TEXT } from "./constants";
 import gm, { State } from "gm";
-import { error } from "console";
 import { writeFile } from "fs";
 
 type cows = "cow";
 
-type lineProps = {
+type LineProps = {
   line: string;
   width: number;
+};
+
+export type TextProps = {
+  offset_x: number;
+  offset_y: number;
+  max_width: number;
+  max_lines: number;
+  font_size: number;
+  line_height: number;
 };
 
 const wrapLines = (
   ctx: CanvasRenderingContext2D,
   text: string,
   maxWidth: number,
-): lineProps[] => {
-  var words: string[] = text.replace(/\s+/g, " ").split(" ");
-  var lines: lineProps[] = [];
+): LineProps[] => {
+  const words: string[] = text.trim().split(" ");
+  const spaceWidth: number = ctx.measureText(" ").width;
+
+  var lines: LineProps[] = [];
   var currentLine: string = words[0];
   var currentWidth: number = ctx.measureText(currentLine).width;
 
   for (var i = 1; i < words.length; i++) {
     var word: string = words[i];
-    var wordWidth: number = ctx.measureText(" " + word).width;
-    if (currentWidth + wordWidth < maxWidth) {
+    var wordWidth: number = ctx.measureText(word).width;
+    if (currentWidth + spaceWidth + wordWidth < maxWidth) {
       currentLine += " " + word;
-      currentWidth += wordWidth;
+      currentWidth += spaceWidth + wordWidth;
     } else {
       lines.push({ line: currentLine, width: currentWidth });
       currentLine = word;
-      currentWidth = ctx.measureText(currentLine).width;
+      currentWidth = wordWidth;
     }
   }
   lines.push({ line: currentLine, width: currentWidth });
   return lines;
 };
+
+const textAsOneLiner = (text: string): string => text.replace(/\s+/g, " ");
 
 export const cowSay = (
   text: string,
@@ -51,35 +63,43 @@ export const cowSay = (
 
   const templateDir: string = "./templates";
   const cowFile: string = `${templateDir}/${cow}.bmp`;
-  const font: string = `${templateDir}/minecraft.ttf`;
+  const font: string = `${templateDir}/TinyUnicode.ttf`;
 
   // Calculate text wrapping and dimensions
-  registerFont(font, { family: "Minecraft" });
+  registerFont(font, { family: "TinyUnicode" });
   const canvas: Canvas = createCanvas(1, 1);
   const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
-  ctx.font = "11pt 'Minecraft'";
-  const lines: lineProps[] = wrapLines(ctx, text, CANVAS_TEXT.width);
+  ctx.font = `${CANVAS_TEXT.font_size}px 'TinyUnicode'`;
+  const lines: LineProps[] = wrapLines(
+    ctx,
+    textAsOneLiner(text),
+    CANVAS_TEXT.max_width,
+  );
 
   console.log(text);
   console.log(lines);
 
-  if (lines.length * CANVAS_TEXT.line_height > CANVAS_TEXT.height) {
+  if (lines.length > CANVAS_TEXT.max_lines) {
     return false;
   }
 
   // If the text fits, save it as new file
   // (using gm as workaround since node-canvas cannot directly save bitmaps)
-  const bitmap: State = gm(cowFile);
-  bitmap.antialias(false);
+  const bitmap: State = gm(cowFile)
+    .antialias(false)
+    .font(font, CANVAS_TEXT.font_size);
 
-  var size = 6.0;
-  var vpos = 6;
-  while (size < 14) {
-    bitmap.font(font, size);
-    bitmap.drawText(6, vpos, `Lorem ipsum dolor sit amet`);
-    size += 0.5;
-    vpos += 6;
-  }
+  const line_offset: number = Math.floor(
+    ((CANVAS_TEXT.max_lines - lines.length) * CANVAS_TEXT.line_height) / 2,
+  );
+  let pos_x: number;
+  let pos_y: number;
+  lines.forEach((line, index) => {
+    pos_x = Math.floor((CANVAS_TEXT.max_width - line.width) / 2);
+    pos_y = (index + 1) * CANVAS_TEXT.line_height + line_offset;
+    bitmap.drawText(pos_x, pos_y, line.line);
+  });
+
   bitmap.toBuffer((error, buffer) => {
     if (error) {
       console.error(error);

@@ -12,4 +12,5 @@ const main = async () => {
 
 main();
 
-cowSay("Hello world", "/home/coward/foo.bmp");
+let text: string = process.env.TEXT ?? "";
+cowSay(text, "/home/coward/foo.bmp");
