@@ -1,22 +1,17 @@
-import { GeneralError, FtpSrv } from "ftp-srv";
-import { FTP_OWN_IP, FTP_OWN_PORT, FTP_PASSWORD, FTP_USER } from "./constants";
+import { SPEECH_BUBBLE } from "./constants";
+import { Cow } from "./cow";
+import { runServer } from "./server";
 
-const ftpServer = new FtpSrv({
-  url: `ftp://0.0.0.0:${FTP_OWN_PORT}`,
-  pasv_url: FTP_OWN_IP,
-  pasv_min: 4000,
-  pasv_max: 4009,
-  anonymous: false,
-  greeting: "This FTP server has super cow powers.",
-});
-
-ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
-  if (username == FTP_USER && password == FTP_PASSWORD) {
-    return resolve({ root: "/cowphone/media" });
+const main = async () => {
+  try {
+    console.log("Starting cowphone main task.");
+    await Promise.all([runServer()]);
+  } catch (error) {
+    console.error("Error during cowphone main task:", error);
   }
-  return reject(new GeneralError("Invalid username or password", 401));
-});
+};
 
-ftpServer.listen().then(() => {
-  console.log("FTP server is starting...");
-});
+main();
+
+let foo = new Cow(SPEECH_BUBBLE);
+if (foo.setText(process.env.TEXT ?? "")) foo.saveBitmap("/home/coward/foo.bmp");
