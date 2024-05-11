@@ -1,4 +1,5 @@
-import { cowSay } from "./cowsay";
+import { SPEECH_BUBBLE } from "./constants";
+import { Cow } from "./cow";
 import { runServer } from "./server";
 
 const main = async () => {
@@ -12,5 +13,5 @@ const main = async () => {
 
 main();
 
-let text: string = process.env.TEXT ?? "";
-cowSay(text, "/home/coward/foo.bmp");
+let foo = new Cow(SPEECH_BUBBLE);
+if (foo.setText(process.env.TEXT ?? "")) foo.saveBitmap("/home/coward/foo.bmp");

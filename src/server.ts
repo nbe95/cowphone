@@ -11,15 +11,12 @@ export const runServer = async () => {
     greeting: "This server has super cow powers.",
   });
 
-  ftpServer.on(
-    "login",
-    ({ connection, username, password }, resolve, reject) => {
-      if (username == FTP_USER && password == FTP_PASSWORD) {
-        return resolve({ root: "/home/coward/" });
-      }
-      return reject(new GeneralError("Invalid username or password", 401));
-    },
-  );
+  ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
+    if (username == FTP_USER && password == FTP_PASSWORD) {
+      return resolve({ root: "/home/coward/" });
+    }
+    return reject(new GeneralError("Invalid username or password", 401));
+  });
 
   ftpServer.listen().then(() => {
     console.log("FTP server is starting...");

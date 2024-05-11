@@ -29,5 +29,8 @@
   "devDependencies": {
     "@types/gm": "^1.25.4",
     "prettier": "^3.2.5"
+  },
+  "prettier": {
+    "printWidth": 100
   }
 }
