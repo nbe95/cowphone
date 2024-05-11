@@ -77,13 +77,16 @@ export class Cow {
     const lines: LineProps[] = Cow.wrapLines(oneLiner, this.bubbleProps.maxWidth);
 
     // Check if the text will fit in the cow's speech bubble
-    if (lines.length <= this.bubbleProps.maxLines) {
-      this.lines = lines;
+    if (
+      lines.length <= this.bubbleProps.maxLines &&
+      Math.max(...lines.map((l) => l.width)) <= this.bubbleProps.maxWidth
+    ) {
       console.log(`I will moo "${oneLiner}" using ${lines.length} lines.`);
+      this.lines = lines;
       return true;
     }
     console.error(
-      `Holy cow! "${oneLiner}" (${lines.length} lines) won't fit in my speech bubble...`,
+      `Holy cow! "${oneLiner}" (${lines.length} lines) won't fit into my speech bubble...`,
     );
     return false;
   }
