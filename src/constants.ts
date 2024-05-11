@@ -7,8 +7,8 @@ export const FTP_PASSWORD: string = "os40";
 export const FTP_ROOT: string = "/home/coward";
 
 export const SPEECH_BUBBLE: SpeechBubbleProps = {
-  xOffset: 3,
+  xOffset: 4,
   yOffset: 4,
-  maxWidth: 106,
+  maxWidth: 105,
   maxLines: 4,
 };
