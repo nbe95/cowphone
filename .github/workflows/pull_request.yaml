@@ -24,6 +24,19 @@ jobs:
       - name: Run linters
         run: npm run lint
 
+  test:
+    name: Test the typescript code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install packages
+        run: npm install
+      - name: Run unit tests
+        run: npm run test
+
   validate-release:
     name: Validate release label and notes
     runs-on: ubuntu-latest
