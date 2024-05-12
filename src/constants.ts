@@ -1,14 +1,17 @@
 import { SpeechBubbleProps } from "./cow";
 import { FtpServerProps } from "./server";
 
-export const PHONE_HOST: string = "192.168.1.10";
-export const ADMIN_PASSWORD: string = "123456";
+export const VERSION: string | undefined = process.env.COWPHONE_VERSION;
+export const CRON_SCHEDULE: string = process.env.CRON_SCHEDULE ?? "0 0 0 * * *";
+
+export const PHONE_HOST: string = process.env.PHONE_HOST ?? "";
+export const ADMIN_PASSWORD: string = process.env.ADMIN_PASSWORD ?? "";
 
 export const FTP_SERVER: FtpServerProps = {
-  host: "127.0.0.1",
-  port: 50021,
-  user: "coward",
-  password: "os40",
+  host: process.env.FTP_OWN_IP ?? "127.0.0.1",
+  port: parseInt(process.env.FTP_OWN_PORT ?? "21", 10),
+  user: process.env.FTP_USER ?? "",
+  password: process.env.FTP_PASSWORD ?? "",
   root: "/home/coward",
 };
 

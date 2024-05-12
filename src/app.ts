@@ -1,13 +1,12 @@
-import { ADMIN_PASSWORD, PHONE_HOST, SPEECH_BUBBLE, FTP_SERVER } from "./constants";
+import { ADMIN_PASSWORD, PHONE_HOST, SPEECH_BUBBLE, FTP_SERVER, CRON_SCHEDULE } from "./constants";
 import { Cow } from "./cow";
-// import { Cow } from "./cow";
 import { fortune } from "./fortune";
 import { FtpServerProps, runServer } from "./server";
 import { Os40WebInterface } from "./webif";
 import { schedule } from "node-cron";
 
 const setUpScheduler = (ftpProps: FtpServerProps, phone: Os40WebInterface) => {
-  schedule("0 0 0 * * *", async () => {
+  schedule(CRON_SCHEDULE, async () => {
     console.log("Moo! Scheduler triggered.");
 
     // Create a cow and get it a fortune cookie

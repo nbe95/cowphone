@@ -1,8 +1,5 @@
 FROM node as builder
 
-WORKDIR /cowphone
-
-COPY package*.json ./
 RUN apt-get update && apt-get install -y \
     build-essential \
     libcairo2-dev \
@@ -11,12 +8,18 @@ RUN apt-get update && apt-get install -y \
     libgif-dev \
     librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /cowphone
+COPY package*.json ./
 RUN npm ci
+
 COPY ./ ./
 RUN npm run build
 
 
 FROM node:alpine
+ARG VERSION
+ENV COWPHONE_VERSION ${VERSION}
 ENV NODE_ENV production
 
 RUN adduser -D coward
@@ -28,10 +31,11 @@ RUN apk update && apk add \
     cairo-dev \
     pango-dev \
     giflib-dev
-WORKDIR /cowphone
 
+WORKDIR /cowphone
 COPY package*.json ./
 RUN npm ci --omit=dev
+
 COPY --from=builder /cowphone/dist ./dist
 COPY ./templates ./templates
 
