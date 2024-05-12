@@ -33,7 +33,8 @@ const setUpScheduler = (ftpProps: FtpServerProps, phone: Os40WebInterface) => {
     }
 
     // Save bitmap
-    const imgName: string = `${new Date().toISOString().split("T")[0]}.bmp`;
+    const dateStr: string = new Date().toISOString().split(".")[0].replace(/\D+/g, "-");
+    const imgName: string = `${dateStr}.bmp`;
     cow.saveBitmap(`${ftpProps.root}/${imgName}`);
 
     // Update logo on our cowphone
