@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     ports:
       - 50021:21/tcp
+      - 50080:80/tcp
       - 3000-3009:3000-3009/tcp
     volumes:
       - /etc/localtime:/etc/localtime:ro
