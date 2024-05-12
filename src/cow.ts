@@ -24,7 +24,7 @@ export type SpeechBubbleProps = {
 type Cows = "cow";
 
 export class Cow {
-  private static _templateDir: string = "/cowphone/templates";
+  private static _templateDir: string = "./templates";
   public static font: FontProps = {
     family: "TinyUnicode",
     file: `${Cow._templateDir}/TinyUnicode.ttf`,
@@ -42,7 +42,7 @@ export class Cow {
     this._cow = cow;
   }
 
-  private static wrapLines = (text: string, maxWidth: number): LineProps[] => {
+  public static wrapLines = (text: string, maxWidth: number): LineProps[] => {
     // Create canvas to measure text dimensions
     const canvas: Canvas = createCanvas(1, 1);
     const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
