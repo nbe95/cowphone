@@ -1,4 +1,11 @@
-import { ADMIN_PASSWORD, PHONE_HOST, SPEECH_BUBBLE, FTP_SERVER, CRON_SCHEDULE } from "./constants";
+import {
+  ADMIN_PASSWORD,
+  PHONE_HOST,
+  SPEECH_BUBBLE,
+  FTP_SERVER,
+  CRON_SCHEDULE,
+  VERSION,
+} from "./constants";
 import { Cow } from "./cow";
 import { fortune } from "./fortune";
 import { FtpServerProps, runServer } from "./server";
@@ -38,7 +45,7 @@ const setUpScheduler = (ftpProps: FtpServerProps, phone: Os40WebInterface) => {
 const main = async () => {
   try {
     const phone = new Os40WebInterface(PHONE_HOST, ADMIN_PASSWORD);
-    console.log("Starting cowphone main task.");
+    console.log(`Starting main task of cowphone v${VERSION ?? "<unknown>"}.`);
     await Promise.all([runServer(FTP_SERVER), setUpScheduler(FTP_SERVER, phone)]);
   } catch (error) {
     console.error("Error during cowphone main task:", error);
