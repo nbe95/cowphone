@@ -1,7 +1,7 @@
 # CowPhone :cow2: :phone:
 
-Got an old OpenStage 40 as your desktop phone? Give it an update and, of course,
-some :sparkles: *super cow powers*! :sparkles:
+Got an old OpenStage 40 as your desktop phone?\
+Give it an update and, of course, some :sparkles: _super cow powers_! :sparkles:
 
 Just as easy as typing `fortune | cowsay` in the terminal, running this tool in
 a Docker container is enough to obtain a fresh fortune cookie once per day (or
