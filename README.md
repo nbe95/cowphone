@@ -10,7 +10,7 @@ anytime you want) and display it on your phone.
 ![A photo of a cow](./doc/beware.jpg)
 
 > Fun fact: This was one of the first fortunes I got when implementing and
-testing this tool. There's no such thing as coincidence...
+> testing this tool. There's no such thing as coincidence...
 
 Take a look at [this template](./.env.template) and populate your own `.env`
 file. Then, simply run `docker compose up -d` etc. and you're all set.
