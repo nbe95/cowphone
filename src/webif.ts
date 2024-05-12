@@ -39,11 +39,11 @@ export class Os40WebInterface {
       ?.map((raw) => parse(raw))
       ?.find((cookie) => "webm" in cookie)?.webm;
     if (authCode && authCode != "0000|0000") {
-      console.log(`Successfully authenticated at OpenStage40 with IP ${this._ipAddr}.`);
+      console.log(`Successfully authenticated at OpenStage40 ${this._ipAddr}.`);
       this._auth = authCode;
       return true;
     }
-    console.error(`Could not obtain authentication at OpenStage40 with IP ${this._ipAddr}.`);
+    console.error(`Could not obtain authentication at OpenStage40 ${this._ipAddr}.`);
     return false;
   }
 
@@ -77,12 +77,10 @@ export class Os40WebInterface {
     );
     const payload: string = response.data;
     if (payload.includes("Transfer completed successfully")) {
-      console.log(
-        `Successfully updated logo for OpenStage40 at IP ${this._ipAddr} to ${fileName}.`,
-      );
+      console.log(`Successfully updated logo for OpenStage40 ${this._ipAddr} to ${fileName}.`);
       return true;
     }
-    console.error(`Could not update logo for OpenStage40 at IP ${this._ipAddr} to ${fileName}.`);
+    console.error(`Could not update logo for OpenStage40 ${this._ipAddr} to ${fileName}.`);
     return false;
   }
 }
