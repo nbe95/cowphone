@@ -25,6 +25,7 @@
     "fs": "^0.0.1-security",
     "ftp-srv": "^4.6.3",
     "gm": "^1.25.0",
+    "node-cron": "^3.0.3",
     "path": "^0.12.7",
     "typescript": "^5.4.5"
   },
@@ -32,6 +33,7 @@
     "@types/cookie": "^0.6.0",
     "@types/gm": "^1.25.4",
     "@types/node": "^20.12.11",
+    "@types/node-cron": "^3.0.11",
     "prettier": "^3.2.5"
   },
   "prettier": {
