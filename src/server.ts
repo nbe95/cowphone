@@ -1,5 +1,4 @@
 import { GeneralError, FtpSrv } from "ftp-srv";
-import { FTP_SERVER } from "./constants";
 
 export type FtpServerProps = {
   host: string;
@@ -9,10 +8,10 @@ export type FtpServerProps = {
   root: string;
 };
 
-export const runServer = async () => {
+export const runServer = async (props: FtpServerProps) => {
   const ftpServer = new FtpSrv({
     url: "ftp://0.0.0.0:21",
-    pasv_url: FTP_SERVER.host,
+    pasv_url: props.host,
     pasv_min: 3000,
     pasv_max: 3009,
     anonymous: false,
@@ -20,8 +19,8 @@ export const runServer = async () => {
   });
 
   ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
-    if (username == FTP_SERVER.user && password == FTP_SERVER.password) {
-      return resolve({ root: FTP_SERVER.root });
+    if (username == props.user && password == props.password) {
+      return resolve({ root: props.root });
     }
     return reject(new GeneralError("Invalid username or password", 401));
   });

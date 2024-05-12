@@ -39,13 +39,11 @@ export class Os40WebInterface {
       ?.map((raw) => parse(raw))
       ?.find((cookie) => "webm" in cookie)?.webm;
     if (authCode && authCode != "0000|0000") {
-      console.log(
-        `Successfully authenticated at OpenStage40 with IP ${this._ipAddr} and code ${authCode}.`,
-      );
+      console.log(`Successfully authenticated at OpenStage40 with IP ${this._ipAddr}.`);
       this._auth = authCode;
       return true;
     }
-    console.error(`Could not obtain auth code from OpenStage40 with IP ${this._ipAddr}.`);
+    console.error(`Could not obtain authentication at OpenStage40 with IP ${this._ipAddr}.`);
     return false;
   }
 

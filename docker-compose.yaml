@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  cowphone:
+    image: nbe95/cowphone
+    restart: unless-stopped
+    ports:
+      - 50021:21/tcp
+      - 3000-3009:3000-3009/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CRON_SCHEDULE=$CRON_SCHEDULE
+      - PHONE_HOST=$PHONE_HOST
+      - ADMIN_PASSWORD=$ADMIN_PASSWORD
+      - FTP_OWN_IP=$FTP_OWN_IP
+      - FTP_OWN_PORT=$FTP_OWN_PORT
+      - FTP_USER=$FTP_USER
+      - FTP_PASSWORD=$FTP_PASSWORD
