@@ -20,7 +20,10 @@ export const runServer = async (props: FtpServerProps) => {
 
   ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
     if (username == props.user && password == props.password) {
-      return resolve({ root: props.root });
+      return resolve({
+        root: props.root,
+        blacklist: ["ALLO", "APPE", "DELE", "MKD", "RMD", "RNRF", "RNTO", "STOR", "STRU"], // make server read-only
+      });
     }
     return reject(new GeneralError("Invalid username or password", 401));
   });
