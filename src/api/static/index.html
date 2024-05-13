@@ -16,6 +16,11 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/js/all.min.js"></script>
     <script type="text/javascript">
+      const loadVersion = async () => {
+        const result = { version: "0.0.0" }
+        document.getElementById("cowphone-version").innerHTML = `v${result.version}`;
+      }
+
       const loadHistory = async () => {
         //const result = await fetch("/api/v1/history", {
         //    method: "GET"
@@ -47,10 +52,11 @@
             </div>
           </div>`;
         });
-        document.getElementById("cowphone_history").innerHTML = html;
+        document.getElementById("cowphone-history").innerHTML = html;
       };
 
       window.onload = () => {
+        loadVersion();
         loadHistory();
       };
     </script>
@@ -58,7 +64,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="/"> <i class="fa-solid fa-cow fa-flip"></i>&ensp;CowPhone</a>
+        <a class="navbar-brand" href="/"> <i class="fa-solid fa-cow fa-flip"></i>&ensp;CowPhone&ensp;<span class="text-secondary" id="cowphone-version"></span></a>
       </div>
     </nav>
 
@@ -68,7 +74,7 @@
       <hr class="col-1 my-4" />
 
       <h3>History</h3>
-      <div class="row my-3" id="cowphone_history">
+      <div class="row my-3" id="cowphone-history">
         <div class="d-flex justify-content-center">
           <div class="spinner-border text-secondary m-4" role="status">
             <span class="sr-only">Loading...</span>
