@@ -23,6 +23,7 @@
     "axios": "^1.6.8",
     "canvas": "^2.11.2",
     "cookie": "^0.6.0",
+    "find-remove": "^4.1.0",
     "fs": "^0.0.1-security",
     "ftp-srv": "^4.6.3",
     "gm": "^1.25.0",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",
+    "@types/find-remove": "^2.0.3",
     "@types/gm": "^1.25.4",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.11",

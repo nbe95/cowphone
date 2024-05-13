@@ -11,10 +11,20 @@ import { fortune } from "./fortune";
 import { FtpServerProps, runServer } from "./server";
 import { Os40WebInterface } from "./webif";
 import { schedule } from "node-cron";
+import findRemoveSync from "find-remove";
 
 const setUpScheduler = (ftpProps: FtpServerProps, phone: Os40WebInterface) => {
   schedule(CRON_SCHEDULE, async () => {
     console.log("Moo! Scheduler triggered.");
+
+    // First, clean-up any old files
+    const result = findRemoveSync(ftpProps.root, {
+      age: {
+        seconds: 60 * 60 * 24 * 100, // 100 days
+      },
+    });
+    const gone: string[] = Object.keys(result as Record<string, boolean>);
+    if (gone.length) console.log(`Deleted old files: ${gone.join(", ")}`);
 
     // Create a cow and get it a fortune cookie
     const cow: Cow = new Cow(SPEECH_BUBBLE);
