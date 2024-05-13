@@ -16,13 +16,11 @@ export class Os40WebInterface {
     this._agent = new Agent({ rejectUnauthorized: false });
   }
 
-  public getRequestUrl(): string {
-    return `https://${this._ipAddr}/page.cmd`;
-  }
+  private _getRequestUrl = (): string => `https://${this._ipAddr}/page.cmd`;
 
   public async authenticate(): Promise<boolean> {
     const response = await axios.post(
-      this.getRequestUrl(),
+      this._getRequestUrl(),
       {
         page_submit: "WEBMp_Admin_Login",
         AdminPassword: this._adminPassword,
@@ -51,7 +49,7 @@ export class Os40WebInterface {
     const fileDir: string = path.dirname(filePath);
     const fileName: string = path.basename(filePath);
     const response = await axios.post(
-      this.getRequestUrl(),
+      this._getRequestUrl(),
       {
         page_submit: "WEBM_Admin_Logo",
         "dl-lgo-method": "0",
