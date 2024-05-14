@@ -91,6 +91,10 @@ export class Cow {
     return false;
   }
 
+  public hasText(): boolean {
+    return this._lines.length > 0;
+  }
+
   public saveBitmap(outFile: string): void {
     // Using gm as workaround since node-canvas cannot directly save bitmaps
     const bitmap: State = gm(this._getCowFile())

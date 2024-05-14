@@ -10,7 +10,7 @@ export type FtpServerProps = {
 
 export const runServer = async (props: FtpServerProps) => {
   const ftpServer = new FtpSrv({
-    url: "ftp://0.0.0.0:21",
+    url: `ftp://0.0.0.0:${props.port}`,
     pasv_url: props.host,
     pasv_min: 3000,
     pasv_max: 3009,
