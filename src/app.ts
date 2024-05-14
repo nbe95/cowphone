@@ -1,18 +1,18 @@
+import findRemoveSync from "find-remove";
+import { schedule } from "node-cron";
+import { runApi } from "./api";
 import {
   ADMIN_PASSWORD,
+  CRON_SCHEDULE,
+  FTP_SERVER,
   PHONE_HOST,
   SPEECH_BUBBLE,
-  FTP_SERVER,
-  CRON_SCHEDULE,
   VERSION,
 } from "./constants";
 import { Cow } from "./cow";
 import { fortune } from "./fortune";
-import { FtpServerProps, runServer } from "./server";
+import { runServer } from "./server";
 import { Os40WebInterface } from "./webif";
-import { schedule } from "node-cron";
-import findRemoveSync from "find-remove";
-import { runApi } from "./api";
 
 const setUpScheduler = () => {
   schedule(CRON_SCHEDULE, async () => {

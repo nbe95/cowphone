@@ -1,8 +1,8 @@
 import axios from "axios";
+import { parse } from "cookie";
 import { Agent } from "https";
-import { parse, serialize } from "cookie";
-import { FtpServerProps } from "./server";
 import path from "path";
+import { FtpServerProps } from "./server";
 
 export class Os40WebInterface {
   private _ipAddr: string;
