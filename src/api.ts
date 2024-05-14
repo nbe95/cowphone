@@ -15,7 +15,7 @@ export const runApi = async (cowDir: string) => {
   const jsonParser = bodyParser.json();
   const apiRouter = express.Router();
   apiRouter.get("/version", (req, rsp) => {
-    rsp.send({ version: VERSION ?? null });
+    rsp.send({ version: VERSION || null });
   });
   apiRouter.get("/history", (req, rsp) => {
     fs.readdir(cowDir, (error, files) => {
