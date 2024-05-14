@@ -37,7 +37,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /cowphone/dist ./dist
-COPY ./templates ./templates
+COPY ./static ./static
 
 EXPOSE 21 80 3000-3009
 USER coward

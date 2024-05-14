@@ -24,7 +24,7 @@ export type SpeechBubbleProps = {
 type Cows = "cow";
 
 export class Cow {
-  private static _templateDir: string = "./templates";
+  private static _templateDir: string = "./static/cows";
   public static font: FontProps = {
     family: "TinyUnicode",
     file: `${Cow._templateDir}/TinyUnicode.ttf`,

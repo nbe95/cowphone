@@ -34,7 +34,7 @@ export const runApi = async (cowDir: string) => {
   app.use("/api/v1", apiRouter);
 
   // Static webinterface and file server for cow images
-  app.use(express.static("src/static"));
+  app.use(express.static("./static/api"));
   app.use("/cow", express.static(cowDir));
 
   app.listen(port, () => {
