@@ -18,7 +18,7 @@ export const runApi = async (cowDir: string) => {
     rsp.send({ version: VERSION ?? null });
   });
   apiRouter.get("/history", (req, rsp) => {
-    fs.readdir(cowDir, (_, files) => {
+    fs.readdir(cowDir, (error, files) => {
       const cows = files.filter((file) => !file.startsWith("."));
       rsp.send(cows);
     });
