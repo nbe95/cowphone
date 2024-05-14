@@ -20,7 +20,7 @@ export const runApi = async (cowDir: string) => {
   apiRouter.get("/history", (req, rsp) => {
     fs.readdir(cowDir, (error, files) => {
       const cows = files.filter((file) => !file.startsWith("."));
-      rsp.send(cows);
+      rsp.send(cows.sort().reverse());
     });
   });
   apiRouter.get("/fortune", async (req, rsp) => {
