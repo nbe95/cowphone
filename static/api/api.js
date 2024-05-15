@@ -8,7 +8,7 @@ const loadVersion = async () => {
 
 const loadHistory = async () => {
   const request = await fetch("/api/v1/history", { method: "GET" });
-  if (request.body) {
+  try {
     const result = await request.json();
     let html = "";
     result.forEach((cow) => {
@@ -22,10 +22,12 @@ const loadHistory = async () => {
       </div>`;
     });
     document.getElementById("cowphone-history").innerHTML = html;
-  } else {
+  } catch (error) {
+    console.error(error);
     document.getElementById("cowphone-history").innerHTML =
-      `<div class="alert alert-info" role="alert">
-        Apparently there's no cow power yet...
+      `<div class="alert alert-warning d-flex flex-row" role="alert">
+        <span class="me-auto">Apparently there's no cow power yet...</span>
+        <i class="fa-regular fa-face-sad-tear fa-xl"></i>
       </div>`;
   }
 };
