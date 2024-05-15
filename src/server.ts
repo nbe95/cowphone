@@ -1,4 +1,5 @@
 import { GeneralError, FtpSrv } from "ftp-srv";
+import { PROD } from "./constants";
 
 export type FtpServerProps = {
   host: string;
@@ -10,7 +11,7 @@ export type FtpServerProps = {
 
 export const runServer = async (props: FtpServerProps) => {
   const ftpServer = new FtpSrv({
-    url: "ftp://0.0.0.0:21",
+    url: `ftp://0.0.0.0:${PROD ? 21 : props.port}`,
     pasv_url: props.host,
     pasv_min: 3000,
     pasv_max: 3009,

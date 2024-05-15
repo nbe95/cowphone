@@ -1,6 +1,6 @@
 import express from "express";
 import fs from "fs";
-import { VERSION } from "./constants";
+import { PROD, VERSION } from "./constants";
 import { fortune } from "./fortune";
 import { makeCow } from "./app";
 import { Cow } from "./cow";
@@ -9,7 +9,6 @@ import { StatusCodes } from "http-status-codes";
 
 export const runApi = async (cowDir: string) => {
   const app = express();
-  const port: number = 80;
 
   // API methods
   const jsonParser = bodyParser.json();
@@ -38,6 +37,8 @@ export const runApi = async (cowDir: string) => {
   app.use(express.static("./static/api"));
   app.use("/cow", express.static(cowDir));
 
+  // Use Docker internal port when productive
+  const port: number = PROD ? 80 : 50080;
   app.listen(port, () => {
     console.log(`Webinterface/API listening on port ${port}.`);
   });
