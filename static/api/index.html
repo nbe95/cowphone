@@ -15,32 +15,8 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/js/all.min.js"></script>
+    <script type="text/javascript" src="/api.js"></script>
     <script type="text/javascript">
-      const loadVersion = async () => {
-        const request = await fetch("/api/v1/version", { method: "GET" });
-        const result = await request.json();
-        if (result.version) {
-          document.getElementById("cowphone-version").innerHTML = `v${result.version}`;
-        }
-      };
-
-      const loadHistory = async () => {
-        const request = await fetch("/api/v1/history", { method: "GET" });
-        const result = await request.json();
-        let html = "";
-        result.forEach((cow) => {
-          html += `<div class="col col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card p-2 my-2">
-              <img src="/cow/${cow}" alt="${cow}">
-              <div class="card-body p-0">
-                <small class="card-text text-muted">${cow}</small>
-              </div>
-            </div>
-          </div>`;
-        });
-        document.getElementById("cowphone-history").innerHTML = html;
-      };
-
       window.onload = () => {
         loadVersion();
         loadHistory();
