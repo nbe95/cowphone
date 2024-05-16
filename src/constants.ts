@@ -3,7 +3,7 @@ import { FtpServerProps } from "./server";
 
 export const PROD = process.env.NODE_ENV === "production";
 export const VERSION: string | undefined = process.env.COWPHONE_VERSION;
-export const CRON_SCHEDULE: string = process.env.CRON_SCHEDULE ?? "0 0 0 * * *";
+export const CRON_SCHEDULE: string | undefined = process.env.CRON_SCHEDULE;
 
 export const PHONE_HOST: string = process.env.PHONE_HOST ?? "";
 export const ADMIN_PASSWORD: string = process.env.ADMIN_PASSWORD ?? "";
