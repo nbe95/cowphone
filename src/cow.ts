@@ -36,18 +36,24 @@ export class Cow {
   private _bubbleProps: SpeechBubbleProps;
   private _cow: Cows;
   private _lines: LineProps[] = [];
+  public textCentered: boolean = true;
+  public textTrimmed: boolean = true;
 
   constructor(speechBubbleProps: SpeechBubbleProps, cow: Cows = "cow") {
     this._bubbleProps = speechBubbleProps;
     this._cow = cow;
   }
 
+  private static _makeCanvas = (): CanvasRenderingContext2D => {
+    const canvas: Canvas = createCanvas(1, 1);
+    const ctx = canvas.getContext("2d");
+    ctx.font = `${Cow.font.size}px '${Cow.font.family}'`;
+    return ctx;
+  };
+
   public static wrapLines = (text: string, maxWidth: number): LineProps[] => {
     // Create canvas to measure text dimensions
-    const canvas: Canvas = createCanvas(1, 1);
-    const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
-    ctx.font = `${Cow.font.size}px '${Cow.font.family}'`;
-
+    const ctx = Cow._makeCanvas();
     const words: string[] = text.split(" ");
     const spaceWidth: number = ctx.measureText(" ").width;
 
@@ -74,7 +80,18 @@ export class Cow {
   public setText(text: string): boolean {
     // Rearrange any spaces and wrap text to lines
     const oneLiner: string = text.trim().replace(/\s+/g, " ");
-    const lines: LineProps[] = Cow.wrapLines(oneLiner, this._bubbleProps.maxWidth);
+
+    let lines: LineProps[] = [];
+    if (this.textTrimmed) {
+      lines = Cow.wrapLines(oneLiner, this._bubbleProps.maxWidth);
+    } else {
+      // Take lines as they come and start measuring
+      const ctx = Cow._makeCanvas();
+      lines = text
+        .replace(/\r+/g, "")
+        .split("\n")
+        .map((l) => ({ line: l, width: ctx.measureText(l).width }));
+    }
 
     // Check if the text will fit in the cow's speech bubble
     if (
@@ -102,13 +119,24 @@ export class Cow {
       .font(Cow.font.file, Cow.font.size);
 
     // Draw line by line, centered both horizontally and vertically
+    const ctx = Cow._makeCanvas();
+    // Calculate vertical starting point for each line
     const lineOffset: number =
       Math.floor(((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2) +
       this._bubbleProps.yOffset;
+
+    // Iterate over each line and draw it
     this._lines.forEach((line, index) => {
+      // Calculate x and y starting point
+      // Note: Leading space must be calculated separately, because drawText() trims the string...
+      const leadingSpace: string = line.line.match(/^\s+/)?.[0] ?? "";
+      const spaceOffset: number = leadingSpace.length ? ctx.measureText(leadingSpace).width : 0;
       const xPos: number =
-        Math.floor((this._bubbleProps.maxWidth - line.width) / 2) + this._bubbleProps.xOffset;
+        (this.textCentered ? Math.floor((this._bubbleProps.maxWidth - line.width) / 2) : 0) +
+        this._bubbleProps.xOffset +
+        spaceOffset;
       const yPos: number = (index + 1) * Cow.font.lineHeight + lineOffset;
+
       bitmap.drawText(xPos, yPos, line.line);
     });
 

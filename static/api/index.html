@@ -36,29 +36,63 @@
     <div class="container my-5">
       <h3>Cow Power Control</h3>
 
+      <div class="my-2">
+        Time schedule: <span class="font-monospace" id="cowphone-schedule">(unknown)</span>
+      </div>
       <form action="#">
         <div class="col col-md-8 my-2">
           <div class="mb-2">
-            <label for="fortune-ta" class="form-label">Set cow text:</label>
-            <textarea class="form-control" id="fortune-ta" name="fortune_ta" rows="3"></textarea>
+            <label for="fortune-ta" class="form-label">Set manual text:</label>
+            <textarea
+              class="form-control"
+              id="fortune-ta"
+              name="fortune_ta"
+              rows="3"
+              onfocus="setTextStatus(this);"
+              onkeydown="setTextStatus(this);"
+            ></textarea>
           </div>
           <div class="hstack gap-3">
             <button
-              class="btn btn-secondary"
+              class="btn btn-secondary me-auto"
               type="button"
-              onclick="loadFortune(this.form.fortune_ta);"
+              onclick="setTextStatus(this.form.fortune_ta); loadFortune(this.form.fortune_ta);"
             >
               Load fortune
             </button>
             <div>
-              Time schedule: <span class="font-monospace" id="cowphone-schedule">(unknown)</span>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="fortune_ta_trim"
+                checked
+              />
+              <label class="form-check-label" for="fortune_ta_trim">Trim whitespace</label>
+            </div>
+            <div>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="fortune_ta_center"
+                checked
+              />
+              <label class="form-check-label" for="fortune_ta_center">Center text</label>
+            </div>
+            <div>
+              <div
+                class="spinner-border spinner-border-sm text-secondary mx-1 invisible"
+                role="status"
+                id="cowphone-spinner"
+              ></div>
             </div>
             <button
-              class="btn btn-primary ms-auto"
+              class="btn btn-primary"
               type="button"
-              onclick="setText(this.form.fortune_ta);"
+              onclick="setTextStatus(this.form.fortune_ta); setText(this.form.fortune_ta, this.form.fortune_ta_trim.checked, this.form.fortune_ta_center.checked);"
             >
-              Apply new text
+              Moo!
             </button>
           </div>
         </div>

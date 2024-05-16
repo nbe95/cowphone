@@ -42,23 +42,33 @@ const loadFortune = async (textArea) => {
   }
 };
 
-const setText = async (textArea) => {
-  const request = await fetch("/api/v1/moo", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: textArea.value }),
-  });
-  if (request.status == 200) {
+const setText = async (textArea, trimmed, centered) => {
+  try {
+    document.getElementById("cowphone-spinner").classList.remove("invisible");
+    const request = await fetch("/api/v1/moo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: textArea.value, trimmed: trimmed, centered: centered }),
+    });
+    if (request.status == 200) {
+      setTextStatus(textArea, false, true);
+    } else {
+      setTextStatus(textArea, true, false);
+    }
+    loadHistory();
+  } finally {
+    document.getElementById("cowphone-spinner").classList.add("invisible");
+  }
+};
+
+const setTextStatus = (textArea, error = false, success = false) => {
+  if (error) {
+    textArea.classList.add("text-danger", "border-danger");
+  } else if (success) {
     textArea.classList.add("text-success", "border-success");
   } else {
-    textArea.classList.add("text-danger", "border-danger");
-  }
-  console.log(textArea);
-  console.log(textArea.classList);
-  window.setTimeout(() => {
     textArea.classList.remove("text-success", "text-danger", "border-success", "border-danger");
-  }, 4000);
-  loadHistory();
+  }
 };

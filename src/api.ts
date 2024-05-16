@@ -29,6 +29,8 @@ export const runApi = async (cowDir: string) => {
     let success: boolean = false;
     if (req.body.text) {
       success = await makeCow(async (cow: Cow) => {
+        cow.textCentered = Boolean(req.body.centered);
+        cow.textTrimmed = Boolean(req.body.trimmed);
         cow.setText(req.body.text ?? "");
       });
     }
