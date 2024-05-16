@@ -1,8 +1,11 @@
-const loadVersion = async () => {
-  const request = await fetch("/api/v1/version", { method: "GET" });
+const loadInfo = async () => {
+  const request = await fetch("/api/v1/info", { method: "GET" });
   const result = await request.json();
   if (result.version) {
     document.getElementById("cowphone-version").innerHTML = `v${result.version}`;
+  }
+  if (result.schedule) {
+    document.getElementById("cowphone-schedule").innerHTML = result.schedule;
   }
 };
 
@@ -29,4 +32,34 @@ const loadHistory = async () => {
         <i class="fa-regular fa-face-sad-tear fa-xl"></i>
       </div>`;
   }
+};
+
+const loadFortune = async (textArea) => {
+  const request = await fetch("/api/v1/fortune", { method: "GET" });
+  const result = await request.json();
+  if (result.text) {
+    textArea.value = result.text;
+  }
+};
+
+const setText = async (textArea) => {
+  const request = await fetch("/api/v1/moo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: textArea.value }),
+  });
+  if (request.status == 200) {
+    textArea.classList.add("text-success", "border-success");
+  } else {
+    textArea.classList.add("text-danger", "border-danger");
+  }
+  console.log(textArea);
+  console.log(textArea.classList);
+  window.setTimeout(() => {
+    textArea.classList.remove("text-success", "text-danger", "border-success", "border-danger");
+  }, 4000);
+  textArea.classList.add("border-danger");
+  loadHistory();
 };
