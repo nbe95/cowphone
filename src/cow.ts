@@ -121,7 +121,7 @@ export class Cow {
         if (buffer[0x1e] == 3) buffer[0x1e] = 0;
 
         writeFile(outFile, buffer, () => {
-          console.log(`Successfully brought the cow in the shed (${outFile}).`);
+          console.log("Successfully brought the cow in the shed.", { file: outFile });
         });
       }
     });

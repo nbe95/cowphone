@@ -5,18 +5,18 @@ import path from "path";
 import { FtpServerProps } from "./server";
 
 export class Os40WebInterface {
-  private _ipAddr: string;
+  private _host: string;
   private _adminPassword: string;
   private _agent: Agent;
   private _auth: string | undefined = undefined;
 
-  constructor(ipAddr: string, adminPassword: string) {
-    this._ipAddr = ipAddr;
+  constructor(host: string, adminPassword: string) {
+    this._host = host;
     this._adminPassword = adminPassword;
     this._agent = new Agent({ rejectUnauthorized: false });
   }
 
-  private _getRequestUrl = (): string => `https://${this._ipAddr}/page.cmd`;
+  private _getRequestUrl = (): string => `https://${this._host}/page.cmd`;
 
   public async authenticate(): Promise<boolean> {
     const response = await axios.post(
@@ -37,11 +37,13 @@ export class Os40WebInterface {
       ?.map((raw) => parse(raw))
       ?.find((cookie) => "webm" in cookie)?.webm;
     if (authCode && authCode != "0000|0000") {
-      console.log(`Successfully authenticated at OpenStage40 ${this._ipAddr}.`);
+      console.log("Successfully authenticated at telephone.", { ipAddress: this._host });
       this._auth = authCode;
       return true;
     }
-    console.error(`Could not obtain authentication at OpenStage40 ${this._ipAddr}.`);
+    console.error("Could not obtain authentication code from telephone.", {
+      ipAddress: this._host,
+    });
     return false;
   }
 
@@ -75,10 +77,19 @@ export class Os40WebInterface {
     );
     const payload: string = response.data;
     if (payload.includes("Transfer completed successfully")) {
-      console.log(`Successfully updated logo for OpenStage40 ${this._ipAddr} to ${fileName}.`);
+      console.log("Successfully updated telephone logo.", {
+        ipAddress: this._host,
+        file: filePath,
+        server: ftpServer,
+      });
       return true;
     }
-    console.error(`Could not update logo for OpenStage40 ${this._ipAddr} to ${fileName}.`);
+
+    console.error("Could not update telephone logo.", {
+      host: this._host,
+      file: filePath,
+      server: ftpServer,
+    });
     return false;
   }
 }

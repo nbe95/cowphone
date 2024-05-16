@@ -30,6 +30,6 @@ export const runServer = async (props: FtpServerProps) => {
   });
 
   ftpServer.listen().then(() => {
-    console.log("FTP server is starting...");
+    console.log("FTP server is starting.");
   });
 };

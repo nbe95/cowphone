@@ -27,7 +27,7 @@ const setUpScheduler = () => {
       },
     });
     const gone: string[] = Object.keys(result as Record<string, boolean>);
-    if (gone.length) console.log(`Deleted old files: ${gone.join(", ")}`);
+    if (gone.length) console.log("Deleted old files.", gone);
 
     // Feed the cow with some fortune cookies
     makeCow(async (cow: Cow) => {
