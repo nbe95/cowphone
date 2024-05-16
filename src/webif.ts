@@ -78,7 +78,7 @@ export class Os40WebInterface {
     const payload: string = response.data;
     if (payload.includes("Transfer completed successfully")) {
       console.log("Successfully updated telephone logo.", {
-        ipAddress: this._host,
+        host: this._host,
         file: filePath,
         server: ftpServer,
       });

@@ -43,6 +43,6 @@ export const runApi = async (cowDir: string) => {
   // Use Docker internal port when productive
   const port: number = PROD ? 80 : 50080;
   app.listen(port, () => {
-    console.log(`Webinterface/API listening on port ${port}.`);
+    console.log("API and webinterface are listening.", { port: port });
   });
 };

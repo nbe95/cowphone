@@ -14,7 +14,6 @@ import { Cow } from "./cow";
 import { fortune } from "./fortune";
 import { runServer } from "./server";
 import { Os40WebInterface } from "./webif";
-import { mkdirp } from "mkdirp";
 
 const setUpScheduler = () => {
   schedule(CRON_SCHEDULE, async () => {
@@ -73,17 +72,9 @@ const main = async () => {
     console.log("Moo! Starting cowphone main task:", {
       version: VERSION,
       productive: PROD,
-    });
-    console.log("Phone data:", {
-      host: PHONE_HOST,
+      phoneHost: PHONE_HOST,
       adminPassword: ADMIN_PASSWORD.replace(/./g, "*"),
     });
-    console.log("FTP data:", { targetServer: FTP_SERVER });
-    if (!PROD) {
-      mkdirp(FTP_SERVER.root).then((made) =>
-        console.log("Created temporary FTP directory for development."),
-      );
-    }
 
     await Promise.all([runServer(FTP_SERVER), setUpScheduler(), runApi(FTP_SERVER.root)]);
   } catch (error) {

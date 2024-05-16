@@ -1,5 +1,6 @@
 import { GeneralError, FtpSrv } from "ftp-srv";
 import { PROD } from "./constants";
+import { mkdirp } from "mkdirp";
 
 export type FtpServerProps = {
   host: string;
@@ -29,7 +30,12 @@ export const runServer = async (props: FtpServerProps) => {
     return reject(new GeneralError("Invalid username or password", 401));
   });
 
+  // Create temp dir for development
+  if (!PROD) {
+    mkdirp(props.root).then(() => console.log("Created temporary FTP directory for development."));
+  }
+
   ftpServer.listen().then(() => {
-    console.log("FTP server is starting.");
+    console.log("FTP server is starting.", { ...props });
   });
 };
