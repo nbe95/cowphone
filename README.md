@@ -16,7 +16,9 @@ Take a look at [this template](./.env.template) and populate your own `.env`
 file. Then, simply run `docker compose up -d` etc. and you're all set.
 
 Behind the scenes, the tool launches a local FTP server and generates new
-fortune cows as bitmaps according to the defined schedule. Then, it requests the
-phone to download the bitmaps and use it as its logo via HTTPS webinterface.
-In addition, a very basic web API is available at port 50080. Check it out to
-see what it can do.
+fortune cows as bitmaps according to the defined schedule (optional). Then, it
+requests the phone to download the bitmaps and use it as its logo via HTTPS
+webinterface.
+
+Additionally, a nice web interface is also available at port 50080.
+Check it out to see what it can do.
