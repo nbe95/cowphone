@@ -1,28 +1,26 @@
 import axios from "axios";
+import { parse } from "cookie";
 import { Agent } from "https";
-import { parse, serialize } from "cookie";
-import { FtpServerProps } from "./server";
 import path from "path";
+import { FtpServerProps } from "./server";
 
 export class Os40WebInterface {
-  private _ipAddr: string;
+  private _host: string;
   private _adminPassword: string;
   private _agent: Agent;
   private _auth: string | undefined = undefined;
 
-  constructor(ipAddr: string, adminPassword: string) {
-    this._ipAddr = ipAddr;
+  constructor(host: string, adminPassword: string) {
+    this._host = host;
     this._adminPassword = adminPassword;
     this._agent = new Agent({ rejectUnauthorized: false });
   }
 
-  public getRequestUrl(): string {
-    return `https://${this._ipAddr}/page.cmd`;
-  }
+  private _getRequestUrl = (): string => `https://${this._host}/page.cmd`;
 
   public async authenticate(): Promise<boolean> {
     const response = await axios.post(
-      this.getRequestUrl(),
+      this._getRequestUrl(),
       {
         page_submit: "WEBMp_Admin_Login",
         AdminPassword: this._adminPassword,
@@ -39,11 +37,13 @@ export class Os40WebInterface {
       ?.map((raw) => parse(raw))
       ?.find((cookie) => "webm" in cookie)?.webm;
     if (authCode && authCode != "0000|0000") {
-      console.log(`Successfully authenticated at OpenStage40 with IP ${this._ipAddr}.`);
+      console.log("Successfully authenticated at telephone.", { ipAddress: this._host });
       this._auth = authCode;
       return true;
     }
-    console.error(`Could not obtain authentication at OpenStage40 with IP ${this._ipAddr}.`);
+    console.error("Could not obtain authentication code from telephone.", {
+      ipAddress: this._host,
+    });
     return false;
   }
 
@@ -51,7 +51,7 @@ export class Os40WebInterface {
     const fileDir: string = path.dirname(filePath);
     const fileName: string = path.basename(filePath);
     const response = await axios.post(
-      this.getRequestUrl(),
+      this._getRequestUrl(),
       {
         page_submit: "WEBM_Admin_Logo",
         "dl-lgo-method": "0",
@@ -75,14 +75,18 @@ export class Os40WebInterface {
         },
       },
     );
+    const ftpLog = {
+      host: this._host,
+      file: filePath,
+      server: (({ host, port }) => ({ host, port }))(ftpServer),
+    };
     const payload: string = response.data;
     if (payload.includes("Transfer completed successfully")) {
-      console.log(
-        `Successfully updated logo for OpenStage40 at IP ${this._ipAddr} to ${fileName}.`,
-      );
+      console.log("Successfully updated telephone logo.", ftpLog);
       return true;
     }
-    console.error(`Could not update logo for OpenStage40 at IP ${this._ipAddr} to ${fileName}.`);
+
+    console.error("Could not update telephone logo.", ftpLog);
     return false;
   }
 }

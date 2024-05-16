@@ -24,7 +24,7 @@ export type SpeechBubbleProps = {
 type Cows = "cow";
 
 export class Cow {
-  private static _templateDir: string = "./templates";
+  private static _templateDir: string = "./static/cows";
   public static font: FontProps = {
     family: "TinyUnicode",
     file: `${Cow._templateDir}/TinyUnicode.ttf`,
@@ -91,6 +91,10 @@ export class Cow {
     return false;
   }
 
+  public hasText(): boolean {
+    return this._lines.length > 0;
+  }
+
   public saveBitmap(outFile: string): void {
     // Using gm as workaround since node-canvas cannot directly save bitmaps
     const bitmap: State = gm(this._getCowFile())
@@ -98,11 +102,12 @@ export class Cow {
       .font(Cow.font.file, Cow.font.size);
 
     // Draw line by line, centered both horizontally and vertically
-    const lineOffset: number = Math.floor(
-      ((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2,
-    );
+    const lineOffset: number =
+      Math.floor(((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2) +
+      this._bubbleProps.yOffset;
     this._lines.forEach((line, index) => {
-      const xPos: number = Math.floor((this._bubbleProps.maxWidth - line.width) / 2);
+      const xPos: number =
+        Math.floor((this._bubbleProps.maxWidth - line.width) / 2) + this._bubbleProps.xOffset;
       const yPos: number = (index + 1) * Cow.font.lineHeight + lineOffset;
       bitmap.drawText(xPos, yPos, line.line);
     });
@@ -117,7 +122,7 @@ export class Cow {
         if (buffer[0x1e] == 3) buffer[0x1e] = 0;
 
         writeFile(outFile, buffer, () => {
-          console.log(`Successfully brought the cow in the shed (${outFile}).`);
+          console.log("Successfully brought the cow in the shed.", { file: outFile });
         });
       }
     });
