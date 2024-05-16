@@ -75,21 +75,18 @@ export class Os40WebInterface {
         },
       },
     );
+    const ftpLog = {
+      host: this._host,
+      file: filePath,
+      server: (({ host, port }) => ({ host, port }))(ftpServer),
+    };
     const payload: string = response.data;
     if (payload.includes("Transfer completed successfully")) {
-      console.log("Successfully updated telephone logo.", {
-        host: this._host,
-        file: filePath,
-        server: ftpServer,
-      });
+      console.log("Successfully updated telephone logo.", ftpLog);
       return true;
     }
 
-    console.error("Could not update telephone logo.", {
-      host: this._host,
-      file: filePath,
-      server: ftpServer,
-    });
+    console.error("Could not update telephone logo.", ftpLog);
     return false;
   }
 }
