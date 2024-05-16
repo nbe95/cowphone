@@ -60,6 +60,9 @@ const setText = async (button, textArea, trimmed, centered) => {
       setTextStatus(textArea, true, false);
     }
     loadHistory();
+  } catch (error) {
+    console.error(error);
+    setTextStatus(textArea, true, false);
   } finally {
     button.innerHTML = buttonText;
     button.disabled = false;

@@ -68,7 +68,13 @@ export const makeCow = async (textSetter: (cow: Cow) => Promise<void>): Promise<
 
   // Update logo on our cowphone
   const phone = new Os40WebInterface(PHONE_HOST, ADMIN_PASSWORD);
-  return await phone.authenticate().then(() => phone.updateLogo(FTP_SERVER, imgName));
+  return await phone
+    .authenticate()
+    .then(() => phone.updateLogo(FTP_SERVER, imgName))
+    .catch(() => {
+      console.error("Could not contact phone via network.");
+      return false;
+    });
 };
 
 const main = async () => {
