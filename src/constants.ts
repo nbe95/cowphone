@@ -17,8 +17,8 @@ export const FTP_SERVER: FtpServerProps = {
 };
 
 export const SPEECH_BUBBLE: SpeechBubbleProps = {
-  xOffset: 4,
-  yOffset: 4,
-  maxWidth: 105,
+  xOffset: 3,
+  yOffset: 1,
+  maxWidth: 102,
   maxLines: 4,
 };

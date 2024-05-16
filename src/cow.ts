@@ -102,11 +102,12 @@ export class Cow {
       .font(Cow.font.file, Cow.font.size);
 
     // Draw line by line, centered both horizontally and vertically
-    const lineOffset: number = Math.floor(
-      ((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2,
-    );
+    const lineOffset: number =
+      Math.floor(((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2) +
+      this._bubbleProps.yOffset;
     this._lines.forEach((line, index) => {
-      const xPos: number = Math.floor((this._bubbleProps.maxWidth - line.width) / 2);
+      const xPos: number =
+        Math.floor((this._bubbleProps.maxWidth - line.width) / 2) + this._bubbleProps.xOffset;
       const yPos: number = (index + 1) * Cow.font.lineHeight + lineOffset;
       bitmap.drawText(xPos, yPos, line.line);
     });
