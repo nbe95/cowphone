@@ -42,12 +42,13 @@
       <form action="#">
         <div class="col col-md-8 my-2">
           <div class="mb-2">
-            <label for="fortune-ta" class="form-label">Set manual text to moo:</label>
+            <label for="fortune-ta" class="form-label">Set manual text:</label>
             <textarea
               class="form-control"
               id="fortune-ta"
               name="fortune_ta"
               rows="3"
+              onfocus="setTextStatus(this);"
               onkeydown="setTextStatus(this);"
             ></textarea>
           </div>
@@ -79,12 +80,19 @@
               />
               <label class="form-check-label" for="fortune_ta_center">Center text</label>
             </div>
+            <div>
+              <div
+                class="spinner-border spinner-border-sm text-secondary mx-1 invisible"
+                role="status"
+                id="cowphone-spinner"
+              ></div>
+            </div>
             <button
               class="btn btn-primary"
               type="button"
               onclick="setTextStatus(this.form.fortune_ta); setText(this.form.fortune_ta, this.form.fortune_ta_trim.checked, this.form.fortune_ta_center.checked);"
             >
-              Apply new text
+              Moo!
             </button>
           </div>
         </div>

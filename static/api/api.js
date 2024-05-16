@@ -43,19 +43,24 @@ const loadFortune = async (textArea) => {
 };
 
 const setText = async (textArea, trimmed, centered) => {
-  const request = await fetch("/api/v1/moo", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: textArea.value, trimmed: trimmed, centered: centered }),
-  });
-  if (request.status == 200) {
-    setTextStatus(textArea, false, true);
-  } else {
-    setTextStatus(textArea, true, false);
+  try {
+    document.getElementById("cowphone-spinner").classList.remove("invisible");
+    const request = await fetch("/api/v1/moo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: textArea.value, trimmed: trimmed, centered: centered }),
+    });
+    if (request.status == 200) {
+      setTextStatus(textArea, false, true);
+    } else {
+      setTextStatus(textArea, true, false);
+    }
+    loadHistory();
+  } finally {
+    document.getElementById("cowphone-spinner").classList.add("invisible");
   }
-  loadHistory();
 };
 
 const setTextStatus = (textArea, error = false, success = false) => {
