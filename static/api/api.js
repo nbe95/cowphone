@@ -42,9 +42,11 @@ const loadFortune = async (textArea) => {
   }
 };
 
-const setText = async (textArea, trimmed, centered) => {
+const setText = async (button, textArea, trimmed, centered) => {
+  const buttonText = button.innerHTML;
+  button.disabled = true;
   try {
-    document.getElementById("cowphone-spinner").classList.remove("invisible");
+    button.innerHTML = `<div class="spinner-border spinner-border-sm mx-1" role="status"></div>`;
     const request = await fetch("/api/v1/moo", {
       method: "POST",
       headers: {
@@ -58,8 +60,12 @@ const setText = async (textArea, trimmed, centered) => {
       setTextStatus(textArea, true, false);
     }
     loadHistory();
+  } catch (error) {
+    console.error(error);
+    setTextStatus(textArea, true, false);
   } finally {
-    document.getElementById("cowphone-spinner").classList.add("invisible");
+    button.innerHTML = buttonText;
+    button.disabled = false;
   }
 };
 
