@@ -41,26 +41,35 @@
       </div>
       <form action="#">
         <div class="col col-md-8 my-2">
-          <div class="mb-2">
-            <label for="fortune-ta" class="form-label">Set manual text:</label>
-            <textarea
-              class="form-control"
-              id="fortune-ta"
-              name="fortune_ta"
-              rows="3"
-              onfocus="setTextStatus(this);"
-              onkeydown="setTextStatus(this);"
-            ></textarea>
+          <!-- Reduced container (8 columns) -->
+          <div class="row mb-2 align-items-center">
+            <div class="col-sm-12 col-md-auto me-auto">
+              <label for="fortune-ta" class="form-label">Set manual text:</label>
+            </div>
+            <div class="col-sm-12 col-md-auto">
+              <button
+                class="btn btn-secondary"
+                type="button"
+                onclick="setTextStatus(this.form.fortune_ta); loadFortune(this.form.fortune_ta);"
+              >
+                Load fortune
+              </button>
+            </div>
           </div>
-          <div class="hstack gap-3">
-            <button
-              class="btn btn-secondary me-auto"
-              type="button"
-              onclick="setTextStatus(this.form.fortune_ta); loadFortune(this.form.fortune_ta);"
-            >
-              Load fortune
-            </button>
-            <div>
+          <div class="row mb-2 align-items-center">
+            <div class="col">
+              <textarea
+                class="form-control"
+                id="fortune-ta"
+                name="fortune_ta"
+                rows="3"
+                onfocus="setTextStatus(this);"
+                onkeydown="setTextStatus(this);"
+              ></textarea>
+            </div>
+          </div>
+          <div class="row mb-2 align-items-center">
+            <div class="col-sm-12 col-md-auto my-1">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -70,7 +79,7 @@
               />
               <label class="form-check-label" for="fortune_ta_trim">Trim whitespace</label>
             </div>
-            <div>
+            <div class="col-sm-12 col-md-auto my-1">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -80,20 +89,15 @@
               />
               <label class="form-check-label" for="fortune_ta_center">Center text</label>
             </div>
-            <div>
-              <div
-                class="spinner-border spinner-border-sm text-secondary mx-1 invisible"
-                role="status"
-                id="cowphone-spinner"
-              ></div>
+            <div class="col-sm-12 col-md-auto ms-auto">
+              <button
+                class="btn btn-primary"
+                type="button"
+                onclick="setTextStatus(this.form.fortune_ta); setText(this, this.form.fortune_ta, this.form.fortune_ta_trim.checked, this.form.fortune_ta_center.checked);"
+              >
+                Moo!
+              </button>
             </div>
-            <button
-              class="btn btn-primary"
-              type="button"
-              onclick="setTextStatus(this.form.fortune_ta); setText(this.form.fortune_ta, this.form.fortune_ta_trim.checked, this.form.fortune_ta_center.checked);"
-            >
-              Moo!
-            </button>
           </div>
         </div>
       </form>
