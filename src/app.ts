@@ -6,6 +6,7 @@ import {
   CRON_SCHEDULE,
   FTP_SERVER,
   PHONE_HOST,
+  PROD,
   SPEECH_BUBBLE,
   VERSION,
 } from "./constants";
@@ -13,6 +14,7 @@ import { Cow } from "./cow";
 import { fortune } from "./fortune";
 import { runServer } from "./server";
 import { Os40WebInterface } from "./webif";
+import { mkdirp } from "mkdirp";
 
 const setUpScheduler = () => {
   schedule(CRON_SCHEDULE, async () => {
@@ -68,7 +70,21 @@ export const makeCow = async (textSetter: (cow: Cow) => Promise<void>): Promise<
 
 const main = async () => {
   try {
-    console.log(`Starting main task of cowphone v${VERSION ?? "<unknown>"}.`);
+    console.log("Moo! Starting cowphone main task:", {
+      version: VERSION,
+      productive: PROD,
+    });
+    console.log("Phone data:", {
+      host: PHONE_HOST,
+      adminPassword: ADMIN_PASSWORD.replace(/./g, "*"),
+    });
+    console.log("FTP data:", { targetServer: FTP_SERVER });
+    if (!PROD) {
+      mkdirp(FTP_SERVER.root).then((made) =>
+        console.log("Created temporary FTP directory for development."),
+      );
+    }
+
     await Promise.all([runServer(FTP_SERVER), setUpScheduler(), runApi(FTP_SERVER.root)]);
   } catch (error) {
     console.error("Error during cowphone main task:", error);
