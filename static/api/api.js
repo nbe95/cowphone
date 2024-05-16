@@ -60,6 +60,5 @@ const setText = async (textArea) => {
   window.setTimeout(() => {
     textArea.classList.remove("text-success", "text-danger", "border-success", "border-danger");
   }, 4000);
-  textArea.classList.add("border-danger");
   loadHistory();
 };
