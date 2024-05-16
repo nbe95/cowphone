@@ -7,5 +7,5 @@ export const fortune = async (): Promise<string> =>
 
     const process = spawn(cmd, args);
     process.on("error", (code) => reject(code));
-    process.on("exit", () => resolve((process.stdout?.read() as Buffer).toString()));
+    process.on("exit", () => resolve((process.stdout?.read() as Buffer).toString().trim()));
   });
