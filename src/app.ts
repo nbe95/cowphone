@@ -49,7 +49,7 @@ const setUpScheduler = () => {
       });
     });
   } else {
-    console.log("Warning: No schedule defined! Cow powers are only available via webinterface...");
+    console.log("Warning: No schedule defined! Cow powers are only available via web interface...");
   }
 };
 

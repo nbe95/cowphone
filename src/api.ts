@@ -38,13 +38,13 @@ export const runApi = async (cowDir: string) => {
   });
   app.use("/api/v1", apiRouter);
 
-  // Static webinterface and file server for cow images
+  // Static web interface and file server for cow images
   app.use(express.static("./static/api"));
   app.use("/cow", express.static(cowDir));
 
   // Use Docker internal port when productive
   const port: number = PROD ? 80 : 50080;
   app.listen(port, () => {
-    console.log("API and webinterface are listening.", { port: port });
+    console.log("API and webi interface are listening.", { port: port });
   });
 };
