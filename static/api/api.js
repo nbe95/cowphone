@@ -78,3 +78,11 @@ const setTextStatus = (textArea, error = false, success = false) => {
     textArea.classList.remove("text-success", "text-danger", "border-success", "border-danger");
   }
 };
+
+const enlargeCow = (title, file) => {
+  document.getElementById("cowphone-modal-title").innerHTML = title;
+  document.getElementById("cowphone-modal-img").setAttribute("src", file);
+  document.getElementById("cowphone-modal-img").setAttribute("alt", title);
+  const modal = new bootstrap.Modal(document.getElementById("cowphone-modal"));
+  modal.show();
+};
