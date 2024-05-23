@@ -15,10 +15,10 @@ const loadHistory = async () => {
   if (result.length) {
     let html = "";
     result.forEach((cow) => {
-      html += `<div class="col col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="card p-2 my-2">
-          <img src="/cow/${cow}" alt="${cow}">
-          <div class="card-body p-0">
+      html += `<div class="col col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card my-2" role="button" onclick="enlargeCow('${cow}', '/cow/${cow}');">
+          <img src="/cow/${cow}" alt="${cow}" class="m-2" style="object-fit: scale-down;">
+          <div class="card-footer small p-1">
             <small class="card-text text-muted">${cow}</small>
           </div>
         </div>
@@ -77,4 +77,12 @@ const setTextStatus = (textArea, error = false, success = false) => {
   } else {
     textArea.classList.remove("text-success", "text-danger", "border-success", "border-danger");
   }
+};
+
+const enlargeCow = (title, file) => {
+  document.getElementById("cowphone-modal-title").innerHTML = title;
+  document.getElementById("cowphone-modal-img").setAttribute("src", file);
+  document.getElementById("cowphone-modal-img").setAttribute("alt", title);
+  const modal = new bootstrap.Modal(document.getElementById("cowphone-modal"));
+  modal.show();
 };
