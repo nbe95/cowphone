@@ -1,5 +1,6 @@
 import findRemoveSync from "find-remove";
 import { schedule } from "node-cron";
+import strftime from "strftime";
 import { runApi } from "./api";
 import {
   ADMIN_PASSWORD,
@@ -62,8 +63,7 @@ export const makeCow = async (textSetter: (cow: Cow) => Promise<void>): Promise<
   }
 
   // Save bitmap
-  const dateStr: string = new Date().toISOString().split(".")[0].replace(/\D+/g, "-");
-  const imgName: string = `${dateStr}.bmp`;
+  const imgName: string = `${strftime("%Y-%m-%d_%H-%M-%S")}.bmp`;
   cow.saveBitmap(`${FTP_SERVER.root}/${imgName}`);
 
   // Update logo on our cowphone

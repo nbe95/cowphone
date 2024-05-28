@@ -14,12 +14,13 @@ const loadHistory = async () => {
   const result = await request.json();
   if (result.length) {
     let html = "";
-    result.forEach((cow) => {
+    result.forEach((file) => {
+      const title = file.substr(0, file.lastIndexOf("."));
       html += `<div class="col col-6 col-md-4 col-lg-3 col-xl-2">
-        <div class="card my-2" role="button" onclick="enlargeCow('${cow}', '/cow/${cow}');">
-          <img src="/cow/${cow}" alt="${cow}" class="m-2" style="object-fit: scale-down;">
+        <div class="card my-2" role="button" onclick="enlargeCow('${title}', '/cow/${file}');">
+          <img src="/cow/${file}" alt="${title}" class="m-2" style="object-fit: scale-down;">
           <div class="card-footer small p-1">
-            <small class="card-text text-muted">${cow}</small>
+            <small class="card-text text-muted">${title}</small>
           </div>
         </div>
       </div>`;
@@ -28,7 +29,7 @@ const loadHistory = async () => {
   } else {
     document.getElementById("cowphone-history").innerHTML =
       `<div class="alert alert-warning d-flex flex-row" role="alert">
-        <span class="me-auto">Apparently there's no cow power yet...</span>
+        <span class="me-auto">Apparently there aren't any cow powers yet...</span>
         <i class="fa-regular fa-face-sad-tear fa-xl"></i>
       </div>`;
   }
