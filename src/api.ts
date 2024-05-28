@@ -1,11 +1,11 @@
+import bodyParser from "body-parser";
 import express from "express";
 import fs from "fs";
-import { CRON_SCHEDULE, PROD, VERSION } from "./constants";
-import { fortune } from "./fortune";
-import { makeCow } from "./app";
-import { Cow } from "./cow";
-import bodyParser from "body-parser";
 import { StatusCodes } from "http-status-codes";
+import { makeCow } from "./app";
+import { CRON_SCHEDULE, PROD, VERSION } from "./constants";
+import { Cow } from "./cow";
+import { fortune } from "./fortune";
 
 export const runApi = async (cowDir: string) => {
   const app = express();

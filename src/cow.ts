@@ -1,6 +1,6 @@
 import { Canvas, CanvasRenderingContext2D, createCanvas, registerFont } from "canvas";
-import gm, { State } from "gm";
 import { writeFile } from "fs";
+import gm, { State } from "gm";
 
 type LineProps = {
   line: string;

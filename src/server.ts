@@ -1,6 +1,6 @@
-import { GeneralError, FtpSrv } from "ftp-srv";
-import { PROD } from "./constants";
+import { FtpSrv } from "ftp-srv";
 import { mkdirp } from "mkdirp";
+import { PROD } from "./constants";
 
 export type FtpServerProps = {
   host: string;

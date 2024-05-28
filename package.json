@@ -45,9 +45,13 @@
     "@types/node-cron": "^3.0.11",
     "jest": "^29.7.0",
     "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "ts-jest": "^29.1.2"
   },
   "prettier": {
-    "printWidth": 100
+    "printWidth": 100,
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ]
   }
 }
