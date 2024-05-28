@@ -32,6 +32,7 @@
     "mkdirp": "^3.0.1",
     "node-cron": "^3.0.3",
     "path": "^0.12.7",
+    "strftime": "^0.10.2",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
