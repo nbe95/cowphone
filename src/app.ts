@@ -12,7 +12,7 @@ import {
   VERSION,
 } from "./constants";
 import { Cow } from "./cow";
-import { fortune } from "./fortune";
+import { getFortuneForCow } from "./fortune";
 import { runServer } from "./server";
 import { Os40WebInterface } from "./webif";
 
@@ -20,34 +20,7 @@ const setUpScheduler = () => {
   if (CRON_SCHEDULE) {
     schedule(CRON_SCHEDULE, async () => {
       console.log("Moo! Scheduler triggered.");
-
-      // First, clean-up any old files
-      const result = findRemoveSync(FTP_SERVER.root, {
-        age: {
-          seconds: 60 * 60 * 24 * 100, // 100 days
-        },
-      });
-      const gone: string[] = Object.keys(result as Record<string, boolean>);
-      if (gone.length) console.log("Deleted old files.", gone);
-
-      // Feed the cow with some fortune cookies
-      makeCow(async (cow: Cow) => {
-        const maxTries: number = 20;
-        let tries: number = 0;
-        let text: string;
-        do {
-          text = await fortune();
-        } while (++tries <= maxTries && !cow.setText(text));
-
-        if (tries <= maxTries) {
-          console.log(`Obtained fortune cookie after ${tries} tries.`);
-        } else {
-          console.log(
-            `Could not obtain fortune cookie even with ${maxTries} tries. Using fallback cookie...`,
-          );
-          cow.setText("This phone has super cow powers...");
-        }
-      });
+      makeCow(getFortuneForCow);
     });
   } else {
     console.log("Warning: No schedule defined! Cow powers are only available via web interface...");
@@ -55,6 +28,15 @@ const setUpScheduler = () => {
 };
 
 export const makeCow = async (textSetter: (cow: Cow) => Promise<void>): Promise<boolean> => {
+  // First, clean-up any old files
+  const result = findRemoveSync(FTP_SERVER.root, {
+    age: {
+      seconds: 60 * 60 * 24 * 100, // 100 days
+    },
+  });
+  const gone: string[] = Object.keys(result as Record<string, boolean>);
+  if (gone.length) console.log("Deleted old files.", gone);
+
   // Create a cow trying to speak
   const cow: Cow = new Cow(SPEECH_BUBBLE);
   await textSetter(cow);
