@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { makeCow } from "./app";
 import { CRON_SCHEDULE, PROD, VERSION } from "./constants";
 import { Cow } from "./cow";
-import { fortune } from "./fortune";
+import { getFortune, getFortuneForCow } from "./fortune";
 
 export const runApi = async (cowDir: string) => {
   const app = express();
@@ -23,7 +23,7 @@ export const runApi = async (cowDir: string) => {
     });
   });
   apiRouter.get("/fortune", async (req, rsp) => {
-    rsp.send({ text: await fortune() });
+    rsp.send({ text: await getFortune() });
   });
   apiRouter.post("/moo", jsonParser, async (req, rsp) => {
     let success: boolean = false;
@@ -36,6 +36,9 @@ export const runApi = async (cowDir: string) => {
     }
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
+  apiRouter.post("/update", jsonParser, async (req, rsp) => {
+    rsp.status((await makeCow(getFortuneForCow)) ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
+  });
   app.use("/api/v1", apiRouter);
 
   // Static web interface and file server for cow images
@@ -45,6 +48,6 @@ export const runApi = async (cowDir: string) => {
   // Use Docker internal port when productive
   const port: number = PROD ? 80 : 50080;
   app.listen(port, () => {
-    console.log("API and webi interface are listening.", { port: port });
+    console.log("API and web interface are listening.", { port: port });
   });
 };

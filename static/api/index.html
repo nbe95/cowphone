@@ -23,6 +23,7 @@
       };
     </script>
   </head>
+
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
@@ -48,7 +49,6 @@
     <div class="container my-5">
       <h3>Cow Power Control</h3>
 
-      <div class="my-2">Time schedule: <code id="cowphone-schedule">(none)</code></div>
       <form action="#">
         <div class="col col-md-8 my-2">
           <!-- Reduced container (8 columns) -->
@@ -66,6 +66,7 @@
               </button>
             </div>
           </div>
+
           <div class="row mb-2 align-items-center">
             <div class="col">
               <textarea
@@ -78,7 +79,8 @@
               ></textarea>
             </div>
           </div>
-          <div class="row mb-2 align-items-center">
+
+          <div class="row mb-3 align-items-center">
             <div class="col-sm-12 col-md-auto my-1">
               <input
                 class="form-check-input"
@@ -101,12 +103,21 @@
             </div>
             <div class="col-sm-12 col-md-auto ms-auto">
               <button
-                class="btn btn-primary"
+                class="btn btn-success"
                 type="button"
                 onclick="setTextStatus(this.form.fortune_ta); setText(this, this.form.fortune_ta, this.form.fortune_ta_trim.checked, this.form.fortune_ta_center.checked);"
               >
                 Moo!
               </button>
+            </div>
+          </div>
+
+          <div class="row mb-2 align-items-center">
+            <div class="col-sm-12 col-md-auto me-auto">
+              Time schedule: <code id="cowphone-schedule">(none)</code>
+            </div>
+            <div class="col-sm-12 col-md-auto">
+              <button class="btn btn-primary" type="button" onclick="update();">Update now</button>
             </div>
           </div>
         </div>

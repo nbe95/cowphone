@@ -43,6 +43,11 @@ const loadFortune = async (textArea) => {
   }
 };
 
+const update = async () => {
+  await fetch("/api/v1/update", { method: "POST" });
+  loadHistory();
+};
+
 const setText = async (button, textArea, trimmed, centered) => {
   const buttonText = button.innerHTML;
   button.disabled = true;
