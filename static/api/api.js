@@ -13,7 +13,7 @@ const loadInfo = async () => {
     result.cowTypes.forEach((cowType) => {
       let option = document.createElement("option");
       option.value = cowType;
-      option.innerHTML = cowType;
+      option.innerHTML = `${cowType} style`;
       selectBox.appendChild(option);
     });
   }
@@ -80,13 +80,13 @@ const setText = async (button, form) => {
     } else {
       setTextStatus(form.cow_text, true, false);
     }
-    loadHistory();
   } catch (error) {
     console.error(error);
     setTextStatus(form.cow_text, true, false);
   } finally {
     button.innerHTML = buttonText;
     button.disabled = false;
+    loadHistory();
   }
 };
 
