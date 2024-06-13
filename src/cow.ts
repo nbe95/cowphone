@@ -45,7 +45,9 @@ export class Cow {
   };
 
   constructor(cow: CowTypes = "cow") {
-    this._cow = COW_DB[COW_TYPES.includes(cow) ? cow : "cow"];
+    const type: string = COW_TYPES.includes(cow) ? cow : "cow";
+    this._cow = COW_DB[type];
+    console.log(`A cow identifying as ${type} was born.`);
   }
 
   private static _makeCanvas = (): CanvasRenderingContext2D => {
