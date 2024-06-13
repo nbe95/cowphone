@@ -1,6 +1,7 @@
 import { Canvas, CanvasRenderingContext2D, createCanvas, registerFont } from "canvas";
 import { writeFile } from "fs";
 import gm, { State } from "gm";
+import { COW_DB, COW_TYPES, CowTypes } from "./constants";
 
 type LineProps = {
   line: string;
@@ -14,14 +15,15 @@ type FontProps = {
   lineHeight: number;
 };
 
-export type SpeechBubbleProps = {
-  xOffset: number;
-  yOffset: number;
-  maxWidth: number;
-  maxLines: number;
+export type CowDefinition = {
+  canvas: string;
+  text: {
+    xOffset: number;
+    yOffset: number;
+    maxWidth: number;
+    maxLines: number;
+  };
 };
-
-type Cows = "cow";
 
 export class Cow {
   private static _templateDir: string = "./static/cows";
@@ -31,17 +33,19 @@ export class Cow {
     size: 15,
     lineHeight: 7,
   };
-  private _getCowFile = (): string => `${Cow._templateDir}/${this._cow}.bmp`;
 
-  private _bubbleProps: SpeechBubbleProps;
-  private _cow: Cows;
+  private _cow: CowDefinition;
   private _lines: LineProps[] = [];
   public textCentered: boolean = true;
   public textTrimmed: boolean = true;
 
-  constructor(speechBubbleProps: SpeechBubbleProps, cow: Cows = "cow") {
-    this._bubbleProps = speechBubbleProps;
-    this._cow = cow;
+  public static makeRandom = (): Cow => {
+    const index: number = Math.floor(Math.random() * COW_TYPES.length);
+    return new Cow(COW_TYPES[index] as CowTypes);
+  };
+
+  constructor(cow: CowTypes = "cow") {
+    this._cow = COW_DB[COW_TYPES.includes(cow) ? cow : "cow"];
   }
 
   private static _makeCanvas = (): CanvasRenderingContext2D => {
@@ -83,7 +87,7 @@ export class Cow {
 
     let lines: LineProps[] = [];
     if (this.textTrimmed) {
-      lines = Cow.wrapLines(oneLiner, this._bubbleProps.maxWidth);
+      lines = Cow.wrapLines(oneLiner, this._cow.text.maxWidth);
     } else {
       // Take lines as they come and start measuring
       const ctx = Cow._makeCanvas();
@@ -95,8 +99,8 @@ export class Cow {
 
     // Check if the text will fit in the cow's speech bubble
     if (
-      lines.length <= this._bubbleProps.maxLines &&
-      Math.max(...lines.map((l) => l.width)) <= this._bubbleProps.maxWidth
+      lines.length <= this._cow.text.maxLines &&
+      Math.max(...lines.map((l) => l.width)) <= this._cow.text.maxWidth
     ) {
       console.log(`I will moo "${oneLiner}" using ${lines.length} lines.`);
       this._lines = lines;
@@ -114,7 +118,7 @@ export class Cow {
 
   public saveBitmap(outFile: string): void {
     // Using gm as workaround since node-canvas cannot directly save bitmaps
-    const bitmap: State = gm(this._getCowFile())
+    const bitmap: State = gm(`${Cow._templateDir}/${this._cow.canvas}`)
       .antialias(false)
       .font(Cow.font.file, Cow.font.size);
 
@@ -122,8 +126,8 @@ export class Cow {
     const ctx = Cow._makeCanvas();
     // Calculate vertical starting point for each line
     const lineOffset: number =
-      Math.floor(((this._bubbleProps.maxLines - this._lines.length) * Cow.font.lineHeight) / 2) +
-      this._bubbleProps.yOffset;
+      Math.floor(((this._cow.text.maxLines - this._lines.length) * Cow.font.lineHeight) / 2) +
+      this._cow.text.yOffset;
 
     // Iterate over each line and draw it
     this._lines.forEach((line, index) => {
@@ -132,8 +136,8 @@ export class Cow {
       const leadingSpace: string = line.line.match(/^\s+/)?.[0] ?? "";
       const spaceOffset: number = leadingSpace.length ? ctx.measureText(leadingSpace).width : 0;
       const xPos: number =
-        (this.textCentered ? Math.floor((this._bubbleProps.maxWidth - line.width) / 2) : 0) +
-        this._bubbleProps.xOffset +
+        (this.textCentered ? Math.floor((this._cow.text.maxWidth - line.width) / 2) : 0) +
+        this._cow.text.xOffset +
         spaceOffset;
       const yPos: number = (index + 1) * Cow.font.lineHeight + lineOffset;
 
