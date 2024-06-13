@@ -4,8 +4,18 @@ const loadInfo = async () => {
   if (result.version) {
     document.getElementById("cowphone-version").innerHTML = `v${result.version}`;
   }
-  if (result.schedule) {
-    document.getElementById("cowphone-schedule").innerHTML = result.schedule;
+  if (result.updateSchedule) {
+    document.getElementById("cowphone-schedule").innerHTML = result.updateSchedule;
+  }
+  if (result.cowTypes) {
+    const selectBox = document.getElementById("cowphone-types");
+    selectBox.replaceChildren();
+    result.cowTypes.forEach((cowType) => {
+      let option = document.createElement("option");
+      option.value = cowType;
+      option.innerHTML = cowType;
+      selectBox.appendChild(option);
+    });
   }
 };
 
@@ -35,11 +45,11 @@ const loadHistory = async () => {
   }
 };
 
-const loadFortune = async (textArea) => {
+const loadFortune = async (form) => {
   const request = await fetch("/api/v1/fortune", { method: "GET" });
   const result = await request.json();
   if (result.text) {
-    textArea.value = result.text;
+    form.cow_text.value = result.text;
   }
 };
 
@@ -48,7 +58,7 @@ const update = async () => {
   loadHistory();
 };
 
-const setText = async (button, textArea, trimmed, centered) => {
+const setText = async (button, form) => {
   const buttonText = button.innerHTML;
   button.disabled = true;
   try {
@@ -58,17 +68,22 @@ const setText = async (button, textArea, trimmed, centered) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text: textArea.value, trimmed: trimmed, centered: centered }),
+      body: JSON.stringify({
+        text: form.cow_text.value,
+        type: form.cow_type.options[form.cow_type.selectedIndex].value,
+        trimmed: form.cow_text_trimmed.checked,
+        centered: form.cow_text_centered.checked,
+      }),
     });
     if (request.status == 200) {
-      setTextStatus(textArea, false, true);
+      setTextStatus(form.cow_text, false, true);
     } else {
-      setTextStatus(textArea, true, false);
+      setTextStatus(form.cow_text, true, false);
     }
     loadHistory();
   } catch (error) {
     console.error(error);
-    setTextStatus(textArea, true, false);
+    setTextStatus(form.cow_text, true, false);
   } finally {
     button.innerHTML = buttonText;
     button.disabled = false;

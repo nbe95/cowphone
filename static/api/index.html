@@ -60,7 +60,7 @@
               <button
                 class="btn btn-secondary"
                 type="button"
-                onclick="setTextStatus(this.form.fortune_ta); loadFortune(this.form.fortune_ta);"
+                onclick="setTextStatus(this.form.cow_text); loadFortune(this.form);"
               >
                 Load fortune
               </button>
@@ -72,7 +72,7 @@
               <textarea
                 class="form-control"
                 id="fortune-ta"
-                name="fortune_ta"
+                name="cow_text"
                 rows="3"
                 onfocus="setTextStatus(this);"
                 onkeydown="setTextStatus(this);"
@@ -86,29 +86,37 @@
                 class="form-check-input"
                 type="checkbox"
                 value=""
-                id="fortune_ta_trim"
+                id="cow_text_trimmed"
                 checked
               />
-              <label class="form-check-label" for="fortune_ta_trim">Trim whitespace</label>
+              <label class="form-check-label" for="cow_text_trimmed">Trim whitespace</label>
             </div>
             <div class="col-sm-12 col-md-auto my-1">
               <input
                 class="form-check-input"
                 type="checkbox"
                 value=""
-                id="fortune_ta_center"
+                id="cow_text_centered"
                 checked
               />
-              <label class="form-check-label" for="fortune_ta_center">Center text</label>
+              <label class="form-check-label" for="cow_text_centered">Center text</label>
             </div>
             <div class="col-sm-12 col-md-auto ms-auto">
-              <button
-                class="btn btn-success"
-                type="button"
-                onclick="setTextStatus(this.form.fortune_ta); setText(this, this.form.fortune_ta, this.form.fortune_ta_trim.checked, this.form.fortune_ta_center.checked);"
-              >
-                Let's moo!
-              </button>
+              <div class="input-group">
+                <select
+                  name="cow_type"
+                  class="form-select"
+                  aria-label="Cow type selection"
+                  id="cowphone-types"
+                ></select>
+                <button
+                  class="btn btn-success"
+                  type="button"
+                  onclick="setTextStatus(this.form.cow_text); setText(this, this.form);"
+                >
+                  Let's moo!
+                </button>
+              </div>
             </div>
           </div>
 
