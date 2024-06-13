@@ -35,7 +35,7 @@ export const runApi = async (cowDir: string) => {
   });
   apiRouter.post("/update", jsonParser, async (req, rsp) => {
     const cow = Cow.makeRandom();
-    setFortuneForCow(cow);
+    await setFortuneForCow(cow);
     const success: boolean = await generateAndApplyCow(cow);
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
