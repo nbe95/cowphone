@@ -86,6 +86,9 @@ export class Cow {
   public setText(text: string): boolean {
     // Rearrange any spaces and wrap text to lines
     const oneLiner: string = text.trim().replace(/\s+/g, " ");
+    if (oneLiner.length == 0) {
+      return false;
+    }
 
     let lines: LineProps[] = [];
     if (this.textTrimmed) {
