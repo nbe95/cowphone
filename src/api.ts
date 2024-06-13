@@ -2,10 +2,10 @@ import bodyParser from "body-parser";
 import express from "express";
 import fs from "fs";
 import { StatusCodes } from "http-status-codes";
-import { makeCow } from "./app";
-import { CRON_SCHEDULE, PROD, VERSION } from "./constants";
+import { generateAndApplyCow } from "./app";
+import { COW_TYPES, CRON_SCHEDULE, PROD, VERSION } from "./constants";
 import { Cow } from "./cow";
-import { getFortune, getFortuneForCow } from "./fortune";
+import { getFortune, getFortuneForCow as setFortuneForCow } from "./fortune";
 
 export const runApi = async (cowDir: string) => {
   const app = express();
@@ -14,30 +14,30 @@ export const runApi = async (cowDir: string) => {
   const jsonParser = bodyParser.json();
   const apiRouter = express.Router();
   apiRouter.get("/info", (req, rsp) => {
-    rsp.send({ version: VERSION || null, schedule: CRON_SCHEDULE });
+    rsp.json({ version: VERSION || null, cowTypes: COW_TYPES, updateSchedule: CRON_SCHEDULE });
   });
   apiRouter.get("/history", (req, rsp) => {
     fs.readdir(cowDir, (error, files) => {
       const cows = files?.filter((file) => !file.startsWith(".")) ?? [];
-      rsp.send(cows.sort().reverse());
+      rsp.json(cows.sort().reverse());
     });
   });
   apiRouter.get("/fortune", async (req, rsp) => {
-    rsp.send({ text: await getFortune() });
+    rsp.json({ text: await getFortune() });
   });
   apiRouter.post("/moo", jsonParser, async (req, rsp) => {
-    let success: boolean = false;
-    if (req.body.text) {
-      success = await makeCow(async (cow: Cow) => {
-        cow.textCentered = Boolean(req.body.centered);
-        cow.textTrimmed = Boolean(req.body.trimmed);
-        cow.setText(req.body.text ?? "");
-      });
-    }
+    const cow = new Cow(req.body.type ?? "");
+    cow.textCentered = Boolean(req.body.centered);
+    cow.textTrimmed = Boolean(req.body.trimmed);
+    cow.setText(req.body.text ?? "");
+    const success: boolean = await generateAndApplyCow(cow);
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
   apiRouter.post("/update", jsonParser, async (req, rsp) => {
-    rsp.status((await makeCow(getFortuneForCow)) ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
+    const cow = Cow.makeRandom();
+    await setFortuneForCow(cow);
+    const success: boolean = await generateAndApplyCow(cow);
+    rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
   app.use("/api/v1", apiRouter);
 

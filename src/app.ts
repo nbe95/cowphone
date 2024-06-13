@@ -2,15 +2,7 @@ import findRemoveSync from "find-remove";
 import { schedule } from "node-cron";
 import strftime from "strftime";
 import { runApi } from "./api";
-import {
-  ADMIN_PASSWORD,
-  CRON_SCHEDULE,
-  FTP_SERVER,
-  PHONE_HOST,
-  PROD,
-  SPEECH_BUBBLE,
-  VERSION,
-} from "./constants";
+import { ADMIN_PASSWORD, CRON_SCHEDULE, FTP_SERVER, PHONE_HOST, PROD, VERSION } from "./constants";
 import { Cow } from "./cow";
 import { getFortuneForCow } from "./fortune";
 import { runServer } from "./server";
@@ -19,15 +11,20 @@ import { Os40WebInterface } from "./webif";
 const setUpScheduler = () => {
   if (CRON_SCHEDULE) {
     schedule(CRON_SCHEDULE, async () => {
-      console.log("Moo! Scheduler triggered.");
-      makeCow(getFortuneForCow);
+      console.log("Moo! Scheduler triggered. Generating a random cow with the need to speak.");
+
+      const cow = Cow.makeRandom();
+      getFortuneForCow(cow);
+      if (!generateAndApplyCow(cow)) {
+        console.error("Could not generate any file for our little bovine.");
+      }
     });
   } else {
-    console.log("Warning: No schedule defined! Cow powers are only available via web interface...");
+    console.warn("No schedule defined! Cow powers are only available via web interface.");
   }
 };
 
-export const makeCow = async (textSetter: (cow: Cow) => Promise<void>): Promise<boolean> => {
+export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
   // First, clean-up any old files
   const result = findRemoveSync(FTP_SERVER.root, {
     age: {
@@ -37,9 +34,7 @@ export const makeCow = async (textSetter: (cow: Cow) => Promise<void>): Promise<
   const gone: string[] = Object.keys(result as Record<string, boolean>);
   if (gone.length) console.log("Deleted old files.", gone);
 
-  // Create a cow trying to speak
-  const cow: Cow = new Cow(SPEECH_BUBBLE);
-  await textSetter(cow);
+  // What does the cow say?
   if (!cow.hasText()) {
     return false;
   }

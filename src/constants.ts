@@ -1,4 +1,5 @@
-import { SpeechBubbleProps } from "./cow";
+import cowDb from "../static/cows/db.json";
+import { CowDefinition } from "./cow";
 import { FtpServerProps } from "./server";
 
 export const PROD = process.env.NODE_ENV === "production";
@@ -16,9 +17,6 @@ export const FTP_SERVER: FtpServerProps = {
   root: PROD ? "/home/coward" : "./.ftp",
 };
 
-export const SPEECH_BUBBLE: SpeechBubbleProps = {
-  xOffset: 3,
-  yOffset: 1,
-  maxWidth: 102,
-  maxLines: 4,
-};
+export const COW_DB: { [id: string]: CowDefinition } = cowDb;
+export const COW_TYPES: string[] = Object.keys(cowDb);
+export type CowTypes = keyof typeof cowDb;

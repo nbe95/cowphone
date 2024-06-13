@@ -1,0 +1,20 @@
+{
+  "cow": {
+    "canvas": "cow.bmp",
+    "text": {
+      "xOffset": 3,
+      "yOffset": 1,
+      "maxWidth": 102,
+      "maxLines": 4
+    }
+  },
+  "cat": {
+    "canvas": "cat.bmp",
+    "text": {
+      "xOffset": 37,
+      "yOffset": 1,
+      "maxWidth": 99,
+      "maxLines": 4
+    }
+  }
+}
