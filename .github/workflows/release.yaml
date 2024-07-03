@@ -66,5 +66,6 @@ jobs:
       - bump-tag-version
       - create-docker-image
     steps:
-      - run: |
-          curl -X POST "${{ secrets.DEPLOYMENT_WEBHOOK }}?DEPLOY_TAG=${{ needs.bump-tag-version.outputs.version }}"
+      - name: Call deployment webhook
+        run: |
+          curl -s -X POST "${{ secrets.DEPLOYMENT_WEBHOOK }}?DEPLOY_TAG=${{ needs.bump-tag-version.outputs.version }}"
