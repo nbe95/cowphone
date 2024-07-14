@@ -14,8 +14,8 @@ const setUpScheduler = () => {
       console.log("Moo! Scheduler triggered. Generating a random cow with the need to speak.");
 
       const cow = Cow.makeRandom();
-      getFortuneForCow(cow);
-      if (!generateAndApplyCow(cow)) {
+      await getFortuneForCow(cow);
+      if (!(await generateAndApplyCow(cow))) {
         console.error("Could not generate any file for our little bovine.");
       }
     });
