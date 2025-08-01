@@ -29,9 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: awalsh128/cache-apt-pkgs-action@latest
+      - name: Install graphicsmagick
+        uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: imagemagick
+          packages: graphicsmagick
           version: 1.0
       - uses: actions/setup-node@v4
         with:
