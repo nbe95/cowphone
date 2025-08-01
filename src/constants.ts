@@ -1,6 +1,9 @@
 import cowDb from "../static/cows/db.json";
 import { CowDefinition } from "./cow";
 import { FtpServerProps } from "./server";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const PROD = process.env.NODE_ENV === "production";
 export const VERSION: string | undefined = process.env.COWPHONE_VERSION;
