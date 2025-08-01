@@ -16,12 +16,12 @@ export const getFortuneForCow = async (cow: Cow, maxTries: number = 30) => {
   let text: string;
   do {
     text = await getFortune();
-  } while (++tries <= maxTries && !cow.setText(text));
+  } while (++tries <= maxTries && !cow.speak(text));
 
   if (tries <= maxTries) {
     console.log(`Obtained fortune cookie after ${tries} tries.`);
   } else {
-    cow.setText("This phone has super cow powers...");
+    cow.speak("This phone has super cow powers...");
     console.log(
       `Could not obtain fortune cookie even with ${maxTries} tries. Using fallback cookie...`,
     );
