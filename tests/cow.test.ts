@@ -9,6 +9,12 @@ describe("Testing cow powers", () => {
     }
   });
 
+  test("Should not instantiate nonsense", () => {
+    expect(() => {
+      new Os40Cow("not-existing");
+    }).toThrow();
+  });
+
   test("Should generate Bitmaps", async () => {
     const cow: Cow = new Os40Cow("Cow");
     cow.speak("foo bar");
