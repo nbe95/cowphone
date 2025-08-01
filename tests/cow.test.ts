@@ -1,0 +1,29 @@
+import { existsSync, mkdirSync } from "fs";
+import { FTP_SERVER } from "../src/constants";
+import { Cow, Os40Cow, Os60Cow } from "../src/cow/cow";
+
+describe("Testing cow powers", () => {
+  beforeAll(() => {
+    if (!existsSync(FTP_SERVER.root)) {
+      mkdirSync(FTP_SERVER.root, { recursive: true });
+    }
+  });
+
+  test("Should generate Bitmaps", async () => {
+    const cow: Cow = new Os40Cow("Cow");
+    cow.speak("foo bar");
+
+    const fileName = await cow.generate();
+    expect(fileName.substring(fileName.length - 4)).toBe(".bmp");
+    expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
+  });
+
+  test("Should generate PNGs", async () => {
+    const cow: Cow = new Os60Cow("Cow");
+    cow.speak("foo bar");
+
+    const fileName = await cow.generate();
+    expect(fileName.substring(fileName.length - 4)).toBe(".png");
+    expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
+  });
+});
