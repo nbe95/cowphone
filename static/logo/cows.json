@@ -12,9 +12,9 @@
                 "name": "Cow",
                 "canvas": "os40/cow.bmp",
                 "textBox": {
-                    "width": 102,
+                    "width": 104,
                     "height": 28,
-                    "offset": [3, 1]
+                    "offset": [4, 3]
                 }
             },
             {

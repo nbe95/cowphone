@@ -4,7 +4,7 @@ import fs from "fs";
 import { StatusCodes } from "http-status-codes";
 import { generateAndApplyCow } from "./app";
 import { COW_TYPES, CRON_SCHEDULE, PROD, VERSION } from "./constants";
-import { Cow, Os40Cow, Os60Cow } from "./cow/cow";
+import { Cow, Os60Cow } from "./cow/cow";
 import { getFortune, getFortuneForCow as setFortuneForCow } from "./cow/fortune";
 
 export const runApi = async (cowDir: string) => {

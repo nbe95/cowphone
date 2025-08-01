@@ -1,17 +1,24 @@
 import { TextBox } from "../src/cow/text-box";
 
 describe("Testing text box powers", () => {
-
-  const lh: number = 15
-  const makeBox = (width: number = 1000, height: number = 1000): TextBox => new TextBox(
-    { width: width, height: height, font: { family: "Tiny Unicode", name: "TinyUnicode", fileName: "TinyUnicode.ttf", size: lh, lineHeight: lh } }
-  );
+  const lh: number = 15;
+  const makeBox = (width: number = 1000, height: number = 1000): TextBox =>
+    new TextBox({
+      width: width,
+      height: height,
+      font: {
+        family: "Tiny Unicode",
+        name: "TinyUnicode",
+        fileName: "TinyUnicode.ttf",
+        size: lh,
+        lineHeight: lh,
+      },
+    });
 
   const lines: string =
-    "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua."
+    "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua.";
   const loremBox: TextBox = makeBox();
   loremBox.setText(lines, false);
-
 
   test("Loooong text should wrap properly", () => {
     const lorem: string =
@@ -19,31 +26,31 @@ describe("Testing text box powers", () => {
     const getWrappedLorem = (width: number, height: number = 1000) => {
       const box: TextBox = makeBox(width, height);
       box.setText(lorem, true);
-      return box.getLines()
+      return box.getLines();
     };
 
     expect(getWrappedLorem(1000)).toStrictEqual([lorem]);
 
     expect(getWrappedLorem(200)).toStrictEqual([
-       "Lorem ipsum dolor sit amet, consectetur",
-        "adipisici elit, sed eiusmod tempor incidunt ut",
-        "labore et dolore magna aliqua. Ut enim ad minim",
-        "veniam, quis nostrud exercitation ullamco laboris",
-        "nisi ut aliquid ex ea commodi consequat.",
+      "Lorem ipsum dolor sit amet, consectetur",
+      "adipisici elit, sed eiusmod tempor incidunt ut",
+      "labore et dolore magna aliqua. Ut enim ad minim",
+      "veniam, quis nostrud exercitation ullamco laboris",
+      "nisi ut aliquid ex ea commodi consequat.",
     ]);
 
     expect(getWrappedLorem(100)).toStrictEqual([
-        "Lorem ipsum dolor sit",
-        "amet, consectetur",
-        "adipisici elit, sed",
-        "eiusmod tempor incidunt",
-        "ut labore et dolore",
-        "magna aliqua. Ut enim",
-        "ad minim veniam, quis",
-        "nostrud exercitation",
-        "ullamco laboris nisi ut",
-        "aliquid ex ea commodi",
-        "consequat.",
+      "Lorem ipsum dolor sit",
+      "amet, consectetur",
+      "adipisici elit, sed",
+      "eiusmod tempor incidunt",
+      "ut labore et dolore",
+      "magna aliqua. Ut enim",
+      "ad minim veniam, quis",
+      "nostrud exercitation",
+      "ullamco laboris nisi ut",
+      "aliquid ex ea commodi",
+      "consequat.",
     ]);
 
     expect(getWrappedLorem(30)).toStrictEqual([
@@ -120,6 +127,5 @@ describe("Testing text box powers", () => {
     expect(result[1]).toHaveProperty("y", lh * 2 + 50);
     expect(result[2]).toHaveProperty("y", lh * 3 + 50);
     expect(result[3]).toHaveProperty("y", lh * 4 + 50);
-
   });
 });

@@ -1,6 +1,5 @@
 import findRemoveSync from "find-remove";
 import { schedule } from "node-cron";
-import strftime from "strftime";
 import { runApi } from "./api";
 import { ADMIN_PASSWORD, CRON_SCHEDULE, FTP_SERVER, PHONE_HOST, PROD, VERSION } from "./constants";
 import { Cow } from "./cow/cow";
@@ -35,11 +34,13 @@ export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
   if (gone.length) console.log("Deleted old files.", gone);
 
   // Generate cow image
-  const fileName: string | void = await cow.generate()
+  const fileName: string | void = await cow
+    .generate()
     .then(async (fileName: string) => {
       console.log("Successfully brought the cow in the shed.", { fileName: fileName });
       return fileName;
-    }).catch((reason: any) => {
+    })
+    .catch((reason: any) => {
       console.error("Failed to generate image!", reason);
     });
 

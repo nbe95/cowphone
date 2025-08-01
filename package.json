@@ -57,6 +57,18 @@
     "printWidth": 100,
     "plugins": [
       "prettier-plugin-organize-imports"
+    ],
+    "overrides": [
+      {
+        "files": "*.json",
+        "excludeFiles": [
+          "./package*.json",
+          "./tsconfig.json"
+        ],
+        "options": {
+          "tabWidth": 4
+        }
+      }
     ]
   }
 }
