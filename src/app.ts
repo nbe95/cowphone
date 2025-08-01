@@ -34,20 +34,24 @@ export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
   const gone: string[] = Object.keys(result as Record<string, boolean>);
   if (gone.length) console.log("Deleted old files.", gone);
 
-  // What does the cow say?
-  if (!cow.hasText()) {
+  // Generate cow image
+  const fileName: string | void = await cow.generate()
+    .then(async (fileName: string) => {
+      console.log("Successfully brought the cow in the shed.", { fileName: fileName });
+      return fileName;
+    }).catch((reason: any) => {
+      console.error("Failed to generate image!", reason);
+    });
+
+  if (!fileName) {
     return false;
   }
 
-  // Save bitmap
-  const imgName: string = `${strftime("%Y-%m-%d_%H-%M-%S")}.png`;
-  cow.saveBitmap(`${FTP_SERVER.root}/${imgName}`);
-
-  // Update logo on our cowphone
+  // Finally, update the logo on our cowphone
   const phone = new Os40WebInterface(PHONE_HOST, ADMIN_PASSWORD);
   return await phone
     .authenticate()
-    .then(() => phone.updateLogo(FTP_SERVER, imgName))
+    .then(() => phone.updateLogo(FTP_SERVER, fileName))
     .catch(() => {
       console.error("Could not contact phone via network.");
       return false;

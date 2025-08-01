@@ -1,5 +1,5 @@
 import cowDb from "../static/logo/cows.json";
-import { CowDefinition } from "./cow/cow";
+import { CowDefinition, CowProps } from "./cow/cow";
 import { FtpServerProps } from "./phone/ftp-server";
 import dotenv from "dotenv";
 
@@ -20,5 +20,7 @@ export const FTP_SERVER: FtpServerProps = {
   root: PROD ? "./" : "./.ftp/",
 };
 
-export const COW_DB: CowDefinition[] = cowDb.os60.cows;
-export const COW_TYPES: string[] = COW_DB.map(cow => cow.name);
+export const COW_DB: CowDefinition = cowDb;
+export type PHONE_TYPES = keyof typeof cowDb;
+
+export const COW_TYPES = ["Cow", "Cat"]
