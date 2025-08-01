@@ -27,8 +27,6 @@ jobs:
   test:
     name: Test the typescript code
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - name: Install graphicsmagick
@@ -49,7 +47,6 @@ jobs:
           report-path: "./ctrf/*.json"
           summary-report: true
           file-report: true
-          pull-request-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
