@@ -1,4 +1,4 @@
-import { Cow } from "../src/cow";
+import { Cow } from "../src/cow/cow";
 
 describe("Testing cow powers", () => {
   test("Word wrap with long text", () => {

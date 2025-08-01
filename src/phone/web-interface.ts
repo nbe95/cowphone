@@ -2,7 +2,7 @@ import axios from "axios";
 import { parse } from "cookie";
 import { Agent } from "https";
 import path from "path";
-import { FtpServerProps } from "./server";
+import { FtpServerProps } from "./ftp-server";
 
 export class Os40WebInterface {
   private _host: string;

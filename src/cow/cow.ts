@@ -1,7 +1,7 @@
 import { Canvas, CanvasRenderingContext2D, createCanvas, registerFont } from "canvas";
 import { writeFile } from "fs";
 import gm, { State } from "gm";
-import { COW_DB, COW_TYPES, CowTypes } from "./constants";
+import { COW_DB, COW_TYPES } from "../constants";
 
 type LineProps = {
   line: string;
@@ -16,22 +16,22 @@ type FontProps = {
 };
 
 export type CowDefinition = {
+  name: string;
   canvas: string;
   text: {
-    xOffset: number;
-    yOffset: number;
+    offset: number[];
     maxWidth: number;
     maxLines: number;
   };
 };
 
 export class Cow {
-  private static _templateDir: string = "./static/cows";
+  private static _templateDir: string = "./static/logo/templates/";
   public static font: FontProps = {
     family: "TinyUnicode",
-    file: `${Cow._templateDir}/TinyUnicode.ttf`,
-    size: 15,
-    lineHeight: 7,
+    file: `${Cow._templateDir}/../fonts/WhiteRabbit.ttf`,
+    size: 11,
+    lineHeight: 12,
   };
 
   private _cow: CowDefinition;
@@ -40,14 +40,16 @@ export class Cow {
   public textTrimmed: boolean = true;
 
   public static makeRandom = (): Cow => {
-    const index: number = Math.floor(Math.random() * COW_TYPES.length);
-    return new Cow(COW_TYPES[index] as CowTypes);
+    // const index: number = Math.floor(Math.random() * COW_TYPES.length);
+    // return new Cow(COW_TYPES[index] as CowTypes);
+    return new Cow()
   };
 
-  constructor(cow: CowTypes = "cow") {
-    const type: string = COW_TYPES.includes(cow) ? cow : "cow";
-    this._cow = COW_DB[type];
-    console.log(`A ${type} was born.`);
+  constructor(/*cow: CowTypes = ""*/) {
+    // const type: string = COW_TYPES.includes(cow) ? cow : "cow";
+    // this._cow = COW_DB[type];
+    this._cow = COW_DB[0];
+    console.log(`A ${this._cow.name} was born.`);
   }
 
   private static _makeCanvas = (): CanvasRenderingContext2D => {
@@ -103,11 +105,9 @@ export class Cow {
     }
 
     // Check if the text will fit in the cow's speech bubble
-    if (
-      lines.length <= this._cow.text.maxLines &&
-      Math.max(...lines.map((l) => l.width)) <= this._cow.text.maxWidth
-    ) {
-      console.log(`I will moo "${oneLiner}" using ${lines.length} lines.`);
+    const boxWidth = Math.max(...lines.map((l) => l.width));
+    if (lines.length <= this._cow.text.maxLines && boxWidth <= this._cow.text.maxWidth) {
+      console.log(`I will moo "${oneLiner}" using ${lines.length} lines (box width: ${boxWidth}).`);
       this._lines = lines;
       return true;
     }
@@ -132,7 +132,7 @@ export class Cow {
     // Calculate vertical starting point for each line
     const lineOffset: number =
       Math.floor(((this._cow.text.maxLines - this._lines.length) * Cow.font.lineHeight) / 2) +
-      this._cow.text.yOffset;
+      this._cow.text.offset[1]
 
     // Iterate over each line and draw it
     this._lines.forEach((line, index) => {
@@ -142,27 +142,37 @@ export class Cow {
       const spaceOffset: number = leadingSpace.length ? ctx.measureText(leadingSpace).width : 0;
       const xPos: number =
         (this.textCentered ? Math.floor((this._cow.text.maxWidth - line.width) / 2) : 0) +
-        this._cow.text.xOffset +
+        this._cow.text.offset[0] +
         spaceOffset;
       const yPos: number = (index + 1) * Cow.font.lineHeight + lineOffset;
 
       bitmap.drawText(xPos, yPos, line.line);
     });
 
-    // Save to file
-    bitmap.toBuffer((error, buffer) => {
+    bitmap.negative();
+
+    bitmap.write(outFile, (error: any) => {
       if (error) {
         console.error(error);
       } else {
-        // gm sets the biCompression field at offset 0x1E to BI_BITFIELDS (3),
-        // while the OpenStage40 can only handle BI_RGB (0).
-        if (buffer[0x1e] == 3) buffer[0x1e] = 0;
-
-        writeFile(outFile, buffer, () => {
-          console.log("Successfully brought the cow in the shed.", { file: outFile });
-        });
+        console.log("Finished!")
       }
     });
+
+    // Save to file
+    // bitmap.toBuffer((error, buffer) => {
+    //   if (error) {
+    //     console.error(error);
+    //   } else {
+    //     // gm sets the biCompression field at offset 0x1E to BI_BITFIELDS (3),
+    //     // while the OpenStage40 can only handle BI_RGB (0).
+    //     if (buffer[0x1e] == 3) buffer[0x1e] = 0;
+
+    //     writeFile(outFile, buffer, () => {
+    //       console.log("Successfully brought the cow in the shed.", { file: outFile });
+    //     });
+    //   }
+    // });
   }
 }
 

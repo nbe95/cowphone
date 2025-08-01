@@ -3,10 +3,10 @@ import { schedule } from "node-cron";
 import strftime from "strftime";
 import { runApi } from "./api";
 import { ADMIN_PASSWORD, CRON_SCHEDULE, FTP_SERVER, PHONE_HOST, PROD, VERSION } from "./constants";
-import { Cow } from "./cow";
-import { getFortuneForCow } from "./fortune";
-import { runServer } from "./server";
-import { Os40WebInterface } from "./webif";
+import { Cow } from "./cow/cow";
+import { getFortuneForCow } from "./cow/fortune";
+import { runServer } from "./phone/ftp-server";
+import { Os40WebInterface } from "./phone/web-interface";
 
 const setUpScheduler = () => {
   if (CRON_SCHEDULE) {
@@ -40,7 +40,7 @@ export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
   }
 
   // Save bitmap
-  const imgName: string = `${strftime("%Y-%m-%d_%H-%M-%S")}.bmp`;
+  const imgName: string = `${strftime("%Y-%m-%d_%H-%M-%S")}.png`;
   cow.saveBitmap(`${FTP_SERVER.root}/${imgName}`);
 
   // Update logo on our cowphone

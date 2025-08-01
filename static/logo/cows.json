@@ -1,0 +1,57 @@
+{
+    "os40": {
+        "font": {
+            "family": "fonts/TinyUnicode.ttf",
+            "size": 15,
+            "lineHeight": 7
+        },
+        "cows": [
+            {
+                "name": "Cow",
+                "canvas": "os40/cow.bmp",
+                "text": {
+                    "offset": [3, 1],
+                    "maxWidth": 102,
+                    "maxLines": 4
+                }
+            },
+            {
+                "name": "Cat",
+                "canvas": "os40/cat.bmp",
+                "text": {
+                    "offset": [37, 1],
+                    "maxWidth": 99,
+                    "maxLines": 4
+                }
+            }
+        ]
+    },
+
+    "os60": {
+        "font": {
+            "family": "fonts/monofonto.ttf",
+            "size": 15,
+            "lineHeight": 7
+        },
+        "cows": [
+            {
+                "name": "Cow",
+                "canvas": "os60/cow.png",
+                "text": {
+                    "offset": [4, 3],
+                    "maxWidth": 96,
+                    "maxLines": 5
+                }
+            },
+            {
+                "name": "Cat",
+                "canvas": "os60/cat.png",
+                "text": {
+                    "offset": [37, 1],
+                    "maxWidth": 99,
+                    "maxLines": 4
+                }
+            }
+        ]
+    }
+}

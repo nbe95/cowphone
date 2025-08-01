@@ -1,6 +1,6 @@
-import cowDb from "../static/cows/db.json";
-import { CowDefinition } from "./cow";
-import { FtpServerProps } from "./server";
+import cowDb from "../static/logo/cows.json";
+import { CowDefinition } from "./cow/cow";
+import { FtpServerProps } from "./phone/ftp-server";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,9 +17,8 @@ export const FTP_SERVER: FtpServerProps = {
   port: parseInt(process.env.FTP_OWN_PORT ?? "50021", 10),
   user: process.env.FTP_USER ?? "",
   password: process.env.FTP_PASSWORD ?? "",
-  root: PROD ? "/home/coward" : "./.ftp",
+  root: PROD ? "./" : "./.ftp/",
 };
 
-export const COW_DB: { [id: string]: CowDefinition } = cowDb;
-export const COW_TYPES: string[] = Object.keys(cowDb);
-export type CowTypes = keyof typeof cowDb;
+export const COW_DB: CowDefinition[] = cowDb.os60.cows;
+export const COW_TYPES: string[] = COW_DB.map(cow => cow.name);
