@@ -3,7 +3,7 @@
         "font": {
             "family": "Tiny Unicode",
             "name": "TinyUnicode",
-            "fileName": "TinyUnicode.ttf",
+            "fileName": "TinyUnicode/TinyUnicode.ttf",
             "size": 15,
             "lineHeight": 15
         },
@@ -33,7 +33,7 @@
         "font": {
             "family": "White Rabbit",
             "name": "WhiteRabbit",
-            "fileName": "WhiteRabbit.ttf",
+            "fileName": "WhiteRabbit/whitrabt.ttf",
             "size": 14,
             "lineHeight": 14
         },

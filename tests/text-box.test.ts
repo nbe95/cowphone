@@ -9,7 +9,7 @@ describe("Testing text box powers", () => {
       font: {
         family: "Tiny Unicode",
         name: "TinyUnicode",
-        fileName: "TinyUnicode.ttf",
+        fileName: "TinyUnicode/TinyUnicode.ttf",
         size: lh,
         lineHeight: lh,
       },
