@@ -114,11 +114,13 @@ export class TextBox {
       const leadingSpace: string = line.line.match(/^\s+/)?.[0] ?? "";
       const hSpaceOffset: number =
         inclLeadingSpace && leadingSpace.length ? this._ctx.measureText(leadingSpace).width : 0;
-      const xPos: number =
-        xOffset + (xCenter ? Math.floor((this._props.width - line.width) / 2) : 0) + hSpaceOffset;
-      const yPos: number = yOffset + (index + 1) * this._props.font.lineHeight + linesOffsetY;
 
-      return { ...line, x: xPos, y: yPos };
+      const xPos: number = Math.round(
+        (xCenter ? Math.floor((this._props.width - line.width) / 2) : 0) + hSpaceOffset,
+      );
+      const yPos: number = Math.floor((index + 1) * this._props.font.lineHeight + linesOffsetY - 0); // Prefer top alignment when off by 0.5px
+
+      return { ...line, x: xOffset + xPos, y: yOffset + yPos };
     });
   };
 }
