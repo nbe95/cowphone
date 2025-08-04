@@ -1,19 +1,15 @@
-import { TextBox } from "../src/cow/text-box";
+import { FontProps, TextBox } from "../src/cow/text-box";
 
 describe("Testing text box powers", () => {
-  const lh: number = 15;
+  const font: FontProps = {
+    family: "Tiny Unicode",
+    name: "TinyUnicode",
+    fileName: "tinyunicode/TinyUnicode.ttf",
+    size: 16,
+    lineHeight: 7,
+  };
   const makeBox = (width: number = 1000, height: number = 1000): TextBox =>
-    new TextBox({
-      width: width,
-      height: height,
-      font: {
-        family: "Tiny Unicode",
-        name: "TinyUnicode",
-        fileName: "TinyUnicode/TinyUnicode.ttf",
-        size: lh,
-        lineHeight: lh,
-      },
-    });
+    new TextBox({ width: width, height: height, font: font });
 
   const lines: string =
     "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua.";
@@ -34,22 +30,24 @@ describe("Testing text box powers", () => {
     expect(getWrappedLorem(200)).toStrictEqual([
       "Lorem ipsum dolor sit amet, consectetur",
       "adipisici elit, sed eiusmod tempor incidunt ut",
-      "labore et dolore magna aliqua. Ut enim ad minim",
-      "veniam, quis nostrud exercitation ullamco laboris",
-      "nisi ut aliquid ex ea commodi consequat.",
+      "labore et dolore magna aliqua. Ut enim ad",
+      "minim veniam, quis nostrud exercitation",
+      "ullamco laboris nisi ut aliquid ex ea commodi",
+      "consequat.",
     ]);
 
     expect(getWrappedLorem(100)).toStrictEqual([
       "Lorem ipsum dolor sit",
       "amet, consectetur",
       "adipisici elit, sed",
-      "eiusmod tempor incidunt",
-      "ut labore et dolore",
-      "magna aliqua. Ut enim",
-      "ad minim veniam, quis",
-      "nostrud exercitation",
-      "ullamco laboris nisi ut",
-      "aliquid ex ea commodi",
+      "eiusmod tempor",
+      "incidunt ut labore et",
+      "dolore magna aliqua.",
+      "Ut enim ad minim",
+      "veniam, quis nostrud",
+      "exercitation ullamco",
+      "laboris nisi ut aliquid",
+      "ex ea commodi",
       "consequat.",
     ]);
 
@@ -97,35 +95,35 @@ describe("Testing text box powers", () => {
     expect(result[2]).toHaveProperty("x", 0);
     expect(result[3]).toHaveProperty("x", 0);
 
-    expect(result[0]).toHaveProperty("y", lh * 1);
-    expect(result[1]).toHaveProperty("y", lh * 2);
-    expect(result[2]).toHaveProperty("y", lh * 3);
-    expect(result[3]).toHaveProperty("y", lh * 4);
+    expect(result[0]).toHaveProperty("y", font.lineHeight * 1 - 1);
+    expect(result[1]).toHaveProperty("y", font.lineHeight * 2 - 1);
+    expect(result[2]).toHaveProperty("y", font.lineHeight * 3 - 1);
+    expect(result[3]).toHaveProperty("y", font.lineHeight * 4 - 1);
   });
 
   test("Text should be horizontally and vertically aligned", () => {
     const result = loremBox.getPositionedText(0, 0, true, true, false);
-    expect(result[0]).toHaveProperty("x", 389);
-    expect(result[1]).toHaveProperty("x", 420);
-    expect(result[2]).toHaveProperty("x", 466);
+    expect(result[0]).toHaveProperty("x", 382);
+    expect(result[1]).toHaveProperty("x", 415);
+    expect(result[2]).toHaveProperty("x", 464);
     expect(result[3]).toHaveProperty("x", 487);
 
-    expect(result[0]).toHaveProperty("y", 470 + lh * 1);
-    expect(result[1]).toHaveProperty("y", 470 + lh * 2);
-    expect(result[2]).toHaveProperty("y", 470 + lh * 3);
-    expect(result[3]).toHaveProperty("y", 470 + lh * 4);
+    expect(result[0]).toHaveProperty("y", 486 + font.lineHeight * 1 - 1);
+    expect(result[1]).toHaveProperty("y", 486 + font.lineHeight * 2 - 1);
+    expect(result[2]).toHaveProperty("y", 486 + font.lineHeight * 3 - 1);
+    expect(result[3]).toHaveProperty("y", 486 + font.lineHeight * 4 - 1);
   });
 
   test("Text should be aligned with offsets", () => {
     const result = loremBox.getPositionedText(20, 50, true, false, false);
-    expect(result[0]).toHaveProperty("x", 389 + 20);
-    expect(result[1]).toHaveProperty("x", 420 + 20);
-    expect(result[2]).toHaveProperty("x", 466 + 20);
+    expect(result[0]).toHaveProperty("x", 382 + 20);
+    expect(result[1]).toHaveProperty("x", 415 + 20);
+    expect(result[2]).toHaveProperty("x", 464 + 20);
     expect(result[3]).toHaveProperty("x", 487 + 20);
 
-    expect(result[0]).toHaveProperty("y", lh * 1 + 50);
-    expect(result[1]).toHaveProperty("y", lh * 2 + 50);
-    expect(result[2]).toHaveProperty("y", lh * 3 + 50);
-    expect(result[3]).toHaveProperty("y", lh * 4 + 50);
+    expect(result[0]).toHaveProperty("y", font.lineHeight * 1 - 1 + 50);
+    expect(result[1]).toHaveProperty("y", font.lineHeight * 2 - 1 + 50);
+    expect(result[2]).toHaveProperty("y", font.lineHeight * 3 - 1 + 50);
+    expect(result[3]).toHaveProperty("y", font.lineHeight * 4 - 1 + 50);
   });
 });
