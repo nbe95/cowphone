@@ -12,8 +12,8 @@ interface PositionedTextLine extends TextLine {
 }
 
 export type FontProps = {
-  family: string;
   name: string;
+  family: string;
   fileName: string;
   size: number;
   lineHeight: number;

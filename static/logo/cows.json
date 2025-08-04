@@ -1,11 +1,11 @@
 {
     "os40": {
         "font": {
-            "family": "Tiny Unicode",
             "name": "TinyUnicode",
-            "fileName": "TinyUnicode/TinyUnicode.ttf",
+            "family": "Tiny Unicode",
+            "fileName": "tinyunicode/TinyUnicode.ttf",
             "size": 15,
-            "lineHeight": 15
+            "lineHeight": 7
         },
         "cows": [
             {
@@ -21,7 +21,7 @@
                 "name": "Cat",
                 "canvas": "os40/cat.bmp",
                 "textBox": {
-                    "width": 107,
+                    "width": 106,
                     "height": 28,
                     "offset": [32, 2]
                 }
@@ -40,11 +40,11 @@
 
     "os60": {
         "font": {
-            "family": "White Rabbit",
-            "name": "WhiteRabbit",
-            "fileName": "WhiteRabbit/whitrabt.ttf",
-            "size": 14,
-            "lineHeight": 14
+            "name": "Pixel Arial 11",
+            "family": "PixelArial",
+            "fileName": "pixel_arial_11/PIXEARG_.TTF",
+            "size": 8,
+            "lineHeight": 12
         },
         "cows": [
             {
