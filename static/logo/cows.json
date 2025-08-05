@@ -51,7 +51,7 @@
                 "name": "Cow",
                 "canvas": "os60/cow.png",
                 "textBox": {
-                    "width": 178,
+                    "width": 176,
                     "height": 61,
                     "offset": [5, 5]
                 }
