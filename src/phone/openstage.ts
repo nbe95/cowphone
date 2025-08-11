@@ -9,7 +9,7 @@ export type OpenStageType = "os40" | "os60";
 export enum OpenStageSkin {
   None,
   SilverBlue,
-  AnthraciteOrange
+  AnthraciteOrange,
 }
 
 export class OpenStagePhone {
@@ -54,19 +54,19 @@ export class OpenStagePhone {
       ipAddress: this._host,
     });
     return false;
-  }
+  };
 
   public getType = async (): Promise<OpenStageType> => {
     throw new Error("Not implemented yet.");
-  }
+  };
 
   public getSkin = async (): Promise<OpenStageSkin> => {
     throw new Error("Not implemented yet.");
-  }
+  };
 
   public updateLogo = async (ftpServer: FtpServerProps, filePath: string): Promise<boolean> => {
     if (!this._isAuthenticated()) {
-      await this._authenticate()
+      await this._authenticate();
     }
 
     const fileDir: string = path.dirname(filePath);
@@ -109,5 +109,5 @@ export class OpenStagePhone {
 
     console.error("Could not update OpenStage logo.", ftpLog);
     return false;
-  }
+  };
 }

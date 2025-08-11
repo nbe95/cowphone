@@ -50,12 +50,10 @@ export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
 
   // Finally, update the logo on our cowphone
   const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
-  return await phone
-    .updateLogo(FTP_SERVER, fileName)
-    .catch(() => {
-      console.error("Could not contact phone via network.");
-      return false;
-    });
+  return await phone.updateLogo(FTP_SERVER, fileName).catch(() => {
+    console.error("Could not contact phone via network.");
+    return false;
+  });
 };
 
 const main = async () => {

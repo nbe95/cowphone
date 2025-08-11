@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node ./dist/src/app.js",
-    "test": "npx jest",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest",
     "lint": "npx prettier . --check",
     "format": "npx prettier . --write",
     "watch": "tsc-watch --onSuccess \"npm run start\""

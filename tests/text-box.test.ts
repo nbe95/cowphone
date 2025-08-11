@@ -1,16 +1,30 @@
+import { loadFont, measureText } from "jimp";
 import { TextBox } from "../src/cow/text-box";
 
 describe("Testing text box powers", () => {
-  const fontFile: string = "tinyunicode/TinyUnicode.ttf"
-  const size: number = 16
-  const lineHeight: number = 7
-  const makeBox = (width: number = 1000, height: number = 1000): TextBox =>
-    new TextBox({ width: width, height: height, lineHeight: lineHeight, measureTextWidth: (text: string) => 0 })
+  let font: any;
+  let makeBox: Function;
+  let loremBox: TextBox;
+  let lineHeight: number;
 
-  const lines: string =
-    "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua.";
-  const loremBox: TextBox = makeBox();
-  loremBox.setText(lines, false);
+  beforeAll(async () => {
+    // Load font and related classes asynchronously before tests
+    font = await loadFont("./static/logo/fonts/tinyunicode/TinyUnicode-16.fnt");
+    makeBox = (width: number = 1000, height: number = 1000): TextBox =>
+      new TextBox({
+        width: width,
+        height: height,
+        lineHeight: lineHeight,
+        measureTextWidth: (text: string) => measureText(font, text),
+      });
+    lineHeight = 7;
+
+    // Make a lorem ipsum box for convenience
+    const lines: string =
+      "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua.";
+    loremBox = makeBox();
+    loremBox.setText(lines, false);
+  });
 
   test("Loooong text should wrap properly", () => {
     const lorem: string =

@@ -4,7 +4,7 @@ import fs from "fs";
 import { StatusCodes } from "http-status-codes";
 import { generateAndApplyCow } from "./app";
 import { CRON_SCHEDULE, PROD, VERSION } from "./config";
-import { Cow, CowType } from "./cow/cow";
+import { Cow } from "./cow/cow";
 import { getFortune, getFortuneForCow as setFortuneForCow } from "./cow/fortune";
 
 export const runApi = async (cowDir: string) => {
@@ -27,7 +27,7 @@ export const runApi = async (cowDir: string) => {
   });
   apiRouter.post("/moo", jsonParser, async (req, rsp) => {
     // const cow = new Cow(req.body.type ?? "");
-    const cow: Cow = new Cow("os60", "Cow")
+    const cow: Cow = new Cow("os60", "Cow");
     await cow.init();
     // cow.textCentered = Boolean(req.body.centered);
     // cow.textTrimmed = Boolean(req.body.trimmed);

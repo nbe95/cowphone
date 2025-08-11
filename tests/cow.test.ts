@@ -19,21 +19,35 @@ describe("Testing cow powers", () => {
     }).toThrow();
   });
 
-  // test("Should generate Bitmaps", async () => {
-  //   const cow: Cow = new Os40Cow("Cow");
-  //   cow.speak("foo bar");
+  test("Should not moo when uninitialized", async () => {
+    expect(() => {
+      new Cow("os40", "Cow").tryToSpeak("foo");
+    }).toThrow();
 
-  //   const fileName = await cow.generate();
-  //   expect(fileName.substring(fileName.length - 4)).toBe(".bmp");
-  //   expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
-  // });
+    expect(async () => {
+      const cow = new Cow("os40", "Cow");
+      await cow.init();
+      cow.tryToSpeak("foo");
+    }).not.toThrow();
+  });
 
-  // test("Should generate PNGs", async () => {
-  //   const cow: Cow = new Os60Cow("Cow");
-  //   cow.speak("foo bar");
+  test("Should generate Bitmaps", async () => {
+    const cow: Cow = new Cow("os40", "Cow");
+    await cow.init();
+    cow.tryToSpeak("foo bar");
 
-  //   const fileName = await cow.generate();
-  //   expect(fileName.substring(fileName.length - 4)).toBe(".png");
-  //   expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
-  // });
+    const fileName = await cow.generate();
+    expect(fileName.substring(fileName.length - 4)).toBe(".bmp");
+    expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
+  });
+
+  test("Should generate PNGs", async () => {
+    const cow: Cow = new Cow("os60", "Cow");
+    await cow.init();
+    cow.tryToSpeak("foo bar");
+
+    const fileName = await cow.generate();
+    expect(fileName.substring(fileName.length - 4)).toBe(".png");
+    expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
+  });
 });

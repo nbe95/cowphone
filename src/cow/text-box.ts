@@ -12,7 +12,7 @@ export type TextBoxProps = {
   width: number;
   height: number;
   lineHeight: number;
-  measureTextWidth: (text: string) => number
+  measureTextWidth: (text: string) => number;
 };
 
 // Class for a rectangular text box with certain properties to determine if text will fit inside
@@ -21,7 +21,7 @@ export class TextBox {
   public readonly height: number;
   public readonly lineHeight: number;
 
-  private _measureTextWidth: (text: string) => number
+  private _measureTextWidth: (text: string) => number;
   private _lines: TextLine[] = [];
 
   constructor(props: TextBoxProps) {
@@ -62,9 +62,7 @@ export class TextBox {
       this._lines = this._wrapLines(text.trim().replace(/\s+/g, " "), this.width);
     } else {
       // Take lines as they come and start measuring
-      this._lines = text
-        .split(/\r?\n/)
-        .map((l) => ({ text: l, width: this._measureTextWidth(l) }));
+      this._lines = text.split(/\r?\n/).map((l) => ({ text: l, width: this._measureTextWidth(l) }));
     }
   };
 
