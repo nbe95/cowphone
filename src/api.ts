@@ -34,7 +34,6 @@ export const runApi = async (cowDir: string) => {
     let success: boolean = cow.tryToSpeak(req.body.text ?? "");
     if (success) {
       success = await generateAndApplyCow(cow);
-      console.log(success)
     }
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });

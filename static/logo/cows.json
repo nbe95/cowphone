@@ -1,17 +1,9 @@
 {
     "os40": {
-        "image": {
-            "type": "bmp",
-            "width": 144,
-            "height": 32
-        },
-        "font": {
-            "name": "TinyUnicode",
-            "family": "Tiny Unicode",
-            "fileName": "tinyunicode/TinyUnicode-16.fnt",
-            "size": 16,
-            "lineHeight": 7
-        },
+        "imageType": "bmp",
+        "size": [144, 32],
+        "font": "tinyunicode/TinyUnicode-16.fnt",
+        "lineHeight": 7,
         "cows": [
             {
                 "name": "Cow",
@@ -44,18 +36,10 @@
     },
 
     "os60": {
-        "image": {
-            "type": "png",
-            "width": 240,
-            "height": 71
-        },
-        "font": {
-            "name": "Pixel Arial 11",
-            "family": "PixelArial",
-            "fileName": "pixel_arial_11/PIXEARG_-8.fnt",
-            "size": 8,
-            "lineHeight": 12
-        },
+        "imageType": "png",
+        "size": [240, 71],
+        "font": "pixel_arial_11/PIXEARG_-8.fnt",
+        "lineHeight": 12,
         "cows": [
             {
                 "name": "Cow",

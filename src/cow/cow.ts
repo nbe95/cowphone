@@ -9,23 +9,15 @@ export type CowType = keyof typeof CowDb;
 type CowProps = {
   name: string,
   template: string,
+  imageType: string,
+  size: number[],
+  font: string;
+  lineHeight: number,
   textBox: {
     width: number
     height: number,
     offset: number[]
   }
-  image: {
-    type: string,
-    width: number,
-    height: number
-  },
-  font:  {
-    name: string;
-    family: string;
-    fileName: string;
-    size: number,
-    lineHeight: number,
-  },
 }
 
 export class Cow {
@@ -56,18 +48,20 @@ export class Cow {
       name: cow.name,
       template: cow.template,
       textBox: cow.textBox,
-      image: CowDb[type].image,
-      font: CowDb[type].font
+      imageType: CowDb[type].imageType,
+      size: CowDb[type].size,
+      font: CowDb[type].font,
+      lineHeight: CowDb[type].lineHeight
     }
   }
 
   public init = async () => {
-    this._image = new Jimp({ width: this.props.image.width, height: this.props.image.height });
-    this._font = await loadFont(Cow._fontDir + this.props.font.fileName);
+    this._image = new Jimp({ width: this.props.size[0], height: this.props.size[1]});
+    this._font = await loadFont(Cow._fontDir + this.props.font);
     this._textBox = new TextBox({
       width: this.props.textBox.width,
       height: this.props.textBox.height,
-      lineHeight: this.props.font.lineHeight,
+      lineHeight: this.props.lineHeight,
       measureTextWidth: (text: string) => measureText(this._font, text)
     });
 
@@ -106,10 +100,9 @@ export class Cow {
 
     // Load image template
     this._image = (await Jimp.read(`${Cow._templateDir}/${this.props.template}`) as JimpInstance);
-    if (this._image.width != this.props.image.width || this._image.height != this.props.image.height) {
+    if (this._image.width != this.props.size[0] || this._image.height != this.props.size[1]) {
       throw new Error("Size does not match!");
     }
-    const imageExt: string = this.props.template.slice(this.props.template.lastIndexOf("."));
 
     // Iterate over each line and draw it
     const positionedText = this._textBox!.getPositionedText(
@@ -122,11 +115,11 @@ export class Cow {
     positionedText.forEach((line) => this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }));
 
     // Invert depending on phone theme
-    // this._image.invert();
+    this._image.invert();
 
     // Save image
-    const baseName: string = `${FTP_SERVER.root}/${strftime("%Y-%m-%d_%H-%M-%S")}`;
-    await this._image.write(`${baseName}.${imageExt}`);
-    return `${baseName}.${imageExt}`
+    const baseName: string = strftime("%Y-%m-%d_%H-%M-%S")
+    await this._image.write(`${FTP_SERVER.root}/${baseName}.${this.props.imageType}`);
+    return `${baseName}.${this.props.imageType}`
   };
 }
