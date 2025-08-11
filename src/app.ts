@@ -1,18 +1,18 @@
 import findRemoveSync from "find-remove";
 import { schedule } from "node-cron";
 import { runApi } from "./api";
-import { ADMIN_PASSWORD, CRON_SCHEDULE, FTP_SERVER, PHONE_HOST, PROD, VERSION } from "./constants";
+import { ADMIN_PASSWORD, CRON_SCHEDULE, FTP_SERVER, PHONE_HOST, PROD, VERSION } from "./config";
 import { Cow } from "./cow/cow";
 import { getFortuneForCow } from "./cow/fortune";
 import { runServer } from "./phone/ftp-server";
-import { Os40WebInterface } from "./phone/web-interface";
+import { OpenStagePhone } from "./phone/openstage";
 
 const setUpScheduler = () => {
   if (CRON_SCHEDULE) {
     schedule(CRON_SCHEDULE, async () => {
       console.log("Moo! Scheduler triggered. Generating a random cow with the need to speak.");
 
-      const cow = Cow.makeRandom();
+      const cow = Cow.makeRandom("os40");
       await getFortuneForCow(cow);
       if (!(await generateAndApplyCow(cow))) {
         console.error("Could not generate any file for our little bovine.");
@@ -49,10 +49,9 @@ export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
   }
 
   // Finally, update the logo on our cowphone
-  const phone = new Os40WebInterface(PHONE_HOST, ADMIN_PASSWORD);
+  const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
   return await phone
-    .authenticate()
-    .then(() => phone.updateLogo(FTP_SERVER, fileName))
+    .updateLogo(FTP_SERVER, fileName)
     .catch(() => {
       console.error("Could not contact phone via network.");
       return false;

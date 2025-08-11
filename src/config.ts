@@ -1,6 +1,4 @@
 import dotenv from "dotenv";
-import cowDb from "../static/logo/cows.json";
-import { CowDefinition } from "./cow/cow";
 import { FtpServerProps } from "./phone/ftp-server";
 
 dotenv.config();
@@ -19,8 +17,3 @@ export const FTP_SERVER: FtpServerProps = {
   password: process.env.FTP_PASSWORD ?? "",
   root: PROD ? "./" : "./.ftp/",
 };
-
-export const COW_DB: CowDefinition = cowDb;
-export type PHONE_TYPES = keyof typeof cowDb;
-
-export const COW_TYPES = ["Cow", "Cat"];

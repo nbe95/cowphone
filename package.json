@@ -22,21 +22,20 @@
   "homepage": "https://github.com/nbe95/cowphone#readme",
   "dependencies": {
     "axios": "^1.6.8",
-    "canvas": "^2.11.2",
     "cookie": "^1.0.2",
     "dotenv": "^17.2.1",
     "express": "^4.19.2",
     "find-remove": "^4.1.0",
     "fs": "^0.0.1-security",
     "ftp-srv": "^4.6.3",
-    "gm": "^1.25.0",
     "http-status-codes": "^2.3.0",
+    "jimp": "^1.6.0",
     "mkdirp": "^3.0.1",
     "node-cron": "^3.0.3",
     "path": "^0.12.7",
     "strftime": "^0.10.2",
     "typescript": "^5.4.5",
-    "watch": "^1.0.2"
+    "watch": "^0.13.0"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",

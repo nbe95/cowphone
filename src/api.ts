@@ -3,8 +3,8 @@ import express from "express";
 import fs from "fs";
 import { StatusCodes } from "http-status-codes";
 import { generateAndApplyCow } from "./app";
-import { COW_TYPES, CRON_SCHEDULE, PROD, VERSION } from "./constants";
-import { Cow, Os60Cow } from "./cow/cow";
+import { CRON_SCHEDULE, PROD, VERSION } from "./config";
+import { Cow, CowType } from "./cow/cow";
 import { getFortune, getFortuneForCow as setFortuneForCow } from "./cow/fortune";
 
 export const runApi = async (cowDir: string) => {
@@ -14,7 +14,7 @@ export const runApi = async (cowDir: string) => {
   const jsonParser = bodyParser.json();
   const apiRouter = express.Router();
   apiRouter.get("/info", (req, rsp) => {
-    rsp.json({ version: VERSION || null, cowTypes: COW_TYPES, updateSchedule: CRON_SCHEDULE });
+    rsp.json({ version: VERSION || null, cowTypes: ["Cow"], updateSchedule: CRON_SCHEDULE });
   });
   apiRouter.get("/history", (req, rsp) => {
     fs.readdir(cowDir, (error, files) => {
@@ -27,17 +27,19 @@ export const runApi = async (cowDir: string) => {
   });
   apiRouter.post("/moo", jsonParser, async (req, rsp) => {
     // const cow = new Cow(req.body.type ?? "");
-    const cow: Cow = new Os60Cow("Cow");
+    const cow: Cow = new Cow("os60", "Cow")
+    await cow.init();
     // cow.textCentered = Boolean(req.body.centered);
     // cow.textTrimmed = Boolean(req.body.trimmed);
-    let success: boolean = cow.speak(req.body.text ?? "");
+    let success: boolean = cow.tryToSpeak(req.body.text ?? "");
     if (success) {
       success = await generateAndApplyCow(cow);
+      console.log(success)
     }
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
   apiRouter.post("/update", jsonParser, async (req, rsp) => {
-    const cow = Cow.makeRandom();
+    const cow = Cow.makeRandom("os40");
     await setFortuneForCow(cow);
     const success: boolean = await generateAndApplyCow(cow);
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();

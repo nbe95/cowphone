@@ -1,16 +1,21 @@
 {
     "os40": {
+        "image": {
+            "type": "bmp",
+            "width": 144,
+            "height": 32
+        },
         "font": {
             "name": "TinyUnicode",
             "family": "Tiny Unicode",
-            "fileName": "tinyunicode/TinyUnicode.ttf",
+            "fileName": "tinyunicode/TinyUnicode-16.fnt",
             "size": 16,
             "lineHeight": 7
         },
         "cows": [
             {
                 "name": "Cow",
-                "canvas": "os40/cow.bmp",
+                "template": "os40/cow.bmp",
                 "textBox": {
                     "width": 105,
                     "height": 28,
@@ -19,7 +24,7 @@
             },
             {
                 "name": "Cat",
-                "canvas": "os40/cat.bmp",
+                "template": "os40/cat.bmp",
                 "textBox": {
                     "width": 106,
                     "height": 28,
@@ -28,7 +33,7 @@
             },
             {
                 "name": "Bongo Cat",
-                "canvas": "os40/bongocat.bmp",
+                "template": "os40/bongocat.bmp",
                 "textBox": {
                     "width": 102,
                     "height": 28,
@@ -39,17 +44,22 @@
     },
 
     "os60": {
+        "image": {
+            "type": "png",
+            "width": 240,
+            "height": 71
+        },
         "font": {
             "name": "Pixel Arial 11",
             "family": "PixelArial",
-            "fileName": "pixel_arial_11/PIXEARG_.TTF",
+            "fileName": "pixel_arial_11/PIXEARG_-8.fnt",
             "size": 8,
             "lineHeight": 12
         },
         "cows": [
             {
                 "name": "Cow",
-                "canvas": "os60/cow.png",
+                "template": "os60/cow.png",
                 "textBox": {
                     "width": 176,
                     "height": 61,
@@ -58,7 +68,7 @@
             },
             {
                 "name": "Cat",
-                "canvas": "os60/cat.png",
+                "template": "os60/cat.png",
                 "textBox": {
                     "width": 186,
                     "height": 61,
@@ -67,7 +77,7 @@
             },
             {
                 "name": "Bongo Cat",
-                "canvas": "os60/bongocat.png",
+                "template": "os60/bongocat.png",
                 "textBox": {
                     "width": 174,
                     "height": 61,

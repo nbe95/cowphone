@@ -1,158 +1,132 @@
-import { writeFile } from "fs";
-import gm, { State } from "gm";
 import strftime from "strftime";
-import { COW_DB, FTP_SERVER, PHONE_TYPES } from "../constants";
-import { FontProps, TextBox } from "./text-box";
+import { FTP_SERVER } from "../config";
+import { TextBox } from "./text-box";
+import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
 
-export type CowDefinition = {
-  [phoneType: string]: {
-    font: FontProps;
-    cows: CowProps[];
-  };
-};
+import CowDb from "../../static/logo/cows.json";
+export type CowType = keyof typeof CowDb;
 
-export type CowProps = {
-  name: string;
-  canvas: string;
+type CowProps = {
+  name: string,
+  template: string,
   textBox: {
-    offset: number[];
-    width: number;
-    height: number;
+    width: number
+    height: number,
+    offset: number[]
+  }
+  image: {
+    type: string,
+    width: number,
+    height: number
+  },
+  font:  {
+    name: string;
+    family: string;
+    fileName: string;
+    size: number,
+    lineHeight: number,
+  },
+}
+
+export class Cow {
+  private static _fontDir: string = "./static/logo/fonts/";
+  private static _templateDir: string = "./static/logo/templates/";
+
+  public readonly type: CowType;
+  public readonly props: CowProps;
+
+  private _image: JimpInstance | undefined;
+  private _font: any | undefined;
+  private _textBox: TextBox | undefined;
+  private _init: boolean = false;
+
+  public static makeRandom = (type: CowType): Cow => {
+    const cows = CowDb[type].cows;
+    const sample: number = Math.floor(Math.random() * cows.length);
+    return new Cow(type, cows[sample].name);
   };
-};
 
-export abstract class Cow {
-  protected static _templateDir: string = "./static/logo/templates/";
-
-  protected _textBox: TextBox;
-  protected _cowProps: CowProps;
-
-  public static makeRandom = (): Cow => {
-    // const index: number = Math.floor(Math.random() * COW_TYPES.length);
-    // return new Cow(COW_TYPES[index] as CowTypes);
-    return new Os60Cow("Cat");
-  };
-
-  protected constructor(phoneType: PHONE_TYPES, cowName: string) {
-    const cow = COW_DB[phoneType].cows.find((cow) => cow.name == cowName);
+  public constructor(type: CowType, name: string) {
+    this.type = type;
+    const cow = CowDb[type].cows.find((cow) => cow.name == name);
     if (cow === undefined) {
-      throw new Error(`Cannot find cow with name "${cowName}!`);
+      throw new Error(`Cannot find cow with name "${name}!`);
     }
-    this._cowProps = cow;
-
-    this._textBox = new TextBox({
-      width: cow.textBox.width,
-      height: cow.textBox.height,
-      font: COW_DB[phoneType].font,
-    });
-
-    console.log(`A ${this._cowProps.name} was born.`);
+    this.props = {
+      name: cow.name,
+      template: cow.template,
+      textBox: cow.textBox,
+      image: CowDb[type].image,
+      font: CowDb[type].font
+    }
   }
 
-  public speak(text: string, wrap: boolean = true): boolean {
+  public init = async () => {
+    this._image = new Jimp({ width: this.props.image.width, height: this.props.image.height });
+    this._font = await loadFont(Cow._fontDir + this.props.font.fileName);
+    this._textBox = new TextBox({
+      width: this.props.textBox.width,
+      height: this.props.textBox.height,
+      lineHeight: this.props.font.lineHeight,
+      measureTextWidth: (text: string) => measureText(this._font, text)
+    });
+
+    console.log(`A <${this.props.name}> was born!`);
+    this._init = true;
+  }
+
+  public tryToSpeak(text: string): boolean {
+    if (!this._init) {
+      return false;
+    }
     const oneLiner: string = text.trim().replace(/\s+/g, " ");
 
     // Check if the text will fit into the cow's speech bubble
-    this._textBox.setText(text, wrap);
-    if (this._textBox.isTextFitting()) {
+    this._textBox!.setText(text);
+    if (this._textBox!.isTextFitting()) {
       console.log("I will MOO!", {
         text: oneLiner,
-        lines: this._textBox.getLines().length,
-        boxSize: this._textBox.getTextSize(),
+        lines: this._textBox!.getLines().length,
+        boxSize: this._textBox!.getTextSize(),
       });
       return true;
     }
     console.error("Holy cow! That won't fit into my speech bubble...", {
       text: oneLiner,
-      lines: this._textBox.getLines().length,
-      boxSize: this._textBox.getTextSize(),
+      lines: this._textBox!.getLines().length,
+      boxSize: this._textBox!.getTextSize(),
     });
     return false;
   }
 
-  // Abstract function which generates an image of the actual cow and returns the file name
-  public abstract generate(): Promise<string>;
-
-  protected _makeFileName = (extension: string) => `${strftime("%Y-%m-%d_%H-%M-%S")}.${extension}`;
-}
-
-export class Os40Cow extends Cow {
-  constructor(cowName: string) {
-    super("os40", cowName);
-  }
-
   public generate = async (): Promise<string> => {
-    const image: State = gm(`${Cow._templateDir}/${this._cowProps.canvas}`)
-      .antialias(false)
-      .font(this._textBox.getFontFile())
-      .fontSize(this._textBox.getFontSize());
+    if (!this._init) {
+      return "";
+    }
+
+    // Load image template
+    this._image = (await Jimp.read(`${Cow._templateDir}/${this.props.template}`) as JimpInstance);
+    if (this._image.width != this.props.image.width || this._image.height != this.props.image.height) {
+      throw new Error("Size does not match!");
+    }
+    const imageExt: string = this.props.template.slice(this.props.template.lastIndexOf("."));
 
     // Iterate over each line and draw it
-    const positionedText = this._textBox.getPositionedText(
-      this._cowProps.textBox.offset[0],
-      this._cowProps.textBox.offset[1],
+    const positionedText = this._textBox!.getPositionedText(
+      this.props.textBox.offset[0],
+      this.props.textBox.offset[1],
       true,
       true,
       true,
     );
-    positionedText.forEach((line) => image.drawText(line.x, line.y, line.line));
-
-    // Save as bitmap file
-    const writeProcess = async () =>
-      new Promise<string>((resolve, reject) => {
-        image.toBuffer((error: Error | null, buffer: Buffer) => {
-          if (error) {
-            reject(error);
-          } else {
-            // gm sets the biCompression field at offset 0x1E to BI_BITFIELDS (3),
-            // while the OpenStage40 can only handle BI_RGB (0).
-            if (buffer[0x1e] == 3) buffer[0x1e] = 0;
-
-            const bmp: string = this._makeFileName("bmp");
-            writeFile(FTP_SERVER.root + bmp, buffer, () => resolve(bmp));
-          }
-        });
-      });
-    return await writeProcess().then((fileName) => fileName);
-  };
-}
-
-export class Os60Cow extends Cow {
-  constructor(cowName: string) {
-    super("os60", cowName);
-  }
-
-  public generate = async (): Promise<string> => {
-    const image: State = gm(`${Cow._templateDir}/${this._cowProps.canvas}`)
-      .antialias(false)
-      .font(this._textBox.getFontFile())
-      .fontSize(this._textBox.getFontSize());
-
-    // Iterate over each line and draw it
-    const positionedText = this._textBox.getPositionedText(
-      this._cowProps.textBox.offset[0],
-      this._cowProps.textBox.offset[1],
-      true,
-      true,
-      true,
-    );
-    positionedText.forEach((line) => image.drawText(line.x, line.y, line.line));
+    positionedText.forEach((line) => this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }));
 
     // Invert depending on phone theme
-    image.negative();
+    // this._image.invert();
 
-    // Save as png file
-    const writeProcess = async () =>
-      new Promise<string>((resolve, reject) => {
-        const png: string = this._makeFileName("png");
-        image.write(FTP_SERVER.root + png, (error: any) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(png);
-          }
-        });
-      });
-    return await writeProcess().then((fileName) => fileName);
+    // Save image
+    const baseName: string = `${FTP_SERVER.root}/${strftime("%Y-%m-%d_%H-%M-%S")}`;
+    await this._image.write(`${baseName}.${imageExt}`);
+    return `${baseName}.${imageExt}`
   };
 }
