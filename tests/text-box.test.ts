@@ -1,5 +1,5 @@
 import { loadFont, measureText } from "jimp";
-import { TextBox } from "../src/cow/text-box";
+import { Alignment, TextBox } from "../src/cow/text-box";
 
 describe("Testing text box powers", () => {
   let font: any;
@@ -98,42 +98,78 @@ describe("Testing text box powers", () => {
     ]);
   });
 
-  test("Text should not be aligned", () => {
-    const result = loremBox.getPositionedText(0, 0, false, false, false);
-    expect(result[0]).toHaveProperty("x", 0);
-    expect(result[1]).toHaveProperty("x", 0);
-    expect(result[2]).toHaveProperty("x", 0);
-    expect(result[3]).toHaveProperty("x", 0);
+  test("Text should be aligned by default", () => {
+    const result = loremBox.getPositionedText(0, 0);
+    expect(result).toHaveLength(4);
 
-    expect(result[0]).toHaveProperty("y", lineHeight * 1 - 1);
-    expect(result[1]).toHaveProperty("y", lineHeight * 2 - 1);
-    expect(result[2]).toHaveProperty("y", lineHeight * 3 - 1);
-    expect(result[3]).toHaveProperty("y", lineHeight * 4 - 1);
-  });
-
-  test("Text should be horizontally and vertically aligned", () => {
-    const result = loremBox.getPositionedText(0, 0, true, true, false);
     expect(result[0]).toHaveProperty("x", 382);
     expect(result[1]).toHaveProperty("x", 415);
     expect(result[2]).toHaveProperty("x", 464);
     expect(result[3]).toHaveProperty("x", 487);
 
-    expect(result[0]).toHaveProperty("y", 486 + lineHeight * 1 - 1);
-    expect(result[1]).toHaveProperty("y", 486 + lineHeight * 2 - 1);
-    expect(result[2]).toHaveProperty("y", 486 + lineHeight * 3 - 1);
-    expect(result[3]).toHaveProperty("y", 486 + lineHeight * 4 - 1);
+    expect(result[0]).toHaveProperty("y", loremBox.height / 2 + lineHeight * -2);
+    expect(result[1]).toHaveProperty("y", loremBox.height / 2 + lineHeight * -1);
+    expect(result[2]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 0);
+    expect(result[3]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 1);
   });
 
-  test("Text should be aligned with offsets", () => {
-    const result = loremBox.getPositionedText(20, 50, true, false, false);
-    expect(result[0]).toHaveProperty("x", 382 + 20);
-    expect(result[1]).toHaveProperty("x", 415 + 20);
-    expect(result[2]).toHaveProperty("x", 464 + 20);
-    expect(result[3]).toHaveProperty("x", 487 + 20);
+  test("Text should be aligned top/left", () => {
+    const result = loremBox.getPositionedText(0, 0, Alignment.hLeft | Alignment.vTop);
+    expect(result).toHaveLength(4);
 
-    expect(result[0]).toHaveProperty("y", lineHeight * 1 - 1 + 50);
-    expect(result[1]).toHaveProperty("y", lineHeight * 2 - 1 + 50);
-    expect(result[2]).toHaveProperty("y", lineHeight * 3 - 1 + 50);
-    expect(result[3]).toHaveProperty("y", lineHeight * 4 - 1 + 50);
+    expect(result[0]).toHaveProperty("x", 0);
+    expect(result[1]).toHaveProperty("x", 0);
+    expect(result[2]).toHaveProperty("x", 0);
+    expect(result[3]).toHaveProperty("x", 0);
+
+    expect(result[0]).toHaveProperty("y", lineHeight * 0);
+    expect(result[1]).toHaveProperty("y", lineHeight * 1);
+    expect(result[2]).toHaveProperty("y", lineHeight * 2);
+    expect(result[3]).toHaveProperty("y", lineHeight * 3);
+  });
+
+  test("Text should be aligned middle/center", () => {
+    const result = loremBox.getPositionedText(0, 0, Alignment.hCenter | Alignment.vMiddle);
+    expect(result).toHaveLength(4);
+
+    expect(result[0]).toHaveProperty("x", 382);
+    expect(result[1]).toHaveProperty("x", 415);
+    expect(result[2]).toHaveProperty("x", 464);
+    expect(result[3]).toHaveProperty("x", 487);
+
+    expect(result[0]).toHaveProperty("y", loremBox.height / 2 + lineHeight * -2);
+    expect(result[1]).toHaveProperty("y", loremBox.height / 2 + lineHeight * -1);
+    expect(result[2]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 0);
+    expect(result[3]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 1);
+  });
+
+  test("Text should be aligned bottom/right", () => {
+    const result = loremBox.getPositionedText(0, 0, Alignment.hRight | Alignment.vBottom);
+    expect(result).toHaveLength(4);
+
+    expect(result[0]).toHaveProperty("x", 765);
+    expect(result[1]).toHaveProperty("x", 831);
+    expect(result[2]).toHaveProperty("x", 929);
+    expect(result[3]).toHaveProperty("x", 974);
+
+    expect(result[0]).toHaveProperty("y", loremBox.height - lineHeight * 4);
+    expect(result[1]).toHaveProperty("y", loremBox.height - lineHeight * 3);
+    expect(result[2]).toHaveProperty("y", loremBox.height - lineHeight * 2);
+    expect(result[3]).toHaveProperty("y", loremBox.height - lineHeight * 1);
+  });
+
+  test("Text should have offsets", () => {
+    const result = loremBox.getPositionedText(20, 50, Alignment.hLeft | Alignment.vTop);
+    expect(result).toHaveLength(4);
+
+    expect(result[0]).toHaveProperty("x", 20);
+    expect(result[1]).toHaveProperty("x", 20);
+    expect(result[2]).toHaveProperty("x", 20);
+    expect(result[3]).toHaveProperty("x", 20);
+
+    expect(result[0]).toHaveProperty("y", 50 + lineHeight * 0);
+    expect(result[1]).toHaveProperty("y", 50 + lineHeight * 1);
+    expect(result[2]).toHaveProperty("y", 50 + lineHeight * 2);
+    expect(result[3]).toHaveProperty("y", 50 + lineHeight * 3);
   });
 });

@@ -1,7 +1,7 @@
 import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
 import strftime from "strftime";
 import { FTP_SERVER } from "../config";
-import { TextBox } from "./text-box";
+import { Alignment, TextBox } from "./text-box";
 
 import CowDb from "../../static/logo/cows.json";
 export type CowType = keyof typeof CowDb;
@@ -108,9 +108,7 @@ export class Cow {
     const positionedText = this._textBox!.getPositionedText(
       this.props.textBox.offset[0],
       this.props.textBox.offset[1],
-      true,
-      true,
-      true,
+      Alignment.hRight | Alignment.vBottom,
     );
     positionedText.forEach((line) =>
       this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }),

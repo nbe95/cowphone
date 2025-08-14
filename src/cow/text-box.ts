@@ -8,6 +8,16 @@ interface PositionedTextLine extends TextLine {
   y: number;
 }
 
+export enum Alignment {
+  hLeft = 0x01,
+  hCenter = 0x02,
+  hRight = 0x03,
+
+  vTop = 0x10,
+  vMiddle = 0x20,
+  vBottom = 0x30,
+}
+
 export type TextBoxProps = {
   width: number;
   height: number;
@@ -81,21 +91,41 @@ export class TextBox {
   public getPositionedText = (
     xOffset: number,
     yOffset: number,
-    xCenter: boolean = true,
-    yCenter: boolean = true,
-    inclLeadingSpace: boolean = false,
+    align: Alignment = Alignment.hCenter | Alignment.vMiddle,
   ): PositionedTextLine[] => {
-    const linesOffsetY: number = yCenter ? (this.height - this.getTextSize().y) / 2 : 0;
-    return this._lines.map((line, index) => {
-      // Note: Leading space must be calculated separately, because some libs trim the string when drawing
-      const leadingSpace: string = line.text.match(/^\s+/)?.[0] ?? "";
-      const hSpaceOffset: number =
-        inclLeadingSpace && leadingSpace.length ? this._measureTextWidth(leadingSpace) : 0;
+    // Calculate static y offsets for all lines (prefer top alignment when off by 0.5px)
+    const linesOffsetY: number = Math.floor(
+      (() => {
+        switch (align & 0xf0) {
+          case Alignment.vTop:
+            return 0;
+          case Alignment.vMiddle:
+            return (this.height - this.getTextSize().y) / 2;
+          case Alignment.vBottom:
+            return this.height - this.getTextSize().y;
+          default:
+            return 0;
+        }
+      })(),
+    );
 
-      const xPos: number = Math.round(
-        (xCenter ? Math.floor((this.width - line.width) / 2) : 0) + hSpaceOffset,
+    return this._lines.map((line, index) => {
+      // Calculate x offset per line
+      const xPos: number = Math.floor(
+        (() => {
+          switch (align & 0x0f) {
+            case Alignment.hLeft:
+              return 0;
+            case Alignment.hCenter:
+              return (this.width - line.width) / 2;
+            case Alignment.hRight:
+              return this.width - line.width;
+            default:
+              return 0;
+          }
+        })(),
       );
-      const yPos: number = Math.floor((index + 1) * this.lineHeight + linesOffsetY - 1); // Prefer top alignment when off by 0.5px
+      const yPos: number = index * this.lineHeight + linesOffsetY;
 
       return { ...line, x: xOffset + xPos, y: yOffset + yPos };
     });
