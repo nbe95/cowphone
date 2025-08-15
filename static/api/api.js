@@ -70,7 +70,7 @@ const setText = async (button, form) => {
       },
       body: JSON.stringify({
         text: form.cow_text.value,
-        type: form.cow_type.options[form.cow_type.selectedIndex].value,
+        // type: form.cow_type.options[form.cow_type.selectedIndex].value,
         trimmed: form.cow_text_trimmed.checked,
         centered: form.cow_text_centered.checked,
       }),

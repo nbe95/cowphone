@@ -9,32 +9,31 @@ describe("Test cow powers!", () => {
     }
   });
 
-  test("should not instantiate nonsense", () => {
-    expect(() => {
-      new Cow("os40", "not-existing");
-    }).toThrow();
-
-    expect(() => {
-      new Cow("os60", "not-existing");
-    }).toThrow();
-  });
-
-  test("should not moo when uninitialized", async () => {
-    expect(() => {
-      new Cow("os40", "Cow").tryToSpeak("foo");
-    }).toThrow();
+  test("should be instantiable", async () => {
+    expect(async () => {
+      await Cow.make("os40", "Cow");
+      await Cow.make("os60", "Cow");
+    }).not.toThrow();
 
     expect(async () => {
-      const cow = new Cow("os40", "Cow");
-      await cow.init();
-      cow.tryToSpeak("foo");
+      await Cow.makeRandom("os40");
+      await Cow.makeRandom("os60");
     }).not.toThrow();
   });
 
+  test("should not instantiate nonsense", async () => {
+    expect(async () => {
+      await Cow.make("os40", "not-existing");
+    }).rejects.toThrow();
+
+    expect(async () => {
+      await Cow.make("os60", "not-existing");
+    }).rejects.toThrow();
+  });
+
   test("should generate bitmaps", async () => {
-    const cow: Cow = new Cow("os40", "Cow");
-    await cow.init();
-    cow.tryToSpeak("foo bar");
+    const cow = await Cow.make("os40", "Cow");
+    cow.tryToSpeak("Unit test");
 
     const fileName = await cow.generate();
     expect(fileName.substring(fileName.length - 4)).toBe(".bmp");
@@ -42,9 +41,8 @@ describe("Test cow powers!", () => {
   });
 
   test("should generate pngs", async () => {
-    const cow: Cow = new Cow("os60", "Cow");
-    await cow.init();
-    cow.tryToSpeak("foo bar");
+    const cow = await Cow.make("os60", "Cow");
+    cow.tryToSpeak("Unit test");
 
     const fileName = await cow.generate();
     expect(fileName.substring(fileName.length - 4)).toBe(".png");

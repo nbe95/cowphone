@@ -13,41 +13,56 @@ export const runApi = async (cowDir: string) => {
   // API methods
   const jsonParser = bodyParser.json();
   const apiRouter = express.Router();
+
   apiRouter.get("/info", (req, rsp) => {
-    rsp.json({ version: VERSION || null, cowTypes: ["Cow"], updateSchedule: CRON_SCHEDULE });
+    rsp.json({ version: VERSION || null, cowTypes: [], updateSchedule: CRON_SCHEDULE });
   });
+
   apiRouter.get("/history", (req, rsp) => {
     fs.readdir(cowDir, (error, files) => {
       const cows = files?.filter((file) => !file.startsWith(".")) ?? [];
       rsp.json(cows.sort().reverse());
     });
   });
+
   apiRouter.get("/fortune", async (req, rsp) => {
-    rsp.json({ text: await getFortune() });
+    getFortune().then((fortune) => rsp.json({ text: fortune }));
   });
+
   apiRouter.post("/moo", jsonParser, async (req, rsp) => {
-    // const cow = new Cow(req.body.type ?? "");
-    const cow: Cow = new Cow("os40", "Cat");
-    await cow.init();
-    // cow.textCentered = Boolean(req.body.centered);
-    // cow.textTrimmed = Boolean(req.body.trimmed);
-    let success: boolean = cow.tryToSpeak(req.body.text ?? "");
-    if (success) {
-      await generateAndApplyCow(cow).catch(() => {
-        success = false;
-      });
-    }
-    rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
+    Cow.make("os60", "Cow").then((cow) => {
+      // cow.textCentered = Boolean(req.body.centered);
+      // cow.textTrimmed = Boolean(req.body.trimmed);
+      if (!cow.tryToSpeak(req.body.text ?? "")) {
+        rsp.status(StatusCodes.BAD_REQUEST).send();
+        return;
+      }
+      generateAndApplyCow(cow).then(
+        () => {
+          rsp.status(StatusCodes.OK).send();
+        },
+        () => {
+          rsp.status(StatusCodes.BAD_REQUEST).send();
+        },
+      );
+    });
   });
+
   apiRouter.post("/update", jsonParser, async (req, rsp) => {
-    const cow = Cow.makeRandom("os40");
-    await setFortuneForCow(cow);
-    const success: boolean = await generateAndApplyCow(cow).then(
-      () => true,
-      () => false,
-    );
-    rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
+    Cow.makeRandom("os60").then((cow) => {
+      setFortuneForCow(cow).then(() => {
+        generateAndApplyCow(cow).then(
+          () => {
+            rsp.status(StatusCodes.OK).send();
+          },
+          () => {
+            rsp.status(StatusCodes.BAD_REQUEST).send();
+          },
+        );
+      });
+    });
   });
+
   app.use("/api/v1", apiRouter);
 
   // Static web interface and file server for cow images

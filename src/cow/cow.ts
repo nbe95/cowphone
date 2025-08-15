@@ -31,19 +31,26 @@ export class Cow {
   private _image: JimpInstance | undefined;
   private _font: any | undefined;
   private _textBox: TextBox | undefined;
-  private _init: boolean = false;
 
-  public static makeRandom = (type: CowType): Cow => {
-    const cows = CowDb[type].cows;
-    const sample: number = Math.floor(Math.random() * cows.length);
-    return new Cow(type, cows[sample].name);
+  public static make = async (type: CowType, name: string): Promise<Cow> => {
+      const cow = new Cow(type, name);
+      await cow._init();
+      return cow;
   };
 
-  public constructor(type: CowType, name: string) {
+  public static makeRandom = async (type: CowType): Promise<Cow> => {
+    const cows = CowDb[type].cows;
+    const sample: number = Math.floor(Math.random() * cows.length);
+    return await this.make(type, cows[sample].name);
+  };
+
+  // Ensure every cow is initialized (async function) by offering a static build method and hiding
+  // the actual constructor
+  protected constructor(type: CowType, name: string) {
     this.type = type;
     const cow = CowDb[type].cows.find((cow) => cow.name == name);
     if (cow === undefined) {
-      throw new Error(`Cannot find cow with name "${name}!`);
+      throw new Error(`Cannot find cow with name '"${name}'!`);
     }
     this.props = {
       name: cow.name,
@@ -57,7 +64,7 @@ export class Cow {
     };
   }
 
-  public init = async () => {
+  protected _init = async () => {
     this._image = new Jimp({ width: this.props.size[0], height: this.props.size[1] });
     this._font = await loadFont(Cow._fontDir + this.props.font);
     this._textBox = new TextBox({
@@ -69,13 +76,9 @@ export class Cow {
     });
 
     console.log(`A <${this.props.name}> was born!`);
-    this._init = true;
   };
 
   public tryToSpeak(text: string): boolean {
-    if (!this._init) {
-      return false;
-    }
     const oneLiner: string = text.trim().replace(/\s+/g, " ");
 
     // Check if the text will fit into the cow's speech bubble
@@ -97,10 +100,6 @@ export class Cow {
   }
 
   public generate = async (): Promise<string> => {
-    if (!this._init) {
-      return "";
-    }
-
     // Load image template
     this._image = (await Jimp.read(`${Cow._templateDir}/${this.props.template}`)) as JimpInstance;
     if (this._image.width != this.props.size[0] || this._image.height != this.props.size[1]) {
@@ -111,7 +110,7 @@ export class Cow {
     const positionedText = this._textBox!.getPositionedText(
       this.props.textBox.offset[0],
       this.props.textBox.offset[1],
-      Alignment.hCenter | Alignment.vMiddle,
+      Alignment.hLeft | Alignment.vTop,
     );
     positionedText.forEach((line) =>
       this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }),

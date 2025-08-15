@@ -19,10 +19,12 @@ const setUpScheduler = () => {
     schedule(CRON_SCHEDULE, async () => {
       console.log("Moo! Scheduler triggered. Generating a random cow with the need to speak.");
 
-      const cow = Cow.makeRandom("os40");
-      await getFortuneForCow(cow);
-      await generateAndApplyCow(cow).catch((error: any) => {
-        console.error("Could not generate any file for our little bovine.", error);
+      Cow.makeRandom("os60").then((cow) => {
+        getFortuneForCow(cow).then(() => {
+          generateAndApplyCow(cow).catch((error: any) => {
+            console.error("Could not generate any file for our little bovine.", error);
+          });
+        });
       });
     });
   } else {
@@ -30,42 +32,40 @@ const setUpScheduler = () => {
   }
 };
 
+export const clearOldCows = (daysUntilSlaughterhouse: number = 100) => {
+  const result = findRemoveSync(FTP_SERVER.root, {
+    age: { seconds: 60 * 60 * 24 * daysUntilSlaughterhouse },
+  });
+  const gone: string[] = Object.keys(result as Record<string, boolean>);
+  if (gone.length) {
+    console.log(`Deleted ${gone.length} old cows.`, gone);
+  }
+};
+
 export const generateAndApplyCow = async (cow: Cow): Promise<void> =>
   new Promise(async (resolve, reject) => {
-    // First, clean-up any old files
-    const result = findRemoveSync(FTP_SERVER.root, {
-      age: {
-        seconds: 60 * 60 * 24 * 100, // 100 days
-      },
-    });
-    const gone: string[] = Object.keys(result as Record<string, boolean>);
-    if (gone.length) console.log("Deleted old files.", gone);
+    clearOldCows();
 
     // Generate cow image
-    const fileName: string | void = await cow
-      .generate()
-      .then(async (fileName: string) => {
+    cow.generate().then(
+      (fileName) => {
         console.log("Successfully brought the cow in the shed.", { fileName: fileName });
-        return fileName;
-      })
-      .catch((reason: any) => {
-        console.error("Failed to generate image!", reason);
-      });
 
-    if (!fileName) {
-      reject();
-      return;
-    }
-
-    // Finally, update the logo on our cowphone
-    const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
-    return await phone.updateLogo(FTP_SERVER, fileName).then(
-      () => {
-        console.log("Phone logo was updated successfully.");
-        resolve();
+        // Update the logo on our cowphone
+        const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
+        phone.updateLogo(FTP_SERVER, fileName).then(
+          () => {
+            console.log("Phone logo was updated successfully.");
+            resolve();
+          },
+          (error: any) => {
+            console.error("Could not contact phone via network.", error);
+            reject();
+          },
+        );
       },
-      (error: any) => {
-        console.error("Could not contact phone via network.", error);
+      (reason) => {
+        console.error("Failed to generate image!", reason);
         reject();
       },
     );
