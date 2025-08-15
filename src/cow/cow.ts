@@ -110,7 +110,7 @@ export class Cow {
     const positionedText = this._textBox!.getPositionedText(
       this.props.textBox.offset[0],
       this.props.textBox.offset[1],
-      Alignment.hLeft | Alignment.vTop,
+      Alignment.hCenter | Alignment.vMiddle,
     );
     positionedText.forEach((line) =>
       this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }),
