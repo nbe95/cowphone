@@ -2,10 +2,10 @@ import bodyParser from "body-parser";
 import express from "express";
 import fs from "fs";
 import { StatusCodes } from "http-status-codes";
-import { generateAndApplyCow } from "./app";
-import { CRON_SCHEDULE, PROD, VERSION } from "./config";
-import { Cow } from "./cow/cow";
-import { getFortune, getFortuneForCow as setFortuneForCow } from "./cow/fortune";
+import { generateAndApplyCow } from "../app";
+import { CRON_SCHEDULE, PROD, VERSION } from "../config/environment";
+import { Cow } from "../cow/cow";
+import { getFortune, getFortuneForCow as setFortuneForCow } from "../cow/fortune";
 
 export const runApi = async (cowDir: string) => {
   const app = express();

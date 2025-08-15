@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { FtpServerProps } from "./phone/ftp-server";
+import { FtpServerProps } from "../phone/ftp-server";
 
 dotenv.config();
 

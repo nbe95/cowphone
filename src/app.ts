@@ -1,7 +1,14 @@
 import findRemoveSync from "find-remove";
 import { schedule } from "node-cron";
-import { runApi } from "./api";
-import { ADMIN_PASSWORD, CRON_SCHEDULE, FTP_SERVER, PHONE_HOST, PROD, VERSION } from "./config";
+import { runApi } from "./api/api";
+import {
+  ADMIN_PASSWORD,
+  CRON_SCHEDULE,
+  FTP_SERVER,
+  PHONE_HOST,
+  PROD,
+  VERSION,
+} from "./config/environment";
 import { Cow } from "./cow/cow";
 import { getFortuneForCow } from "./cow/fortune";
 import { runServer } from "./phone/ftp-server";

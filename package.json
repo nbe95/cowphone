@@ -32,6 +32,7 @@
     "jimp": "^1.6.0",
     "mkdirp": "^3.0.1",
     "node-cron": "^3.0.3",
+    "node-html-parser": "^7.0.1",
     "path": "^0.12.7",
     "strftime": "^0.10.2",
     "typescript": "^5.4.5",
@@ -50,7 +51,7 @@
     "jest-ctrf-json-reporter": "^0.0.9",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "ts-jest": "^29.1.2",
+    "ts-jest": "^29.4.1",
     "tsc-watch": "^7.1.1"
   },
   "prettier": {

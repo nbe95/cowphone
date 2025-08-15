@@ -1,6 +1,6 @@
 import { FtpSrv } from "ftp-srv";
 import { mkdirp } from "mkdirp";
-import { PROD } from "../config";
+import { PROD } from "../config/environment";
 
 export type FtpServerProps = {
   host: string;

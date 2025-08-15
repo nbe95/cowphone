@@ -1,6 +1,6 @@
 import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
 import strftime from "strftime";
-import { FTP_SERVER } from "../config";
+import { FTP_SERVER } from "../config/environment";
 import { Alignment, TextBox } from "./text-box";
 
 import CowDb from "../../static/logo/cows.json";

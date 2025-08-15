@@ -1,11 +1,18 @@
 import { loadFont, measureText } from "jimp";
-import { Alignment, TextBox } from "../src/cow/text-box";
+import { Alignment, TextBox } from "../../src/cow/text-box";
 
-describe("Testing text box powers", () => {
+describe("Test text wrapping", () => {
   let font: any;
   let makeBox: Function;
-  let loremBox: TextBox;
   let lineHeight: number;
+
+  const lorem: string =
+    "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.";
+  const getWrappedLorem = (width: number, height: number = 1000) => {
+    const box: TextBox = makeBox(width, height);
+    box.setText(lorem, true);
+    return box.getLines();
+  };
 
   beforeAll(async () => {
     // Load font and related classes asynchronously before tests
@@ -18,25 +25,13 @@ describe("Testing text box powers", () => {
         measureTextWidth: (text: string) => measureText(font, text),
       });
     lineHeight = 7;
-
-    // Make a lorem ipsum box for convenience
-    const lines: string =
-      "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua.";
-    loremBox = makeBox();
-    loremBox.setText(lines, false);
   });
 
-  test("Loooong text should wrap properly", () => {
-    const lorem: string =
-      "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.";
-    const getWrappedLorem = (width: number, height: number = 1000) => {
-      const box: TextBox = makeBox(width, height);
-      box.setText(lorem, true);
-      return box.getLines();
-    };
-
+  test("should not wrap at all", () => {
     expect(getWrappedLorem(1000)).toStrictEqual([lorem]);
+  });
 
+  test("should wrap in a medium box", () => {
     expect(getWrappedLorem(200)).toStrictEqual([
       "Lorem ipsum dolor sit amet, consectetur",
       "adipisici elit, sed eiusmod tempor incidunt ut",
@@ -45,7 +40,9 @@ describe("Testing text box powers", () => {
       "ullamco laboris nisi ut aliquid ex ea commodi",
       "consequat.",
     ]);
+  });
 
+  test("should wrap in a small box", () => {
     expect(getWrappedLorem(100)).toStrictEqual([
       "Lorem ipsum dolor sit",
       "amet, consectetur",
@@ -60,7 +57,9 @@ describe("Testing text box powers", () => {
       "ex ea commodi",
       "consequat.",
     ]);
+  });
 
+  test("should wrap in a tiny box", () => {
     expect(getWrappedLorem(30)).toStrictEqual([
       "Lorem",
       "ipsum",
@@ -97,8 +96,34 @@ describe("Testing text box powers", () => {
       "consequat.",
     ]);
   });
+});
 
-  test("Text should be aligned by default", () => {
+describe("Test text alignment", () => {
+  let font: any;
+  let loremBox: TextBox;
+  let lineHeight: number;
+
+  beforeAll(async () => {
+    // Load font and related classes asynchronously before tests
+    font = await loadFont("./static/logo/fonts/tinyunicode/TinyUnicode-16.fnt");
+    lineHeight = 7;
+
+    // Make a lorem ipsum box for convenience
+    loremBox = ((text, width: number = 1000, height: number = 1000): TextBox => {
+      const box = new TextBox({
+        width: width,
+        height: height,
+        lineHeight: lineHeight,
+        measureTextWidth: (text: string) => measureText(font, text),
+      });
+      box.setText(text, false);
+      return box;
+    })(
+      "Lorem ipsum dolor sit amet, consectetur adipisici elit,\nsed eiusmod tempor incidunt ut labore\net dolore magna\naliqua.",
+    );
+  });
+
+  test("should be aligned by default", () => {
     const result = loremBox.getPositionedText(0, 0);
     expect(result).toHaveLength(4);
 
@@ -113,7 +138,7 @@ describe("Testing text box powers", () => {
     expect(result[3]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 1);
   });
 
-  test("Text should be aligned top/left", () => {
+  test("should be aligned top/left", () => {
     const result = loremBox.getPositionedText(0, 0, Alignment.hLeft | Alignment.vTop);
     expect(result).toHaveLength(4);
 
@@ -128,7 +153,7 @@ describe("Testing text box powers", () => {
     expect(result[3]).toHaveProperty("y", lineHeight * 3);
   });
 
-  test("Text should be aligned middle/center", () => {
+  test("should be aligned middle/center", () => {
     const result = loremBox.getPositionedText(0, 0, Alignment.hCenter | Alignment.vMiddle);
     expect(result).toHaveLength(4);
 
@@ -143,7 +168,7 @@ describe("Testing text box powers", () => {
     expect(result[3]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 1);
   });
 
-  test("Text should be aligned bottom/right", () => {
+  test("should be aligned bottom/right", () => {
     const result = loremBox.getPositionedText(0, 0, Alignment.hRight | Alignment.vBottom);
     expect(result).toHaveLength(4);
 
@@ -158,7 +183,7 @@ describe("Testing text box powers", () => {
     expect(result[3]).toHaveProperty("y", loremBox.height - lineHeight * 1);
   });
 
-  test("Text should have offsets", () => {
+  test("should have offsets", () => {
     const result = loremBox.getPositionedText(20, 50, Alignment.hLeft | Alignment.vTop);
     expect(result).toHaveLength(4);
 

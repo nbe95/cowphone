@@ -1,15 +1,15 @@
 import { existsSync, mkdirSync } from "fs";
-import { FTP_SERVER } from "../src/config";
-import { Cow } from "../src/cow/cow";
+import { FTP_SERVER } from "../config/environment";
+import { Cow } from "./cow";
 
-describe("Testing cow powers", () => {
+describe("Test cow powers!", () => {
   beforeAll(() => {
     if (!existsSync(FTP_SERVER.root)) {
       mkdirSync(FTP_SERVER.root, { recursive: true });
     }
   });
 
-  test("Should not instantiate nonsense", () => {
+  test("should not instantiate nonsense", () => {
     expect(() => {
       new Cow("os40", "not-existing");
     }).toThrow();
@@ -19,7 +19,7 @@ describe("Testing cow powers", () => {
     }).toThrow();
   });
 
-  test("Should not moo when uninitialized", async () => {
+  test("should not moo when uninitialized", async () => {
     expect(() => {
       new Cow("os40", "Cow").tryToSpeak("foo");
     }).toThrow();
@@ -31,7 +31,7 @@ describe("Testing cow powers", () => {
     }).not.toThrow();
   });
 
-  test("Should generate Bitmaps", async () => {
+  test("should generate bitmaps", async () => {
     const cow: Cow = new Cow("os40", "Cow");
     await cow.init();
     cow.tryToSpeak("foo bar");
@@ -41,7 +41,7 @@ describe("Testing cow powers", () => {
     expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
   });
 
-  test("Should generate PNGs", async () => {
+  test("should generate pngs", async () => {
     const cow: Cow = new Cow("os60", "Cow");
     await cow.init();
     cow.tryToSpeak("foo bar");
