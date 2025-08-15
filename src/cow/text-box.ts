@@ -40,7 +40,7 @@ export class TextBox {
     this.width = props.width;
     this.height = props.height;
     this.lineHeight = props.lineHeight;
-    this.lineOffset = props.lineHeight;
+    this.lineOffset = props.lineOffset;
     this._measureTextWidth = props.measureTextWidth;
   }
 
@@ -97,22 +97,24 @@ export class TextBox {
     align: Alignment = Alignment.hCenter | Alignment.vMiddle,
   ): PositionedTextLine[] => {
     // Calculate static y offsets for all lines (prefer top alignment when off by 0.5px)
-    const linesOffsetY: number = Math.floor(
-      (() => {
-        switch (align & 0xf0) {
-          case Alignment.vTop:
-            return 0;
-          case Alignment.vMiddle:
-            return (this.height - this.getTextSize().y) / 2;
-          case Alignment.vBottom:
-            return this.height - this.getTextSize().y;
-          default:
-            return 0;
-        }
-      })(),
-    );
+    const linesOffsetY: number =
+      this.lineOffset +
+      Math.floor(
+        (() => {
+          switch (align & 0xf0) {
+            case Alignment.vTop:
+              return 0;
+            case Alignment.vMiddle:
+              return (this.height - this.getTextSize().y) / 2;
+            case Alignment.vBottom:
+              return this.height - this.getTextSize().y;
+            default:
+              return 0;
+          }
+        })(),
+      );
 
-    return this._lines.map((line, index) => {
+    return this._lines.map((line, lineIndex) => {
       // Calculate x offset per line
       const linesOffsetX: number = Math.floor(
         (() => {
@@ -132,7 +134,7 @@ export class TextBox {
       return {
         ...line,
         x: xOffset + linesOffsetX,
-        y: yOffset + linesOffsetY + this.lineOffset + index * this.lineHeight,
+        y: yOffset + linesOffsetY + lineIndex * this.lineHeight,
       };
     });
   };

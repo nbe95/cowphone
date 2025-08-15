@@ -138,10 +138,10 @@ describe("Test text alignment", () => {
     expect(result[2]).toHaveProperty("x", 464);
     expect(result[3]).toHaveProperty("x", 487);
 
-    expect(result[0]).toHaveProperty("y", loremBox.height / 2 + lineHeight * -1);
-    expect(result[1]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 0);
-    expect(result[2]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 1);
-    expect(result[3]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 2);
+    expect(result[0]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * -2);
+    expect(result[1]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * -1);
+    expect(result[2]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * 0);
+    expect(result[3]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * 1);
   });
 
   test("should be aligned top/left", () => {
@@ -153,10 +153,10 @@ describe("Test text alignment", () => {
     expect(result[2]).toHaveProperty("x", 0);
     expect(result[3]).toHaveProperty("x", 0);
 
-    expect(result[0]).toHaveProperty("y", lineHeight * 1);
-    expect(result[1]).toHaveProperty("y", lineHeight * 2);
-    expect(result[2]).toHaveProperty("y", lineHeight * 3);
-    expect(result[3]).toHaveProperty("y", lineHeight * 4);
+    expect(result[0]).toHaveProperty("y", lineOffset + lineHeight * 0);
+    expect(result[1]).toHaveProperty("y", lineOffset + lineHeight * 1);
+    expect(result[2]).toHaveProperty("y", lineOffset + lineHeight * 2);
+    expect(result[3]).toHaveProperty("y", lineOffset + lineHeight * 3);
   });
 
   test("should be aligned middle/center", () => {
@@ -168,10 +168,10 @@ describe("Test text alignment", () => {
     expect(result[2]).toHaveProperty("x", 464);
     expect(result[3]).toHaveProperty("x", 487);
 
-    expect(result[0]).toHaveProperty("y", loremBox.height / 2 + lineHeight * -1);
-    expect(result[1]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 0);
-    expect(result[2]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 1);
-    expect(result[3]).toHaveProperty("y", loremBox.height / 2 + lineHeight * 2);
+    expect(result[0]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * -2);
+    expect(result[1]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * -1);
+    expect(result[2]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * 0);
+    expect(result[3]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * 1);
   });
 
   test("should be aligned bottom/right", () => {
@@ -183,10 +183,10 @@ describe("Test text alignment", () => {
     expect(result[2]).toHaveProperty("x", 929);
     expect(result[3]).toHaveProperty("x", 974);
 
-    expect(result[0]).toHaveProperty("y", loremBox.height - lineHeight * 3);
-    expect(result[1]).toHaveProperty("y", loremBox.height - lineHeight * 2);
-    expect(result[2]).toHaveProperty("y", loremBox.height - lineHeight * 1);
-    expect(result[3]).toHaveProperty("y", loremBox.height - lineHeight * 0);
+    expect(result[0]).toHaveProperty("y", lineOffset + loremBox.height - lineHeight * 4);
+    expect(result[1]).toHaveProperty("y", lineOffset + loremBox.height - lineHeight * 3);
+    expect(result[2]).toHaveProperty("y", lineOffset + loremBox.height - lineHeight * 2);
+    expect(result[3]).toHaveProperty("y", lineOffset + loremBox.height - lineHeight * 1);
   });
 
   test("should have offsets", () => {
@@ -198,9 +198,9 @@ describe("Test text alignment", () => {
     expect(result[2]).toHaveProperty("x", 20);
     expect(result[3]).toHaveProperty("x", 20);
 
-    expect(result[0]).toHaveProperty("y", 50 + lineHeight * 1);
-    expect(result[1]).toHaveProperty("y", 50 + lineHeight * 2);
-    expect(result[2]).toHaveProperty("y", 50 + lineHeight * 3);
-    expect(result[3]).toHaveProperty("y", 50 + lineHeight * 4);
+    expect(result[0]).toHaveProperty("y", 50 + lineOffset + lineHeight * 0);
+    expect(result[1]).toHaveProperty("y", 50 + lineOffset + lineHeight * 1);
+    expect(result[2]).toHaveProperty("y", 50 + lineOffset + lineHeight * 2);
+    expect(result[3]).toHaveProperty("y", 50 + lineOffset + lineHeight * 3);
   });
 });
