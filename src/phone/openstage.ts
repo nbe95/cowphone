@@ -34,17 +34,19 @@ export class OpenStagePhone {
         return;
       }
 
-      const response = await axios.post(this._getBaseUrl() + "/page.cmd",
+      const response = await axios.post(
+        this._getBaseUrl() + "/page.cmd",
         {
           page_submit: "WEBMp_Admin_Login",
           AdminPassword: this._adminPassword,
         },
         {
-        httpsAgent: this._agent,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          httpsAgent: this._agent,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
         },
-      });
+      );
       const responseCookies: string[] | undefined = response?.headers["set-cookie"];
       const authCode: string | undefined = responseCookies
         ?.map((raw) => parseCookie(raw))

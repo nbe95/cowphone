@@ -22,6 +22,7 @@ export type TextBoxProps = {
   width: number;
   height: number;
   lineHeight: number;
+  lineOffset: number;
   measureTextWidth: (text: string) => number;
 };
 
@@ -30,6 +31,7 @@ export class TextBox {
   public readonly width: number;
   public readonly height: number;
   public readonly lineHeight: number;
+  public readonly lineOffset: number;
 
   private _measureTextWidth: (text: string) => number;
   private _lines: TextLine[] = [];
@@ -38,6 +40,7 @@ export class TextBox {
     this.width = props.width;
     this.height = props.height;
     this.lineHeight = props.lineHeight;
+    this.lineOffset = props.lineHeight;
     this._measureTextWidth = props.measureTextWidth;
   }
 
@@ -111,7 +114,7 @@ export class TextBox {
 
     return this._lines.map((line, index) => {
       // Calculate x offset per line
-      const xPos: number = Math.floor(
+      const linesOffsetX: number = Math.floor(
         (() => {
           switch (align & 0x0f) {
             case Alignment.hLeft:
@@ -125,9 +128,12 @@ export class TextBox {
           }
         })(),
       );
-      const yPos: number = index * this.lineHeight + linesOffsetY;
 
-      return { ...line, x: xOffset + xPos, y: yOffset + yPos };
+      return {
+        ...line,
+        x: xOffset + linesOffsetX,
+        y: yOffset + linesOffsetY + this.lineOffset + index * this.lineHeight,
+      };
     });
   };
 }

@@ -30,42 +30,46 @@ const setUpScheduler = () => {
   }
 };
 
-export const generateAndApplyCow = async (cow: Cow): Promise<void> => new Promise(async (resolve, reject) => {
-  // First, clean-up any old files
-  const result = findRemoveSync(FTP_SERVER.root, {
-    age: {
-      seconds: 60 * 60 * 24 * 100, // 100 days
-    },
-  });
-  const gone: string[] = Object.keys(result as Record<string, boolean>);
-  if (gone.length) console.log("Deleted old files.", gone);
-
-  // Generate cow image
-  const fileName: string | void = await cow
-    .generate()
-    .then(async (fileName: string) => {
-      console.log("Successfully brought the cow in the shed.", { fileName: fileName });
-      return fileName;
-    })
-    .catch((reason: any) => {
-      console.error("Failed to generate image!", reason);
+export const generateAndApplyCow = async (cow: Cow): Promise<void> =>
+  new Promise(async (resolve, reject) => {
+    // First, clean-up any old files
+    const result = findRemoveSync(FTP_SERVER.root, {
+      age: {
+        seconds: 60 * 60 * 24 * 100, // 100 days
+      },
     });
+    const gone: string[] = Object.keys(result as Record<string, boolean>);
+    if (gone.length) console.log("Deleted old files.", gone);
 
-  if (!fileName) {
-    reject();
-    return;
-  }
+    // Generate cow image
+    const fileName: string | void = await cow
+      .generate()
+      .then(async (fileName: string) => {
+        console.log("Successfully brought the cow in the shed.", { fileName: fileName });
+        return fileName;
+      })
+      .catch((reason: any) => {
+        console.error("Failed to generate image!", reason);
+      });
 
-  // Finally, update the logo on our cowphone
-  const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
-  return await phone.updateLogo(FTP_SERVER, fileName).then(() => {
-    console.log("Phone logo was updated successfully.");
-    resolve();
-  }, (error: any) => {
-    console.error("Could not contact phone via network.", error);
-    reject();
+    if (!fileName) {
+      reject();
+      return;
+    }
+
+    // Finally, update the logo on our cowphone
+    const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
+    return await phone.updateLogo(FTP_SERVER, fileName).then(
+      () => {
+        console.log("Phone logo was updated successfully.");
+        resolve();
+      },
+      (error: any) => {
+        console.error("Could not contact phone via network.", error);
+        reject();
+      },
+    );
   });
-});
 
 const main = async () => {
   try {

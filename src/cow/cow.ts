@@ -13,6 +13,7 @@ type CowProps = {
   size: number[];
   font: string;
   lineHeight: number;
+  lineOffset: number;
   textBox: {
     width: number;
     height: number;
@@ -52,6 +53,7 @@ export class Cow {
       size: CowDb[type].size,
       font: CowDb[type].font,
       lineHeight: CowDb[type].lineHeight,
+      lineOffset: CowDb[type].lineOffset,
     };
   }
 
@@ -62,6 +64,7 @@ export class Cow {
       width: this.props.textBox.width,
       height: this.props.textBox.height,
       lineHeight: this.props.lineHeight,
+      lineOffset: this.props.lineOffset,
       measureTextWidth: (text: string) => measureText(this._font, text),
     });
 
@@ -108,14 +111,14 @@ export class Cow {
     const positionedText = this._textBox!.getPositionedText(
       this.props.textBox.offset[0],
       this.props.textBox.offset[1],
-      Alignment.hRight | Alignment.vBottom,
+      Alignment.hCenter | Alignment.vMiddle,
     );
     positionedText.forEach((line) =>
       this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }),
     );
 
     // Invert depending on phone theme
-    this._image.invert();
+    // this._image.invert();
 
     // Save image
     const baseName: string = strftime("%Y-%m-%d_%H-%M-%S");

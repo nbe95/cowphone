@@ -4,6 +4,7 @@
         "size": [144, 32],
         "font": "tinyunicode/TinyUnicode-16.fnt",
         "lineHeight": 7,
+        "lineOffset": -5,
         "cows": [
             {
                 "name": "Cow",
@@ -40,6 +41,7 @@
         "size": [240, 71],
         "font": "pixel_arial_11/PIXEARG_-8.fnt",
         "lineHeight": 12,
+        "lineOffset": 0,
         "cows": [
             {
                 "name": "Cow",
