@@ -33,9 +33,9 @@ export class Cow {
   private _textBox: TextBox | undefined;
 
   public static make = async (type: CowType, name: string): Promise<Cow> => {
-      const cow = new Cow(type, name);
-      await cow._init();
-      return cow;
+    const cow = new Cow(type, name);
+    await cow._init();
+    return cow;
   };
 
   public static makeRandom = async (type: CowType): Promise<Cow> => {
