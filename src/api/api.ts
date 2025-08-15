@@ -27,20 +27,20 @@ export const runApi = async (cowDir: string) => {
   });
   apiRouter.post("/moo", jsonParser, async (req, rsp) => {
     // const cow = new Cow(req.body.type ?? "");
-    const cow: Cow = new Cow("os60", "Cow");
+    const cow: Cow = new Cow("os40", "Cat");
     await cow.init();
     // cow.textCentered = Boolean(req.body.centered);
     // cow.textTrimmed = Boolean(req.body.trimmed);
     let success: boolean = cow.tryToSpeak(req.body.text ?? "");
     if (success) {
-      success = await generateAndApplyCow(cow);
+      await generateAndApplyCow(cow).catch(() => { success = false });
     }
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
   apiRouter.post("/update", jsonParser, async (req, rsp) => {
     const cow = Cow.makeRandom("os40");
     await setFortuneForCow(cow);
-    const success: boolean = await generateAndApplyCow(cow);
+    const success: boolean = await generateAndApplyCow(cow).then(() => true, () => false);
     rsp.status(success ? StatusCodes.OK : StatusCodes.BAD_REQUEST).send();
   });
   app.use("/api/v1", apiRouter);

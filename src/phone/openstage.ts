@@ -34,20 +34,18 @@ export class OpenStagePhone {
         return;
       }
 
-      const response = await axios.post(this._getBaseUrl() + "/page.cmd", {
-        data: {
+      const response = await axios.post(this._getBaseUrl() + "/page.cmd",
+        {
           page_submit: "WEBMp_Admin_Login",
           AdminPassword: this._adminPassword,
         },
+        {
         httpsAgent: this._agent,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       });
       const responseCookies: string[] | undefined = response?.headers["set-cookie"];
-
-      console.log(response);
-
       const authCode: string | undefined = responseCookies
         ?.map((raw) => parseCookie(raw))
         ?.find((cookie) => "webm" in cookie)?.webm;
@@ -89,10 +87,10 @@ export class OpenStagePhone {
     new Promise(async (resolve, reject) => {
       this._authenticate().then(async () => {
         const response = await axios.get(this._getBaseUrl() + "/page.cmd", {
+          httpsAgent: this._agent,
           params: {
             page: "WEBM_User_DisplaySettings",
           },
-          httpsAgent: this._agent,
         });
         if (response.status != 200) {
           console.error("Could not retrieve OpenStage skin.", { rsp: response });

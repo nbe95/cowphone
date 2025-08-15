@@ -21,16 +21,16 @@ const setUpScheduler = () => {
 
       const cow = Cow.makeRandom("os40");
       await getFortuneForCow(cow);
-      if (!(await generateAndApplyCow(cow))) {
-        console.error("Could not generate any file for our little bovine.");
-      }
+      await generateAndApplyCow(cow).catch((error: any) => {
+        console.error("Could not generate any file for our little bovine.", error);
+      });
     });
   } else {
     console.warn("No schedule defined! Cow powers are only available via web interface.");
   }
 };
 
-export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
+export const generateAndApplyCow = async (cow: Cow): Promise<void> => new Promise(async (resolve, reject) => {
   // First, clean-up any old files
   const result = findRemoveSync(FTP_SERVER.root, {
     age: {
@@ -52,16 +52,20 @@ export const generateAndApplyCow = async (cow: Cow): Promise<boolean> => {
     });
 
   if (!fileName) {
-    return false;
+    reject();
+    return;
   }
 
   // Finally, update the logo on our cowphone
   const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
-  return await phone.updateLogo(FTP_SERVER, fileName).catch(() => {
-    console.error("Could not contact phone via network.");
-    return false;
+  return await phone.updateLogo(FTP_SERVER, fileName).then(() => {
+    console.log("Phone logo was updated successfully.");
+    resolve();
+  }, (error: any) => {
+    console.error("Could not contact phone via network.", error);
+    reject();
   });
-};
+});
 
 const main = async () => {
   try {
