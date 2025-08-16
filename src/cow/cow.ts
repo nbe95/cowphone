@@ -1,6 +1,6 @@
 import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
 import strftime from "strftime";
-import { FTP_SERVER } from "../config/environment";
+import { FTP_SERVER, OS60_COLOR_MODE } from "../config/environment";
 import { Alignment, TextBox } from "./text-box";
 
 import CowDb from "../../static/logo/cows.json";
@@ -117,7 +117,9 @@ export class Cow {
     );
 
     // Invert depending on phone theme
-    // this._image.invert();
+    if (OS60_COLOR_MODE != "black") {
+      this._image.invert();
+    }
 
     // Save image
     const baseName: string = strftime("%Y-%m-%d_%H-%M-%S");
