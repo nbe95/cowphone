@@ -27,7 +27,7 @@ const mockAuthResponse = (successful: boolean = true) => {
   });
 };
 
-describe("Check admin authentication", () => {
+describe("Authentication", () => {
   class OpenMock extends OpenStagePhone {
     public auth = async (): Promise<void> => this._authenticate();
   }
@@ -40,18 +40,18 @@ describe("Check admin authentication", () => {
     jest.resetAllMocks();
   });
 
-  test("successful", async () => {
+  it("should authenticate", async () => {
     mockAuthResponse(true);
     await expect(phone.auth()).resolves.toBeUndefined();
   });
 
-  test("not so successful", async () => {
+  it("should not authenticate", async () => {
     mockAuthResponse(false);
     await expect(phone.auth()).rejects.toBeDefined();
   });
 });
 
-describe("Retrieving phone type", () => {
+describe("Phone type", () => {
   let phone: OpenStagePhone;
   beforeEach(() => {
     phone = new OpenStagePhone("", "");
@@ -61,23 +61,23 @@ describe("Retrieving phone type", () => {
     jest.resetAllMocks();
   });
 
-  test("should not recognize garbage", async () => {
+  it("should not resolve to garbage", async () => {
     mockedAxios.get.mockResolvedValue(getWebAsset("main-banner_invalid.html"));
     await expect(phone.getType()).rejects.toContain("OpenStage FOO");
   });
 
-  test("should recognize an OpenStage 40", async () => {
+  it("should resolve to an OpenStage 40", async () => {
     mockedAxios.get.mockResolvedValue(getWebAsset("main-banner_os40.html"));
     await expect(phone.getType()).resolves.toBe("os40");
   });
 
-  test("should recognize an OpenStage 60", async () => {
+  it("should resolve to an OpenStage 60", async () => {
     mockedAxios.get.mockResolvedValue(getWebAsset("main-banner_os60.html"));
     await expect(phone.getType()).resolves.toBe("os60");
   });
 });
 
-describe("Retrieving phone skin", () => {
+describe("Phone skin", () => {
   let phone: OpenStagePhone;
   beforeEach(() => {
     phone = new OpenStagePhone("", "");
@@ -87,17 +87,17 @@ describe("Retrieving phone skin", () => {
     jest.resetAllMocks();
   });
 
-  test("should not recognize non-available skin", async () => {
+  it("should not resolve to non-available skin", async () => {
     mockedAxios.get.mockResolvedValue(getWebAsset("display-settings_os40.html"));
     await expect(phone.getSkin()).rejects.toContain("null");
   });
 
-  test("should recognize Anthracite-Orange skin", async () => {
+  it("should resolve to Anthracite-Orange", async () => {
     mockedAxios.get.mockResolvedValue(getWebAsset("display-settings_os60-ao.html"));
     await expect(phone.getSkin()).resolves.toBe(OpenStageSkin.AnthraciteOrange);
   });
 
-  test("should recognize Silver-Blue skin", async () => {
+  it("should resolve to Silver-Blue", async () => {
     mockedAxios.get.mockResolvedValue(getWebAsset("display-settings_os60-sb.html"));
     await expect(phone.getSkin()).resolves.toBe(OpenStageSkin.SilverBlue);
   });
@@ -121,12 +121,12 @@ describe("Interpret update logo response", () => {
     user: "",
   };
 
-  test("should retrieve successful update", async () => {
+  it("should retrieve successful update", async () => {
     mockedAxios.post.mockResolvedValue(getWebAsset("logo-update_success.html"));
     await expect(phone.updateLogo(ftpClientMock, "")).resolves.toBeUndefined();
   });
 
-  test("should retrieve failed update", async () => {
+  it("should retrieve failed update", async () => {
     mockedAxios.post.mockResolvedValue(getWebAsset("logo-update_fail.html"));
     await expect(phone.updateLogo(ftpClientMock, "")).rejects.toContain("Transfer failed");
   });

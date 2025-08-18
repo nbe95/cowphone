@@ -2,14 +2,14 @@ import { existsSync, mkdirSync } from "fs";
 import { FTP_SERVER } from "../config/environment";
 import { Cow } from "./cow";
 
-describe("Test cow powers!", () => {
+describe("Cow powers", () => {
   beforeAll(() => {
     if (!existsSync(FTP_SERVER.root)) {
       mkdirSync(FTP_SERVER.root, { recursive: true });
     }
   });
 
-  test("should be instantiable", async () => {
+  it("should be instantiable", async () => {
     expect(async () => {
       await Cow.make("os40", "Cow");
       await Cow.make("os60", "Cow");
@@ -21,7 +21,7 @@ describe("Test cow powers!", () => {
     }).not.toThrow();
   });
 
-  test("should not instantiate nonsense", async () => {
+  it("should not instantiate nonsense", async () => {
     expect(async () => {
       await Cow.make("os40", "not-existing");
     }).rejects.toThrow();
@@ -31,7 +31,7 @@ describe("Test cow powers!", () => {
     }).rejects.toThrow();
   });
 
-  test("should generate bitmaps", async () => {
+  it("should generate bitmaps", async () => {
     const cow = await Cow.make("os40", "Cow");
     cow.tryToSpeak("Unit test");
 
@@ -40,7 +40,7 @@ describe("Test cow powers!", () => {
     expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
   });
 
-  test("should generate pngs", async () => {
+  it("should generate pngs", async () => {
     const cow = await Cow.make("os60", "Cow");
     cow.tryToSpeak("Unit test");
 

@@ -1,7 +1,7 @@
 import { loadFont, measureText } from "jimp";
 import { Alignment, TextBox } from "../../src/cow/text-box";
 
-describe("Test text wrapping", () => {
+describe("Long text", () => {
   let font: any;
   let makeBox: Function;
   let lineHeight: number;
@@ -30,11 +30,11 @@ describe("Test text wrapping", () => {
       });
   });
 
-  test("should not wrap at all", () => {
+  it("should not wrap at all", () => {
     expect(getWrappedLorem(1000)).toStrictEqual([lorem]);
   });
 
-  test("should wrap in a medium box", () => {
+  it("should wrap in a medium box", () => {
     expect(getWrappedLorem(200)).toStrictEqual([
       "Lorem ipsum dolor sit amet, consectetur",
       "adipisici elit, sed eiusmod tempor incidunt ut",
@@ -45,7 +45,7 @@ describe("Test text wrapping", () => {
     ]);
   });
 
-  test("should wrap in a small box", () => {
+  it("should wrap in a small box", () => {
     expect(getWrappedLorem(100)).toStrictEqual([
       "Lorem ipsum dolor sit",
       "amet, consectetur",
@@ -62,7 +62,7 @@ describe("Test text wrapping", () => {
     ]);
   });
 
-  test("should wrap in a tiny box", () => {
+  it("should wrap in a tiny box", () => {
     expect(getWrappedLorem(30)).toStrictEqual([
       "Lorem",
       "ipsum",
@@ -101,7 +101,7 @@ describe("Test text wrapping", () => {
   });
 });
 
-describe("Test text alignment", () => {
+describe("Text box", () => {
   let font: any;
   let loremBox: TextBox;
   let lineHeight: number;
@@ -129,7 +129,7 @@ describe("Test text alignment", () => {
     );
   });
 
-  test("should be aligned by default", () => {
+  it("should be aligned by default", () => {
     const result = loremBox.getPositionedText(0, 0);
     expect(result).toHaveLength(4);
 
@@ -144,7 +144,7 @@ describe("Test text alignment", () => {
     expect(result[3]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * 1);
   });
 
-  test("should be aligned top/left", () => {
+  it("should be aligned top/left", () => {
     const result = loremBox.getPositionedText(0, 0, Alignment.hLeft | Alignment.vTop);
     expect(result).toHaveLength(4);
 
@@ -159,7 +159,7 @@ describe("Test text alignment", () => {
     expect(result[3]).toHaveProperty("y", lineOffset + lineHeight * 3);
   });
 
-  test("should be aligned middle/center", () => {
+  it("should be aligned middle/center", () => {
     const result = loremBox.getPositionedText(0, 0, Alignment.hCenter | Alignment.vMiddle);
     expect(result).toHaveLength(4);
 
@@ -174,7 +174,7 @@ describe("Test text alignment", () => {
     expect(result[3]).toHaveProperty("y", lineOffset + loremBox.height / 2 + lineHeight * 1);
   });
 
-  test("should be aligned bottom/right", () => {
+  it("should be aligned bottom/right", () => {
     const result = loremBox.getPositionedText(0, 0, Alignment.hRight | Alignment.vBottom);
     expect(result).toHaveLength(4);
 
@@ -189,7 +189,7 @@ describe("Test text alignment", () => {
     expect(result[3]).toHaveProperty("y", lineOffset + loremBox.height - lineHeight * 1);
   });
 
-  test("should have offsets", () => {
+  it("should have offsets", () => {
     const result = loremBox.getPositionedText(20, 50, Alignment.hLeft | Alignment.vTop);
     expect(result).toHaveLength(4);
 
