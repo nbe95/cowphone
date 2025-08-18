@@ -3,5 +3,5 @@ module.exports = {
   testEnvironment: "node",
   testRegex: ".*\\.(test|spec)?\\.(ts|tsx)$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  reporters: ["default", ["jest-ctrf-json-reporter", {}]],
+  reporters: ["default", ["jest-ctrf-json-reporter", { outputDir: ".ctrf" }]],
 };
