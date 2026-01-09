@@ -1,0 +1,75 @@
+{
+    "os40": {
+        "imageType": "bmp",
+        "size": [144, 32],
+        "font": "tinyunicode/TinyUnicode-16.fnt",
+        "lineHeight": 7,
+        "lineOffset": -5,
+        "cows": [
+            {
+                "name": "Cow",
+                "template": "os40/cow.bmp",
+                "textBox": {
+                    "width": 105,
+                    "height": 28,
+                    "offset": [5, 2]
+                }
+            },
+            {
+                "name": "Cat",
+                "template": "os40/cat.bmp",
+                "textBox": {
+                    "width": 106,
+                    "height": 28,
+                    "offset": [32, 2]
+                }
+            },
+            {
+                "name": "Bongo Cat",
+                "template": "os40/bongocat.bmp",
+                "textBox": {
+                    "width": 102,
+                    "height": 28,
+                    "offset": [37, 2]
+                }
+            }
+        ]
+    },
+
+    "os60": {
+        "imageType": "png",
+        "size": [240, 71],
+        "font": "pixel_arial_11/PIXEARG_-8.fnt",
+        "lineHeight": 12,
+        "lineOffset": 0,
+        "cows": [
+            {
+                "name": "Cow",
+                "template": "os60/cow.png",
+                "textBox": {
+                    "width": 176,
+                    "height": 61,
+                    "offset": [5, 5]
+                }
+            },
+            {
+                "name": "Cat",
+                "template": "os60/cat.png",
+                "textBox": {
+                    "width": 186,
+                    "height": 61,
+                    "offset": [49, 5]
+                }
+            },
+            {
+                "name": "Bongo Cat",
+                "template": "os60/bongocat.png",
+                "textBox": {
+                    "width": 174,
+                    "height": 61,
+                    "offset": [61, 5]
+                }
+            }
+        ]
+    }
+}

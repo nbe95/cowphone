@@ -1,0 +1,83 @@
+{
+  "name": "CowPhone",
+  "description": "A little bit of cows for your desktop phone.",
+  "main": "app.ts",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node ./dist/src/app.js",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest",
+    "lint": "npx prettier . --check",
+    "format": "npx prettier . --write",
+    "watch": "tsc-watch --onSuccess \"npm run start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbe95/cowphone.git"
+  },
+  "author": "Niklas Bettgen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nbe95/cowphone/issues"
+  },
+  "homepage": "https://github.com/nbe95/cowphone#readme",
+  "dependencies": {
+    "@fastify/swagger": "^9.6.1",
+    "@fastify/swagger-ui": "^5.2.4",
+    "axios": "^1.6.8",
+    "cookie": "^1.0.2",
+    "dotenv": "^17.2.1",
+    "fastify": "^5.6.2",
+    "find-remove": "^4.1.0",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.3.1",
+    "ftp-srv": "^4.6.3",
+    "http-status-codes": "^2.3.0",
+    "jimp": "^1.6.0",
+    "json-schema-to-ts": "^3.1.1",
+    "mkdirp": "^3.0.1",
+    "node-cron": "^3.0.3",
+    "node-html-parser": "^7.0.1",
+    "path": "^0.12.7",
+    "strftime": "^0.10.2",
+    "tmp": "^0.2.5",
+    "typescript": "^5.4.5",
+    "watch": "^0.13.0",
+    "with-local-tmp-dir": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/express": "^4.17.21",
+    "@types/find-remove": "^2.0.3",
+    "@types/gm": "^1.25.4",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.11",
+    "@types/node-cron": "^3.0.11",
+    "@types/strftime": "^0.9.8",
+    "@types/tmp": "^0.2.6",
+    "jest": "^29.7.0",
+    "jest-ctrf-json-reporter": "^0.0.9",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "ts-jest": "^29.4.1",
+    "tsc-watch": "^7.1.1"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ],
+    "overrides": [
+      {
+        "files": "*.json",
+        "excludeFiles": [
+          "./package*.json",
+          "./tsconfig.json"
+        ],
+        "options": {
+          "tabWidth": 4
+        }
+      }
+    ]
+  }
+}

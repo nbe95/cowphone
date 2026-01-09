@@ -1,8 +1,6 @@
-version: "2"
-
 services:
   cowphone:
-    image: nbe95/cowphone
+    image: nbe95/cowphone:test-os60
     restart: unless-stopped
     ports:
       - 50021:21/tcp
@@ -11,10 +9,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - CRON_SCHEDULE=$CRON_SCHEDULE
-      - PHONE_HOST=$PHONE_HOST
-      - ADMIN_PASSWORD=$ADMIN_PASSWORD
-      - FTP_OWN_IP=$FTP_OWN_IP
-      - FTP_OWN_PORT=$FTP_OWN_PORT
-      - FTP_USER=$FTP_USER
-      - FTP_PASSWORD=$FTP_PASSWORD
+      OWN_HOST: $OWN_HOST
+      CRON_SCHEDULE: $CRON_SCHEDULE
+      OS_PHONE_HOST: $OS_PHONE_HOST
+      OS_ADMIN_PASSWORD: $OS_ADMIN_PASSWORD

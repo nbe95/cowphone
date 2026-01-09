@@ -1,0 +1,133 @@
+import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
+import strftime from "strftime";
+import { Alignment, TextBox } from "./text-box.js";
+
+import path from "path";
+import CowDb from "../../assets/logo/cows.json" with { type: "json" };
+export type CowType = keyof typeof CowDb;
+
+type CowProps = {
+  name: string;
+  template: string;
+  imageType: string;
+  size: number[];
+  font: string;
+  lineHeight: number;
+  lineOffset: number;
+  textBox: {
+    width: number;
+    height: number;
+    offset: number[];
+  };
+};
+
+export class Cow {
+  private static _assetsDir: string = path.resolve(import.meta.dirname + "../../../../assets");
+  private static _fontDir: string = this._assetsDir + "/logo/fonts/";
+  private static _templateDir: string = this._assetsDir + "/logo/templates/";
+
+  public readonly type: CowType;
+  public readonly props: CowProps;
+
+  private _image: JimpInstance | undefined;
+  private _font: any | undefined;
+  private _textBox: TextBox | undefined;
+
+  public static make = async (type: CowType, name: string): Promise<Cow> => {
+    const cow = new Cow(type, name);
+    await cow._init();
+    return cow;
+  };
+
+  public static makeRandom = async (type: CowType): Promise<Cow> => {
+    const cows = CowDb[type].cows;
+    const sample: number = Math.floor(Math.random() * cows.length);
+    return await this.make(type, cows[sample].name);
+  };
+
+  // Ensure every cow is initialized (async function) by offering a static build method and hiding
+  // the actual constructor
+  protected constructor(type: CowType, name: string) {
+    this.type = type;
+    const cow = CowDb[type].cows.find((cow) => cow.name == name);
+    if (cow === undefined) {
+      throw new Error(`Cannot find cow with name '"${name}'!`);
+    }
+    this.props = {
+      name: cow.name,
+      template: cow.template,
+      textBox: cow.textBox,
+      imageType: CowDb[type].imageType,
+      size: CowDb[type].size,
+      font: CowDb[type].font,
+      lineHeight: CowDb[type].lineHeight,
+      lineOffset: CowDb[type].lineOffset,
+    };
+  }
+
+  protected _init = async () => {
+    this._image = new Jimp({ width: this.props.size[0], height: this.props.size[1] });
+    this._font = await loadFont(Cow._fontDir + this.props.font);
+    this._textBox = new TextBox({
+      width: this.props.textBox.width,
+      height: this.props.textBox.height,
+      lineHeight: this.props.lineHeight,
+      lineOffset: this.props.lineOffset,
+      measureTextWidth: (text: string) => measureText(this._font, text),
+    });
+
+    console.log(`A <${this.props.name}> was born!`);
+  };
+
+  public tryToSpeak(text: string): boolean {
+    const oneLiner: string = text.trim().replace(/\s+/g, " ");
+
+    // Check if the text will fit into the cow's speech bubble
+    this._textBox!.setText(text);
+    if (this._textBox!.isTextFitting()) {
+      console.log("I will MOO!", {
+        text: oneLiner,
+        lines: this._textBox!.getLines().length,
+        boxSize: this._textBox!.getTextSize(),
+      });
+      return true;
+    }
+    console.error("Holy cow! That won't fit into my speech bubble...", {
+      text: oneLiner,
+      lines: this._textBox!.getLines().length,
+      boxSize: this._textBox!.getTextSize(),
+    });
+    return false;
+  }
+
+  public generate = async (): Promise<string> => {
+    // Load image template
+    this._image = (await Jimp.read(`${Cow._templateDir}/${this.props.template}`)) as JimpInstance;
+    if (this._image.width != this.props.size[0] || this._image.height != this.props.size[1]) {
+      throw new Error("Size does not match!");
+    }
+
+    // Iterate over each line and draw it
+    const positionedText = this._textBox!.getPositionedText(
+      this.props.textBox.offset[0],
+      this.props.textBox.offset[1],
+      Alignment.hCenter | Alignment.vMiddle,
+    );
+    positionedText.forEach((line) =>
+      this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }),
+    );
+
+    // Invert depending on current phone theme
+
+    // TODO: Retrieve currently activated theme
+
+    // if (OS60_COLOR_MODE != "black") {
+    //   this._image.invert();
+    // }
+
+    // Save image
+    const baseName: string = strftime("%Y-%m-%d_%H-%M-%S");
+    await this._image.write(`${baseName}.${this.props.imageType}`);
+    return `${baseName}.${this.props.imageType}`;
+  };
+}

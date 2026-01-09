@@ -1,4 +1,5 @@
-/.ftp
+.barn-*/
+.ctrf/
 
 # Logs
 logs
