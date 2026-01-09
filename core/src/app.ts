@@ -1,6 +1,7 @@
 import findRemoveSync from "find-remove";
 import { schedule } from "node-cron";
-import { runApi } from "./api/api";
+import withLocalTmpDir from "with-local-tmp-dir";
+import { runApi } from "./api/api.js";
 import {
   ADMIN_PASSWORD,
   CRON_SCHEDULE,
@@ -8,11 +9,11 @@ import {
   PHONE_HOST,
   PROD,
   VERSION,
-} from "./config/environment";
-import { Cow } from "./cow/cow";
-import { getFortuneForCow } from "./cow/fortune";
-import { runServer } from "./phone/ftp-server";
-import { OpenStagePhone } from "./phone/openstage";
+} from "./config/environment.js";
+import { Cow } from "./cow/cow.js";
+import { getFortuneForCow } from "./cow/fortune.js";
+import { runServer } from "./phone/ftp-server.js";
+import { OpenStagePhone } from "./phone/openstage.js";
 
 const setUpScheduler = () => {
   if (CRON_SCHEDULE) {
@@ -33,7 +34,7 @@ const setUpScheduler = () => {
 };
 
 export const clearOldCows = (daysUntilSlaughterhouse: number = 100) => {
-  const result = findRemoveSync(FTP_SERVER.root, {
+  const result = findRemoveSync(".", {
     age: { seconds: 60 * 60 * 24 * daysUntilSlaughterhouse },
   });
   const gone: string[] = Object.keys(result as Record<string, boolean>);
@@ -72,6 +73,7 @@ export const generateAndApplyCow = async (cow: Cow): Promise<void> =>
   });
 
 const main = async () => {
+  var resetCwd: () => Promise<void> = () => Promise.resolve();
   try {
     console.log("Moo! Starting cowphone main task:", {
       version: VERSION,
@@ -80,10 +82,24 @@ const main = async () => {
       adminPassword: ADMIN_PASSWORD.replace(/./g, "*"),
     });
 
-    await Promise.all([runServer(FTP_SERVER), setUpScheduler(), runApi(FTP_SERVER.root)]);
+    if (!PROD) {
+      resetCwd = await withLocalTmpDir({ prefix: ".barn" });
+      console.info("Created temporary barn for development:", process.cwd());
+    }
+
+    const barnDir: string = process.cwd();
+    setUpScheduler();
+    runApi(barnDir);
+    runServer(FTP_SERVER, barnDir);
   } catch (error) {
     console.error("Error during cowphone main task:", error);
+    process.exit(1);
   }
+
+  process.on("SIGTERM", async () => {
+    console.log("\nShutting down, bye-bye!");
+    await resetCwd();
+  });
 };
 
 main();

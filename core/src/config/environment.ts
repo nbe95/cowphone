@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { FtpServerProps } from "../phone/ftp-server";
+import { FtpServerProps } from "../phone/ftp-server.js";
 
 dotenv.config();
 
@@ -15,7 +15,6 @@ export const FTP_SERVER: FtpServerProps = {
   port: parseInt(process.env.FTP_OWN_PORT ?? "50021", 10),
   user: process.env.FTP_USER ?? "",
   password: process.env.FTP_PASSWORD ?? "",
-  root: PROD ? "./barn" : "./.barn/",
 };
 
 export const OS60_COLOR_MODE: string = process.env.OS60_COLOR_MODE ?? "black";

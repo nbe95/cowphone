@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import { Cow } from "./cow";
+import { Cow } from "./cow.js";
 
 export const getFortune = async (): Promise<string> =>
   new Promise((resolve, reject) => {

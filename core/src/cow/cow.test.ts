@@ -1,12 +1,11 @@
-import { existsSync, mkdirSync } from "fs";
-import { FTP_SERVER } from "../config/environment";
-import { Cow } from "./cow";
+import { existsSync } from "fs";
+import { Cow } from "./cow.js";
 
 describe("Cow powers", () => {
   beforeAll(() => {
-    if (!existsSync(FTP_SERVER.root)) {
-      mkdirSync(FTP_SERVER.root, { recursive: true });
-    }
+    // if (!existsSync(FTP_SERVER.root)) {
+    //   mkdirSync(FTP_SERVER.root, { recursive: true });
+    // }
   });
 
   it("should be instantiable", async () => {
@@ -37,7 +36,7 @@ describe("Cow powers", () => {
 
     const fileName = await cow.generate();
     expect(fileName.substring(fileName.length - 4)).toBe(".bmp");
-    expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
+    expect(existsSync(fileName)).toBe(true);
   });
 
   it("should generate pngs", async () => {
@@ -46,6 +45,6 @@ describe("Cow powers", () => {
 
     const fileName = await cow.generate();
     expect(fileName.substring(fileName.length - 4)).toBe(".png");
-    expect(existsSync(FTP_SERVER.root + fileName)).toBe(true);
+    expect(existsSync(fileName)).toBe(true);
   });
 });

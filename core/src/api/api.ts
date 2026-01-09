@@ -2,12 +2,12 @@ import bodyParser from "body-parser";
 import express from "express";
 import fs from "fs";
 import { StatusCodes } from "http-status-codes";
-import { generateAndApplyCow } from "../app";
-import { CRON_SCHEDULE, PROD, VERSION } from "../config/environment";
-import { Cow } from "../cow/cow";
-import { getFortune, getFortuneForCow as setFortuneForCow } from "../cow/fortune";
+import { generateAndApplyCow } from "../app.js";
+import { CRON_SCHEDULE, PROD, VERSION } from "../config/environment.js";
+import { Cow } from "../cow/cow.js";
+import { getFortune, getFortuneForCow as setFortuneForCow } from "../cow/fortune.js";
 
-export const runApi = async (cowDir: string) => {
+export const runApi = (cowDir: string) => {
   const app = express();
 
   // API methods
@@ -66,7 +66,7 @@ export const runApi = async (cowDir: string) => {
   app.use("/api/v1", apiRouter);
 
   // Static web interface and file server for cow images
-  app.use(express.static("./static/api"));
+  app.use(express.static(PROD ? "./static/" : "../../frontend/static/"));
   app.use("/cow", express.static(cowDir));
 
   // Use Docker internal port when productive

@@ -1,5 +1,5 @@
 import { loadFont, measureText } from "jimp";
-import { Alignment, TextBox } from "../../src/cow/text-box";
+import { Alignment, TextBox } from "./text-box.js";
 
 describe("Long text", () => {
   let font: any;
@@ -17,7 +17,7 @@ describe("Long text", () => {
 
   beforeAll(async () => {
     // Load font and related classes asynchronously before tests
-    font = await loadFont("./static/logo/fonts/tinyunicode/TinyUnicode-16.fnt");
+    font = await loadFont("./assets/logo/fonts/tinyunicode/TinyUnicode-16.fnt");
     lineHeight = 7;
     lineOffset = -5;
     makeBox = (width: number = 1000, height: number = 1000): TextBox =>
@@ -111,7 +111,7 @@ describe("Text box", () => {
     // Load font and related classes asynchronously before tests
     lineHeight = 7;
     lineOffset = -5;
-    font = await loadFont("./static/logo/fonts/tinyunicode/TinyUnicode-16.fnt");
+    font = await loadFont("./assets/logo/fonts/tinyunicode/TinyUnicode-16.fnt");
 
     // Make a lorem ipsum box for convenience
     loremBox = ((text, width: number = 1000, height: number = 1000): TextBox => {

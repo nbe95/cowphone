@@ -1,9 +1,10 @@
 import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
 import strftime from "strftime";
-import { FTP_SERVER, OS60_COLOR_MODE } from "../config/environment";
-import { Alignment, TextBox } from "./text-box";
+import { OS60_COLOR_MODE } from "../config/environment.js";
+import { Alignment, TextBox } from "./text-box.js";
 
-import CowDb from "../../static/logo/cows.json";
+import CowDb from "../../assets/logo/cows.json" with { type: "json" };
+import path from "path";
 export type CowType = keyof typeof CowDb;
 
 type CowProps = {
@@ -22,8 +23,9 @@ type CowProps = {
 };
 
 export class Cow {
-  private static _fontDir: string = "./static/logo/fonts/";
-  private static _templateDir: string = "./static/logo/templates/";
+  private static _assetsDir: string = path.resolve(import.meta.dirname + "../../../../assets");
+  private static _fontDir: string = this._assetsDir + "/logo/fonts/";
+  private static _templateDir: string = this._assetsDir + "/logo/templates/";
 
   public readonly type: CowType;
   public readonly props: CowProps;
@@ -123,7 +125,7 @@ export class Cow {
 
     // Save image
     const baseName: string = strftime("%Y-%m-%d_%H-%M-%S");
-    await this._image.write(`${FTP_SERVER.root}/${baseName}.${this.props.imageType}`);
+    await this._image.write(`${baseName}.${this.props.imageType}`);
     return `${baseName}.${this.props.imageType}`;
   };
 }

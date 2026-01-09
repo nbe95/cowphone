@@ -1,13 +1,11 @@
 import { FtpSrv } from "ftp-srv";
-import { mkdirp } from "mkdirp";
-import { PROD } from "../config/environment";
+import { PROD } from "../config/environment.js";
 
 export type FtpServerProps = {
   host: string;
   port: number;
   user: string;
   password: string;
-  root: string;
 };
 
 class GeneralError extends Error {
@@ -22,7 +20,7 @@ class GeneralError extends Error {
   }
 }
 
-export const runServer = async (props: FtpServerProps) => {
+export const runServer = (props: FtpServerProps, rootDir: string) => {
   const ftpServer = new FtpSrv({
     url: `ftp://0.0.0.0:${PROD ? 21 : props.port}`,
     pasv_url: props.host,
@@ -36,7 +34,7 @@ export const runServer = async (props: FtpServerProps) => {
     if (username == props.user && password == props.password) {
       console.log(`FTP client ${connection.ip} connected as user ${username}.`);
       return resolve({
-        root: props.root,
+        root: rootDir,
         blacklist: ["ALLO", "APPE", "DELE", "MKD", "RMD", "RNRF", "RNTO", "STOR", "STRU"], // make server read-only
       });
     }
@@ -47,11 +45,6 @@ export const runServer = async (props: FtpServerProps) => {
   ftpServer.on("disconnect", ({ connection, id }) => {
     console.log(`FTP client ${connection.ip} disconnected.`);
   });
-
-  // Create temp dir for development
-  if (!PROD) {
-    mkdirp(props.root).then(() => console.log("Created temporary FTP directory for development."));
-  }
 
   ftpServer.listen().then(() => {
     console.log("FTP server is starting.", { ...props });

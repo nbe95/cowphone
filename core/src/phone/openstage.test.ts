@@ -1,8 +1,8 @@
 import axios from "axios";
 import { readFileSync } from "fs";
 import path from "path";
-import { FtpServerProps } from "./ftp-server";
-import { OpenStagePhone, OpenStageSkin } from "./openstage";
+import { FtpServerProps } from "./ftp-server.js";
+import { OpenStagePhone, OpenStageSkin } from "./openstage.js";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -10,7 +10,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 // Convenience function to retrieve a mocked HTML response from a file with any status code
 const getWebAsset = (rspFile: string, statusCode: number = 200) => ({
   status: statusCode,
-  data: readFileSync(path.join(__dirname, "./mock-assets/", rspFile)),
+  data: readFileSync(path.join("./mock-assets/", rspFile)),
 });
 
 // Convenience function to mock phone authentication
@@ -117,7 +117,6 @@ describe("Interpret update logo response", () => {
     host: "",
     password: "",
     port: 0,
-    root: "",
     user: "",
   };
 

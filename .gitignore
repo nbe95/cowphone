@@ -1,5 +1,5 @@
-/.barn
-/.ctrf
+.barn-*/
+.ctrf/
 
 # Logs
 logs
