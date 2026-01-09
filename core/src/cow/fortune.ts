@@ -8,7 +8,12 @@ export const getFortune = async (): Promise<string> =>
 
     const process = spawn(cmd, args);
     process.on("error", (code) => reject(code));
-    process.on("exit", () => resolve((process.stdout?.read() as Buffer).toString().trim()));
+    process.on("exit", () => {
+      const text: string = (process.stdout?.read() as Buffer).toString().trim();
+
+      // Only include printable characters and \n
+      resolve(text.replace(/[^ -~\n]+/g, ""));
+    });
   });
 
 export const getFortuneForCow = async (cow: Cow, maxTries: number = 30) => {
