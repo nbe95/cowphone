@@ -1,7 +1,7 @@
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import fastify from "fastify";
-import { FTP_SERVER, PROD } from "../config/environment.js";
+import { HTTP_PORT, OWN_HOST } from "../config/environment.js";
 import versionEndpoint from "./v1/version.js";
 import configEndpoint from "./v2/config.js";
 import cowEndpoint from "./v2/cow.js";
@@ -38,14 +38,11 @@ export const runApi = async (cowDir: string) => {
 
   app.ready();
 
-  // Use Docker internal port when productive
-  const port: number = PROD ? 80 : 50080;
-  const host: string = FTP_SERVER.host;
   try {
-    await app.listen({ port: port, host: "0.0.0.0" });
+    await app.listen({ host: "0.0.0.0", port: HTTP_PORT });
     console.log("API and web interface are listening.", {
-      webinterface: `http://${host}:${port}/`,
-      swagger_ui: `http://${host}:${port}/swagger`,
+      webinterface: `http://${OWN_HOST}:${HTTP_PORT}/`,
+      swagger_ui: `http://${OWN_HOST}:${HTTP_PORT}/swagger`,
     });
   } catch (err) {
     app.log.error(err);

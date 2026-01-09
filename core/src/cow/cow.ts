@@ -1,6 +1,5 @@
 import { Jimp, JimpInstance, loadFont, measureText } from "jimp";
 import strftime from "strftime";
-import { OS60_COLOR_MODE } from "../config/environment.js";
 import { Alignment, TextBox } from "./text-box.js";
 
 import path from "path";
@@ -118,10 +117,13 @@ export class Cow {
       this._image!.print({ font: this._font, text: line.text, x: line.x, y: line.y }),
     );
 
-    // Invert depending on phone theme
-    if (OS60_COLOR_MODE != "black") {
-      this._image.invert();
-    }
+    // Invert depending on current phone theme
+
+    // TODO: Retrieve currently activated theme
+
+    // if (OS60_COLOR_MODE != "black") {
+    //   this._image.invert();
+    // }
 
     // Save image
     const baseName: string = strftime("%Y-%m-%d_%H-%M-%S");

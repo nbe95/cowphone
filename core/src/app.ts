@@ -3,10 +3,10 @@ import { schedule } from "node-cron";
 import withLocalTmpDir from "with-local-tmp-dir";
 import { runApi } from "./api/api.js";
 import {
-  ADMIN_PASSWORD,
   CRON_SCHEDULE,
   FTP_SERVER,
-  PHONE_HOST,
+  OS_ADMIN_PASSWORD,
+  OS_PHONE_HOST,
   PROD,
   VERSION,
 } from "./config/environment.js";
@@ -52,8 +52,8 @@ export const generateAndApplyCow = async (cow: Cow): Promise<void> =>
       (fileName) => {
         console.log("Successfully brought the cow in the shed.", { fileName: fileName });
 
-        // Update the logo on our cowphone
-        const phone = new OpenStagePhone(PHONE_HOST, ADMIN_PASSWORD);
+        // Update the logo on our CowPhone
+        const phone = new OpenStagePhone(OS_PHONE_HOST, OS_ADMIN_PASSWORD);
         phone.updateLogo(FTP_SERVER, fileName).then(
           () => {
             console.log("Phone logo was updated successfully.");
@@ -75,11 +75,11 @@ export const generateAndApplyCow = async (cow: Cow): Promise<void> =>
 const main = async () => {
   var resetCwd: () => Promise<void> = () => Promise.resolve();
   try {
-    console.log("Moo! Starting cowphone main task:", {
+    console.log("Moo! Starting CowPhone main task:", {
       version: VERSION,
       productive: PROD,
-      phoneHost: PHONE_HOST,
-      adminPassword: ADMIN_PASSWORD.replace(/./g, "*"),
+      phoneHost: OS_PHONE_HOST,
+      adminPassword: OS_ADMIN_PASSWORD.replace(/./g, "*"),
     });
 
     if (!PROD) {
@@ -92,7 +92,7 @@ const main = async () => {
     runApi(barnDir);
     runServer(FTP_SERVER, barnDir);
   } catch (error) {
-    console.error("Error during cowphone main task:", error);
+    console.error("Error during CowPhone main task:", error);
     process.exit(1);
   }
 

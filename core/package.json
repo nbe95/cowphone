@@ -1,5 +1,5 @@
 {
-  "name": "cowphone",
+  "name": "CowPhone",
   "description": "A little bit of cows for your desktop phone.",
   "main": "app.ts",
   "type": "module",

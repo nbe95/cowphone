@@ -9,11 +9,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
+      OWN_HOST: $OWN_HOST
       CRON_SCHEDULE: $CRON_SCHEDULE
-      PHONE_HOST: $PHONE_HOST
-      ADMIN_PASSWORD: $ADMIN_PASSWORD
-      FTP_OWN_IP: $FTP_OWN_IP
-      FTP_OWN_PORT: $FTP_OWN_PORT
-      FTP_USER: $FTP_USER
-      FTP_PASSWORD: $FTP_PASSWORD
-      OS60_COLOR_MODE: $OS60_COLOR_MODE
+      OS_PHONE_HOST: $OS_PHONE_HOST
+      OS_ADMIN_PASSWORD: $OS_ADMIN_PASSWORD
