@@ -1,5 +1,4 @@
 import { FtpSrv } from "ftp-srv";
-import { PROD } from "../config/environment.js";
 
 export type FtpServerProps = {
   host: string;
@@ -21,13 +20,22 @@ class GeneralError extends Error {
 }
 
 export const runServer = (props: FtpServerProps, rootDir: string) => {
+  const noOpLogger = {
+    trace: () => {},
+    debug: () => {},
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+    fatal: () => {},
+  };
   const ftpServer = new FtpSrv({
-    url: `ftp://0.0.0.0:${PROD ? 21 : props.port}`,
+    url: `ftp://0.0.0.0:${props.port}`,
     pasv_url: props.host,
     pasv_min: 3000,
     pasv_max: 3009,
     anonymous: false,
-    greeting: "This server has super cow powers.",
+    greeting: "This server has super cow powers…",
+    log: noOpLogger,
   });
 
   ftpServer.on("login", ({ connection, username, password }, resolve, reject) => {
