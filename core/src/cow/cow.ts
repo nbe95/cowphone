@@ -3,8 +3,8 @@ import strftime from "strftime";
 import { OS60_COLOR_MODE } from "../config/environment.js";
 import { Alignment, TextBox } from "./text-box.js";
 
-import CowDb from "../../assets/logo/cows.json" with { type: "json" };
 import path from "path";
+import CowDb from "../../assets/logo/cows.json" with { type: "json" };
 export type CowType = keyof typeof CowDb;
 
 type CowProps = {

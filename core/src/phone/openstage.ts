@@ -4,7 +4,6 @@ import { Agent } from "https";
 import { parse as parseHtml } from "node-html-parser";
 import path from "path";
 import { FtpServerProps } from "./ftp-server.js";
-import { REQUEST_HEADER_FIELDS_TOO_LARGE } from "http-status-codes";
 
 export type OpenStageType = "os40" | "os60";
 
